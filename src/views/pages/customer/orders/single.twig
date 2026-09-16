@@ -165,7 +165,7 @@
                                     <div class="mb-4 flex gap-4">
                                         <a href="{{ item.product.url }}" class="shrink-0">
                                             <img src="{{ item.image ?: 'images/placeholder.png' | asset }}" alt="{{ item.name }}"
-                                                 class="h-16 w-16 rounded object-{{ item.image ? 'cover' : 'contain' }} sand-bg">
+                                                 class="h-16 w-16 rounded {{ item.image ? 'object-cover' : 'object-contain' }} sand-bg">
                                         </a>
                                         <div>
                                             <a href="{{ item.product.url }}" class="mb-1.5 block font-semibold leading-5 transition-colors md:text-base">

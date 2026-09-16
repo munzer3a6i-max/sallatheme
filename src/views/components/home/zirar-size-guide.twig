@@ -17,7 +17,8 @@
             sub_title: component.description
         } %}
 
-        <div class="grid gap-4 sm:gap-6 md:grid-cols-{{ component.steps|length > 2 ? 3 : 2 }}">
+        {% set cols = component.steps|length > 2 ? 'md:grid-cols-3' : 'md:grid-cols-2' %}
+        <div class="grid gap-4 sm:gap-6 {{ cols }}">
             {% for step in component.steps %}
                 <div class="size-step">
                     <span class="size-step__num">{{ loop.index }}</span>

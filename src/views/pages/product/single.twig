@@ -85,11 +85,14 @@
                                    href="{{ (image.video_url is iterable ? image.video_url|first : image.video_url)|default(image.url) }}"
                                    aria-label="{{ product.name }}"
                                    class="swiper-slide magnify-wrapper {{ image.video_url ? 'video-entry' : '' }}">
+                                    {# Tailwind needs the whole class name in the source, so the fit
+                                       mode is chosen as a complete class rather than interpolated. #}
+                                    {% set fit = theme.settings.get('slider_background_size', 'cover') == 'contain' ? 'object-contain' : 'object-cover' %}
                                     <img id="{{ image.id }}"
                                          src="{{ image.url }}"
                                          alt="{{ image.alt|default(product.name) }}"
                                          {{ loop.first ? 'fetchpriority="high" loading="eager"' : 'loading="lazy"' }}
-                                         class="h-full w-full object-{{ theme.settings.get('slider_background_size', 'cover') }}">
+                                         class="h-full w-full {{ fit }}">
                                 </a>
                             {% endif %}
                         {% endfor %}

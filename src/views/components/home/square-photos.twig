@@ -12,12 +12,12 @@
 #}
 {% set photos_count = items|length %}
 {% set equal_size = theme.settings.get('square_photos_equal_size', false) %}
-{% set cols = photos_count in [2, 4] ? 2 : (photos_count > 1 ? 3 : 1) %}
+{% set cols = photos_count in [2, 4] ? 'md:grid-cols-2' : (photos_count > 1 ? 'md:grid-cols-3' : 'md:grid-cols-1') %}
 <section component-id="{{ componentId }}" data-testid="store-home-square-photos"
          class="s-block s-block--banners container js-reveal">
     {% include 'components.partials.section-head' with { title: title } %}
 
-    <div class="grid grid-flow-row gap-3 sm:gap-6 md:grid-cols-{{ cols }}">
+    <div class="grid grid-flow-row gap-3 sm:gap-6 {{ cols }}">
         {% for item in items %}
             <a class="banner-entry square-photos {{ item.text ? 'has-overlay' : '' }} {{ equal_size ? 'h-banner' : '' }}"
                href="{{ item.url }}"

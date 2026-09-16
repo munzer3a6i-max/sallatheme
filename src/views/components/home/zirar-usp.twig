@@ -12,7 +12,8 @@
 <section component-id="{{ componentId }}"
          data-testid="store-home-promises"
          class="s-block s-block--promises layout--{{ layout }} container js-reveal">
-    <div class="promises-wrap grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-{{ component.items|length > 3 ? 4 : 3 }} {{ layout == 'bar' ? 'gap-0' : '' }}">
+    {% set cols = component.items|length > 3 ? 'lg:grid-cols-4' : 'lg:grid-cols-3' %}
+    <div class="promises-wrap grid grid-cols-1 gap-4 sm:grid-cols-2 {{ cols }} {{ layout == 'bar' ? 'gap-0' : '' }}">
         {% for item in component.items %}
             <div class="promise-item">
                 <i class="{{ item.icon|default('sicon-star') }}"></i>

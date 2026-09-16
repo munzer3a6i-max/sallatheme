@@ -17,7 +17,8 @@
         sub_title: component.sub_title
     } %}
 
-    <div class="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-3 lg:grid-cols-{{ shape == 'circle' ? '6' : '4' }}">
+    {% set cols = shape == 'circle' ? 'lg:grid-cols-6' : 'lg:grid-cols-4' %}
+    <div class="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-3 {{ cols }}">
         {% for category in component.categories %}
             <a href="{{ category.url }}" class="collection-card group" aria-label="{{ category.name }}">
                 <div class="collection-card__media">
