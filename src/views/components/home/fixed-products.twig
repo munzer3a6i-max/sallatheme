@@ -1,0 +1,31 @@
+{#
+| Variable              | Type    | Description                                              |
+|-----------------------|---------|----------------------------------------------------------|
+| products.source       | string  |                                                          |
+| products.source_value | ?int[]  | ids of sources                                           |
+| title                 | string  | Section title                                            |
+| display_all_url       | ?string | when set, a "show all" link is rendered                   |
+| limit                 | int     | Number of products to be shown                           |
+| position              | Int     | Sorting number start from zero                           |
+#}
+{% set is_vertical = theme.settings.get('vertical_fixed_products', true) %}
+<section component-id="{{ componentId }}" data-testid="store-home-fixed-products"
+         class="s-block s-block--fixed-products container js-reveal">
+    {% if title %}
+        <div class="s-block__title">
+            <div class="right-side"><h2>{{ title }}</h2></div>
+            {% if display_all_url and theme.settings.get('is_more_button_enabled', true) %}
+                <a href="{{ display_all_url }}" class="s-block__display-all">
+                    {{ trans('blocks.home.display_all') }} <i class="sicon-arrow-left {{ theme.is_rtl ? '' : 'flip-x' }}"></i>
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <salla-products-list data-testid="store-home-fixed-products-list"
+                         source="{{ products.source }}"
+                         limit="{{ limit }}"
+                         source-value="{{ products.source_value|json_encode }}"
+                         class="{{ is_vertical ? 'vertical-products' : 'horizontal-products' }}"
+                         {{ is_vertical ? '' : 'horizontal-cards' }}></salla-products-list>
+</section>

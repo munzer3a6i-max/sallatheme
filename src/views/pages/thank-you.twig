@@ -1,0 +1,115 @@
+{#
+| Variable            | Type   | Description                            |
+|---------------------|--------|----------------------------------------|
+| order               | Order  | @see pages/customer/orders/single.twig |
+| thank_you_title     | string |                                        |
+| messages            | array  | merchant messages                      |
+#}
+{% extends "layouts.master" %}
+
+{% block content %}
+    {% hook 'thank-you:start' %}
+
+    <div class="gradient-bg relative -z-1 -mb-44 h-52 w-full"></div>
+
+    <div class="container mb-20">
+        <nav class="breadcrumbs thankyou-breadcrumbs w-full py-5">
+            <salla-breadcrumb></salla-breadcrumb>
+        </nav>
+
+        <div class="s-card mb-6 p-6 md:mb-8 md:p-10">
+            <div class="flex flex-col items-center pb-10 pt-10 text-center">
+                <span class="thanks-item mb-6 inline-flex h-24 w-24 items-center justify-center rounded-full sand-bg">
+                    <i class="sicon-check-circle text-5xl" style="color: var(--color-primary);"></i>
+                </span>
+
+                <h1 data-testid="store-thankyou-title" class="thanks-item mb-3 text-xl font-bold">{{ thank_you_title }}</h1>
+
+                <p class="thanks-item mb-6 max-w-xs text-sm leading-6" style="color: var(--color-muted);">
+                    {{ trans('pages.thank_you.order_id') }}
+                    <salla-button data-testid="store-thankyou-order-id" class="relative" color="dark" shape="link"
+                                  data-content="{{ order.reference_id }}" onclick="app.copyToClipboard(event)">
+                        <span>#{{ order.reference_id }}</span>
+                        <i class="copy-icon sicon-swap-stroke pointer-events-none rtl:mr-1 ltr:ml-1"></i>
+                    </salla-button>
+                </p>
+
+                <salla-button data-testid="store-thankyou-order-details-btn"
+                              onclick="salla.order.show({order_id:'{{ order.id }}', url:'{{ order.url }}'})">
+                    <i class="sicon-newspaper rtl:ml-1 ltr:mr-1"></i>
+                    {{ trans('pages.thank_you.order_details') }}
+                </salla-button>
+            </div>
+
+            {% if order.instructions %}
+                <article class="article article--main article--small text-center">{{ order.instructions|raw }}</article>
+            {% endif %}
+
+            {% for message in messages %}
+                <div class="flex flex-col items-center pb-10 pt-1">
+                    <span class="font-bold">{{ message }}</span>
+                </div>
+            {% endfor %}
+
+            {% hook 'thank-you:items.start' %}
+            {% hook 'thank-you:items.end' %}
+        </div>
+
+        {# Split shipment tracking — self-hides for single-shipment orders #}
+        <salla-order-shipments class="mb-6 block empty:hidden md:mb-8"></salla-order-shipments>
+
+        <salla-next-order-coupon data-testid="store-thankyou-coupon"></salla-next-order-coupon>
+
+        {% if order.is_pickable %}
+            <salla-order-branch data-testid="store-thankyou-branch"></salla-order-branch>
+        {% endif %}
+
+        <div class="gap-6 lg:flex lg:gap-8">
+            {% if order.email_sent %}
+                <div class="thankyou-block flex-1">
+                    <div class="mb-3 rounded-icon sand-bg"><i class="sicon-newspaper-alt text-xl"></i></div>
+                    <p class="mb-2 text-sm">{{ trans('pages.thank_you.email_sent') }}</p>
+                    <b class="text-sm">{{ order.customer.email }}</b>
+                </div>
+            {% else %}
+                <div id="invoice-form" class="thankyou-block flex-1">
+                    <div class="mb-3 rounded-icon sand-bg"><i class="sicon-newspaper-alt text-xl"></i></div>
+                    <p class="mb-3 text-sm">{{ trans('pages.thank_you.resend_email') }}</p>
+                    <form onsubmit="return salla.form.onSubmit('order.sendInvoice', event)" class="inline-form max-w-sm">
+                        <input data-testid="store-thankyou-email-input" type="email" name="email" required
+                               class="form-input" placeholder="your@email.com">
+                        <salla-button data-testid="store-thankyou-email-submit" type="submit" loader-position="center">
+                            <span class="btn__text">{{ trans('blocks.comments.submit') }}</span>
+                        </salla-button>
+                    </form>
+                </div>
+            {% endif %}
+
+            <div class="thankyou-block flex-1">
+                <div class="mb-3 rounded-icon sand-bg"><i class="sicon-mail-letter text-xl"></i></div>
+                <p class="mb-3 text-sm">{{ trans('common.titles.support') }}</p>
+
+                <div class="flex flex-wrap items-center justify-center gap-5">
+                    {% if store.contacts.mobile %}
+                        <a href="tel:{{ store.contacts.mobile }}" class="flex items-center gap-1.5 text-sm transition hover:opacity-80">
+                            <i class="sicon-phone"></i><b class="unicode">{{ store.contacts.mobile }}</b>
+                        </a>
+                    {% endif %}
+
+                    {% if store.contacts.whatsapp %}
+                        <a href="https://wa.me/{{ store.contacts.whatsapp|replace({' ': '', '+': '', '-': ''}) }}"
+                           target="_blank" rel="noopener" class="flex items-center gap-1.5 text-sm transition hover:opacity-80">
+                            <i class="sicon-whatsapp"></i><b class="unicode">{{ store.contacts.whatsapp }}</b>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {% hook 'thank-you:end' %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script defer src="{{ 'checkout.js' | asset }}"></script>
+{% endblock %}

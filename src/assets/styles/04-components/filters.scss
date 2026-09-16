@@ -1,0 +1,51 @@
+@use '../01-settings/breakpoints' as *;
+
+/* Category filters sidebar (`salla-filters`) + its mobile drawer. */
+salla-filters {
+  @apply block;
+
+  .s-filters-wrapper,
+  .s-filters-container {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--s-radius);
+  }
+
+  .s-filters-title,
+  h3 {
+    @apply text-sm font-bold;
+    color: var(--color-ink);
+  }
+
+  .s-filters-item,
+  .s-filters-group {
+    border-color: var(--color-line);
+  }
+}
+
+#filters-menu {
+  @apply w-full;
+
+  @include desktop {
+    background-color: var(--color-surface);
+  }
+}
+
+body.filters-opened {
+  .close-filters {
+    @apply fixed top-4 rtl:left-4 ltr:right-4 z-50 inline-flex h-10 w-10 items-center justify-center;
+    background-color: var(--color-surface);
+    border-radius: var(--s-radius-pill);
+    color: var(--color-danger);
+  }
+}
+
+/* Sorting select on listing pages. */
+#product-filter,
+#testimonials-filter {
+  @apply w-auto min-w-[150px] text-sm;
+}
+
+.products-toolbar {
+  @apply mb-5 flex flex-wrap items-center justify-between gap-3;
+}

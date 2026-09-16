@@ -1,0 +1,23 @@
+/* Empty states: cart, wishlist, orders, brands, blog. */
+.no-content-placeholder {
+  @apply flex flex-col items-center justify-center gap-3 px-6 py-16 text-center;
+  background-color: var(--color-surface);
+  border: 1px dashed var(--color-line);
+  border-radius: var(--s-radius-lg);
+
+  .icon {
+    @apply mb-2 inline-flex h-20 w-20 items-center justify-center text-4xl;
+    background-color: var(--color-sand);
+    border-radius: var(--s-radius-pill);
+    color: var(--color-muted);
+  }
+
+  p {
+    @apply text-sm;
+    color: var(--color-muted);
+  }
+
+  .btn {
+    @apply mt-2;
+  }
+}

@@ -1,0 +1,145 @@
+/* Swiper-based `salla-slider` blocks. */
+salla-slider {
+  @apply block;
+
+  .swiper {
+    @apply overflow-hidden;
+  }
+
+  .swiper-slide {
+    height: auto;
+  }
+}
+
+.s-slider-block-title,
+.s-slider-block h2 {
+  @apply text-xl font-bold sm:text-2xl;
+  color: var(--color-ink);
+}
+
+.s-slider-nav-arrow,
+.swiper-button-next,
+.swiper-button-prev {
+  @apply inline-flex h-10 w-10 items-center justify-center;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--s-radius-pill);
+  color: var(--color-ink);
+  transition: var(--s-transition);
+
+  &:hover {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-primary-reverse);
+  }
+
+  &::after {
+    @apply text-xs;
+  }
+}
+
+.swiper-pagination-bullet {
+  background-color: var(--color-sand-dark);
+  opacity: 1;
+  transition: var(--s-transition);
+}
+
+.swiper-pagination-bullet-active {
+  background-color: var(--color-primary);
+  width: 22px;
+  border-radius: var(--s-radius-pill);
+}
+
+/* Hero pagination sits on the image, so it needs light bullets. */
+.s-block--hero {
+  .swiper-pagination-bullet {
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .swiper-pagination-bullet-active {
+    background-color: #fff;
+  }
+}
+
+/* Product gallery on the single product page. */
+.details-slider {
+  .swiper-slide {
+    @apply overflow-hidden;
+    background-color: var(--color-sand);
+    border-radius: var(--s-radius);
+  }
+
+  img {
+    @apply w-full;
+    aspect-ratio: 3 / 4;
+  }
+
+  .s-slider-thumbs,
+  [slot='thumbs'] {
+    @apply mt-3 flex gap-3;
+  }
+
+  .slide--one-fourth {
+    @apply w-20 shrink-0 cursor-pointer overflow-hidden sm:w-24;
+    border: 1px solid var(--color-line);
+    border-radius: var(--s-radius-sm);
+    transition: var(--s-transition);
+
+    &.swiper-slide-thumb-active,
+    &:hover {
+      border-color: var(--color-primary);
+    }
+
+    img {
+      aspect-ratio: 1;
+    }
+  }
+
+  .video-entry::after,
+  .model-entry::after {
+    @apply absolute inset-0 flex items-center justify-center text-2xl text-white;
+    content: '\e9f5';
+    font-family: 'sallaicons';
+    pointer-events: none;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.promotion-title {
+  @apply absolute top-4 z-2 rtl:right-4 ltr:left-4 px-4 py-1.5 text-xs font-bold;
+  background-color: var(--color-ink);
+  border-radius: var(--s-radius-pill);
+  color: var(--color-ivory);
+}
+
+.slide--one-sixth {
+  @apply w-28 shrink-0 sm:w-32;
+}
+
+.slide--one-fourth {
+  @apply w-56 shrink-0;
+}
+
+/* Blog slider */
+.blog-slider__slide {
+  @apply relative overflow-hidden;
+  border-radius: var(--s-radius);
+
+  &.has-overlay::after {
+    @apply absolute inset-0;
+    background-image: linear-gradient(to top, rgba(18, 16, 14, 0.8), transparent 65%);
+    content: '';
+  }
+
+  .blog-slider__content {
+    @apply relative z-10;
+  }
+}
+
+/* The magnifier glass created by partials/image-zoom.js */
+.img-magnifier-glass {
+  border: 2px solid var(--color-surface);
+  border-radius: var(--s-radius-pill);
+  box-shadow: var(--s-shadow);
+  cursor: none;
+}

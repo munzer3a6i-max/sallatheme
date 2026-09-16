@@ -1,0 +1,219 @@
+/**
+ * Header — announcement bar, utility top nav, and the sticky main nav.
+ * `app.js` toggles `.fixed-header` / `.fixed-pinned` on `#mainnav` while the
+ * visitor scrolls, so the sticky state lives here.
+ */
+.store-header {
+  @apply relative z-30;
+}
+
+/* ---------------------------------------------------------- announcement */
+.announcement-bar {
+  @apply relative overflow-hidden text-center text-xs sm:text-sm;
+  background-color: var(--color-invert-bg);
+  color: var(--color-invert-ink);
+  transition: opacity 0.3s var(--s-ease), transform 0.3s var(--s-ease);
+
+  &.is-hidden {
+    @apply hidden;
+  }
+
+  &.is-dismissing {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+
+  &__inner {
+    @apply flex items-center justify-center gap-3 py-2.5;
+  }
+
+  &__text {
+    @apply line-clamp-1;
+  }
+
+  &__close {
+    @apply absolute top-1/2 rtl:left-2 ltr:right-2 inline-flex h-7 w-7 -translate-y-1/2 items-center justify-center text-sm;
+    border-radius: var(--s-radius-pill);
+    opacity: 0.7;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.12);
+      opacity: 1;
+    }
+  }
+}
+
+/* -------------------------------------------------------------- top nav */
+.top-navbar {
+  @apply hidden border-b lg:block;
+  background-color: var(--color-surface);
+  border-color: var(--color-line);
+  color: var(--color-ink-soft);
+  font-size: 0.8125rem;
+
+  .container {
+    @apply flex items-center justify-between gap-4 py-2;
+  }
+
+  a:hover {
+    color: var(--color-primary);
+  }
+}
+
+.topnav-is-dark .top-navbar {
+  background-color: var(--color-invert-bg);
+  border-color: transparent;
+  color: var(--color-invert-ink);
+
+  .btn--rounded-gray {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: inherit;
+  }
+}
+
+.header-buttons {
+  @apply flex items-center gap-2;
+}
+
+/* ------------------------------------------------------------- main nav */
+.main-nav-container {
+  @apply relative;
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-line);
+
+  .inner {
+    @apply w-full;
+    background-color: inherit;
+    transition: box-shadow var(--s-transition), background-color var(--s-transition);
+  }
+
+  &.fixed-header .inner {
+    @apply fixed top-0 rtl:right-0 ltr:left-0 z-40;
+    background-color: color-mix(in srgb, var(--color-surface) 92%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--color-line);
+    box-shadow: var(--s-shadow-soft);
+  }
+
+  &.fixed-pinned.animated .inner {
+    animation: zirar-fade-up 0.35s var(--s-ease) both;
+  }
+}
+
+.navbar-brand {
+  @apply flex shrink-0 items-center;
+
+  img {
+    @apply object-contain;
+    max-height: 46px;
+    width: auto;
+  }
+}
+
+.header-actions {
+  @apply flex items-center gap-1;
+}
+
+.header-search {
+  @apply w-full max-w-md;
+
+  salla-search {
+    @apply block w-full;
+  }
+}
+
+/* The cart pill carries a live count badge. */
+salla-cart-summary {
+  @apply relative inline-flex;
+
+  .s-cart-summary-count,
+  [data-cart-count] {
+    @apply absolute -top-1 rtl:-left-1 ltr:-right-1 flex h-5 min-w-[20px] items-center justify-center px-1 text-xxs font-bold;
+    background-color: var(--color-primary);
+    border-radius: var(--s-radius-pill);
+    color: var(--color-primary-reverse);
+  }
+}
+
+.mburger {
+  @apply inline-flex h-11 w-11 items-center justify-center lg:hidden;
+  border-radius: var(--s-radius-pill);
+
+  &:hover {
+    background-color: var(--color-sand);
+  }
+}
+
+/* --------------------------------------------------------- scheme toggle */
+.scheme-toggle {
+  @apply relative inline-flex h-10 w-10 items-center justify-center;
+  border-radius: var(--s-radius-pill);
+  color: var(--color-ink);
+
+  &:hover {
+    background-color: var(--color-sand);
+  }
+
+  .sicon-sun {
+    @apply hidden;
+  }
+}
+
+html.dark .scheme-toggle {
+  .sicon-sun {
+    @apply inline-block;
+  }
+
+  .sicon-moon {
+    @apply hidden;
+  }
+}
+
+/* --------------------------------------------------- mobile bottom bar */
+.mobile-bottom-bar {
+  @apply fixed bottom-0 inset-x-0 z-40 lg:hidden;
+  background-color: color-mix(in srgb, var(--color-surface) 95%, transparent);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--color-line);
+  box-shadow: var(--s-shadow-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  transition: transform 0.3s var(--s-ease);
+
+  &.is-hidden {
+    transform: translateY(105%);
+  }
+
+  &__inner {
+    @apply grid grid-cols-5;
+  }
+
+  &__item {
+    @apply flex flex-col items-center justify-center gap-1 py-2 text-xxs;
+    color: var(--color-muted);
+
+    i {
+      @apply text-xl;
+    }
+
+    &.is-active,
+    &:hover {
+      color: var(--color-primary);
+    }
+  }
+
+  &__badge {
+    @apply absolute -top-0.5 rtl:-left-2 ltr:-right-2 flex h-4 min-w-[16px] items-center justify-center px-1 text-xxxs font-bold;
+    background-color: var(--color-primary);
+    border-radius: var(--s-radius-pill);
+    color: var(--color-primary-reverse);
+
+    &.is-empty {
+      @apply hidden;
+    }
+  }
+}
+
+/* Keep the sticky add-to-cart bar above the bottom bar. */
+body.is-sticky-product-bar .mobile-bottom-bar {
+  @apply lg:hidden;
+}

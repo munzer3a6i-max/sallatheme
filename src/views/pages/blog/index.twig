@@ -1,0 +1,148 @@
+{#
+| Variable            | Type           | Description                 |
+|---------------------|----------------|-----------------------------|
+| slides              | ?Article[]     | @see pages/blog/single.twig |
+| articles            | Article[]      | paginated, has `next_page`  |
+| categories          | BlogCategory[] | name, url, is_current       |
+#}
+{% extends "layouts.master" %}
+
+{% block content %}
+    <div class="container mb-10 sm:mb-20">
+        <div class="center-between">
+            <nav class="breadcrumbs w-full py-5">
+                <salla-breadcrumb></salla-breadcrumb>
+            </nav>
+
+            <div class="dropdown-toggler cat-filter lg:hidden">
+                <button type="button" class="dropdown__trigger flex items-center gap-1.5 text-sm" style="color: var(--color-primary);"
+                        aria-label="{{ trans('pages.blog_categories.categories') }}" aria-expanded="false" aria-haspopup="true">
+                    <i class="sicon-filter pointer-events-none text-xs"></i>
+                    <span class="fix-align pointer-events-none">{{ trans('pages.blog_categories.categories') }}</span>
+                </button>
+
+                <div class="dropdown__menu" role="menu" aria-orientation="vertical" tabindex="-1">
+                    <div class="relative mb-1 flex items-center border-b p-4 hairline lg:hidden">
+                        <h2 class="font-bold">{{ trans('pages.blog_categories.categories') }}</h2>
+                        <button class="dropdown__close absolute top-2 z-50 h-10 w-10 rounded-full text-lg rtl:left-1 ltr:right-1"
+                                style="color: var(--color-danger);">
+                            <i class="sicon-cancel pointer-events-none"></i>
+                        </button>
+                    </div>
+                    <ul class="space-y-px px-2 py-2 pb-4 lg:px-0 lg:pb-2">
+                        {% for category in categories %}
+                            <li>
+                                <a class="block rounded p-2.5 text-sm {{ category.is_current ? 'is-active' : '' }}" href="{{ category.url }}">
+                                    <span>{{ category.name }}</span>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-8 lg:grid-cols-8">
+            <nav data-testid="store-blog-categories" aria-label="Sidebar" class="col-span-2 hidden shrink-0 lg:sticky lg:top-24 lg:block" id="blog-categories">
+                <h2 class="mb-3 font-bold">{{ trans('pages.blog_categories.categories') }}</h2>
+                <ul>
+                    {% for category in categories %}
+                        <li>
+                            <a class="block py-2.5 text-sm {{ category.is_current ? 'font-bold' : '' }}"
+                               {% if category.is_current %}style="color: var(--color-primary);"{% endif %}
+                               href="{{ category.url }}">{{ category.name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </nav>
+
+            <div class="main-content lg:col-span-6">
+                {% if slides|length %}
+                    <salla-slider id="blog-home-slider" type="blog" auto-play auto-height show-controls="false" pagination
+                                  class="blog-slider mb-4 block overflow-hidden rounded lg:mb-8">
+                        <div slot="items">
+                            {% for article in slides %}
+                                <div class="swiper-slide blog-slider__slide has-overlay relative flex h-[300px] justify-center sand-bg md:h-[400px]">
+                                    <img class="{{ article.image.url|is_placeholder ? 'w-20 object-contain opacity-50 sm:h-full' : 'h-full w-full object-cover' }}"
+                                         src="{{ article.image.url }}" alt="{{ article.image.alt|default(article.title) }}">
+                                    <div class="absolute bottom-0 z-10 p-5 pb-10 rtl:right-0 ltr:left-0 lg:pb-16 rtl:lg:pr-10 ltr:lg:pl-10">
+                                        <div class="blog-slider__content w-full text-white md:w-5/6 lg:w-8/12">
+                                            <div class="mb-2.5 inline-flex gap-5 text-sm" data-swiper-parallax="-400">
+                                                <span class="flex items-center gap-1"><i class="sicon-calendar-date"></i>{{ article.created_at|date }}</span>
+                                                <a href="{{ article.author.url }}" class="flex items-center gap-1 hover:underline">
+                                                    <i class="sicon-user"></i>{{ article.author.name }}
+                                                </a>
+                                            </div>
+                                            <h2 class="mb-3 text-lg font-bold leading-normal text-white">
+                                                <a href="{{ article.url }}">{{ article.title }}</a>
+                                            </h2>
+                                            <p class="description line-clamp-2 text-sm text-white/85" data-swiper-parallax="-250">{{ article.summary }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </salla-slider>
+                {% else %}
+                    <h1 class="blog-category__title mb-6 text-lg font-bold">{{ page.title }}</h1>
+                {% endif %}
+
+                {% if articles|length %}
+                    {% hook 'blog:index.items.start' %}
+
+                    <salla-infinite-scroll class="grid gap-4 md:grid-cols-2 md:gap-6" next-page="{{ articles.next_page }}" autoload>
+                        {% for article in articles %}
+                            <article data-testid="store-blog-article-card" class="post-entry s-card flex h-full flex-col overflow-hidden transition-shadow duration-500 hover:shadow-default">
+                                <a href="{{ article.url }}" class="post-entry__image flex h-56 w-full items-center justify-center overflow-hidden sand-bg transition hover:opacity-90">
+                                    <img class="{{ article.image.url|is_placeholder ? 'w-20 object-contain opacity-60 sm:h-full' : 'h-full w-full object-cover' }}"
+                                         src="{{ article.image.url }}" alt="{{ article.image.alt|default(article.title) }}" loading="lazy">
+                                </a>
+
+                                <div class="flex-1 px-5 pb-6 pt-5">
+                                    <div class="mb-2.5 inline-flex gap-5 text-sm" style="color: var(--color-muted);">
+                                        <span class="flex items-center gap-1"><i class="sicon-calendar-date"></i>{{ article.created_at|date }}</span>
+                                        <a href="{{ article.author.url }}" class="flex items-center gap-1"><i class="sicon-user"></i>{{ article.author.name }}</a>
+                                    </div>
+
+                                    <h3 class="post-entry__title mb-2.5 text-base font-bold leading-6">
+                                        <a href="{{ article.url }}">{{ article.title }}</a>
+                                    </h3>
+
+                                    <p class="mb-2.5 text-sm leading-6" style="color: var(--color-muted);">{{ article.summary }}</p>
+
+                                    {% if store.settings.blog.allow_likes_and_comments %}
+                                        <div class="post-entry__icons flex items-center gap-3 text-sm" style="color: var(--color-muted);">
+                                            {% if article.likes_count %}
+                                                <span class="flex items-center gap-1"><i class="sicon-thumbs-up"></i>{{ article.likes_count }}</span>
+                                            {% endif %}
+                                            {% if article.comments_count %}
+                                                <span class="flex items-center gap-1"><i class="sicon-chat"></i>{{ article.comments_count }}</span>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                                {% if article.tags|length %}
+                                    <div class="flex flex-wrap items-center gap-2 border-t p-4 hairline">
+                                        {% for tag in article.tags %}
+                                            <a href="{{ tag.url }}" class="inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm sand-bg">
+                                                <i class="sicon-tag"></i><span class="fix-align whitespace-nowrap">{{ tag.name }}</span>
+                                            </a>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </article>
+                        {% endfor %}
+                    </salla-infinite-scroll>
+
+                    {% hook 'blog:index.items.end' %}
+                {% elseif not slides|length %}
+                    <div class="no-content-placeholder">
+                        <i class="sicon-inbox icon"></i>
+                        <p>{{ trans('pages.blog_categories.no_articles') }}</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

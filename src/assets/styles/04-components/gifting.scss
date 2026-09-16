@@ -1,0 +1,18 @@
+/* Gift options in the cart and on the product page. */
+salla-gifting {
+  .s-gift-card-wrapper,
+  .s-gift-card-item {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--s-radius);
+  }
+
+  .s-gift-card-item.is-selected {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 1px var(--color-primary);
+  }
+}
+
+#cart-gifting {
+  background-color: transparent;
+}

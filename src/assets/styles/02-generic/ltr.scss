@@ -1,0 +1,10 @@
+/* English store front: mirror the few directional affordances. */
+[dir='ltr'] {
+  .hero-slide__content {
+    text-align: left;
+  }
+
+  .breadcrumbs .sicon-keyboard_arrow_left {
+    transform: scaleX(-1);
+  }
+}

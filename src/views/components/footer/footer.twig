@@ -1,0 +1,118 @@
+{#
+    Footer — brand column, page links, contacts, apps, payments.
+    Goes dark when the `footer_is_dark` theme setting is on (default).
+#}
+{% set footer_note = theme.settings.get('footer_note') %}
+<footer data-testid="store-footer" class="store-footer">
+    <div aria-label="footer" class="store-footer__inner">
+        <div class="container">
+
+            {% if theme.settings.get('show_footer_cta', true) %}
+                <div class="footer-cta mb-10 grid gap-6 lg:grid-cols-2 lg:items-center">
+                    <div>
+                        <h3>{{ trans('blocks.footer.help_title') }}</h3>
+                        <p>{{ trans('blocks.footer.help_text') }}</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3 lg:justify-end">
+                        {% if store.contacts.whatsapp %}
+                            <a class="btn btn--primary"
+                               href="https://wa.me/{{ store.contacts.whatsapp|replace({' ': '', '+': '', '-': ''}) }}"
+                               target="_blank" rel="noopener">
+                                <i class="sicon-whatsapp"></i>
+                                <span>{{ trans('blocks.footer.chat_with_us') }}</span>
+                            </a>
+                        {% endif %}
+                        {% if store.contacts.mobile %}
+                            <a class="btn btn--outline-light" href="tel:{{ store.contacts.mobile }}">
+                                <i class="sicon-phone"></i>
+                                <span class="unicode">{{ store.contacts.mobile }}</span>
+                            </a>
+                        {% endif %}
+                        <salla-social class="block"></salla-social>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="grid grid-cols-1 gap-8 lg:grid-cols-6 lg:gap-6">
+
+                {# ------------------------------------------------ brand column #}
+                <div class="lg:col-span-2 rtl:lg:pl-16 ltr:lg:pr-16">
+                    <a href="{{ link('/') }}" class="footer-brand">
+                        {% if store.logo %}
+                            <img src="{{ store.logo|cdn(175) }}" alt="{{ store.name }}" width="150" height="44" loading="lazy">
+                        {% else %}
+                            <h3 class="text-lg font-bold">{{ store.name }}</h3>
+                        {% endif %}
+                    </a>
+
+                    {% if footer_note %}
+                        <p class="footer-note">{{ footer_note }}</p>
+                    {% elseif store.description %}
+                        <div class="footer-note">{{ store.description|raw }}</div>
+                    {% endif %}
+
+                    <div class="hidden lg:block">
+                        <salla-social data-testid="store-footer-social" class="mb-6 block"></salla-social>
+                    </div>
+
+                    <div class="flex flex-wrap items-end gap-4">
+                        <salla-trust-badges data-testid="store-footer-trust-badges"
+                                            {% if theme.settings.get('footer_is_dark', true) %} dark {% endif %}></salla-trust-badges>
+
+                        {% if store.settings.tax.number %}
+                            <div class="flex items-end gap-2">
+                                {% if store.settings.tax.certificate %}
+                                    <a class="load-img-onclick" data-modal-id="modal-value-tax" href="#/" aria-label="{{ store.settings.tax.number }}">
+                                        <img width="40" height="50" src="{{ 'images/tax.png' | cdn(70,70) }}" loading="lazy"
+                                             class="w-10 rounded-sm transition-opacity hover:opacity-80" alt="value added tax">
+                                    </a>
+                                {% endif %}
+                                <div>
+                                    <p class="mb-1 text-sm text-text-grey">{{ trans('common.elements.tax_number') }}</p>
+                                    <b class="text-sm">{{ store.settings.tax.number }}</b>
+                                </div>
+                            </div>
+
+                            {% if store.settings.tax.certificate %}
+                                <salla-modal data-testid="store-footer-tax-modal" sub-title-first
+                                             sub-title="{{ trans('common.elements.tax_number') }}"
+                                             modal-title="{{ store.settings.tax.number }}" id="modal-value-tax">
+                                    <div class="flex max-w-full justify-center">
+                                        <img class="w-full" loading="lazy" data-src="{{ store.settings.tax.certificate }}"
+                                             alt="{{ store.settings.tax.number }}"/>
+                                    </div>
+                                </salla-modal>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+
+                {# ------------------------------------------------- pages links #}
+                <div>
+                    <h3>{{ trans('blocks.footer.pages_links') }}</h3>
+                    <salla-menu data-testid="store-footer-menu" source="footer" with-cookie-preferences></salla-menu>
+                </div>
+
+                {# ---------------------------------------------------- contacts #}
+                <div>
+                    <salla-contacts data-testid="store-footer-contacts"></salla-contacts>
+
+                    <div class="contact-social lg:hidden">
+                        <salla-social data-testid="store-footer-social-mobile"></salla-social>
+                    </div>
+                </div>
+
+                {# -------------------------------------------------------- apps #}
+                <salla-apps-icons data-testid="store-footer-apps"
+                                  class="lg:col-span-2 rtl:lg:pr-16 ltr:lg:pl-16"></salla-apps-icons>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="footer-bottom">
+            <span class="copyright-text text-sm">{% hook copyright %}</span>
+            <salla-payments data-testid="store-footer-payments"></salla-payments>
+        </div>
+    </div>
+</footer>

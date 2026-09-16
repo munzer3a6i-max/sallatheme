@@ -1,0 +1,478 @@
+@use '../01-settings/breakpoints' as *;
+
+/**
+ * Home page blocks.
+ *
+ * Each block is a `<section class="s-block s-block--*">` rendered from
+ * `views/components/home/*.twig`. The shared rhythm lives in
+ * `02-generic/common.scss`; the identity of each block is below.
+ */
+
+/* ---------------------------------------------------------------- hero */
+.s-block--hero {
+  @apply mt-0;
+
+  .hero-slider__slide {
+    @apply relative flex items-center overflow-hidden;
+    background-color: var(--color-sand);
+  }
+
+  &.hero--medium .hero-slider__slide {
+    min-height: 340px;
+
+    @include from-desktop {
+      min-height: 460px;
+    }
+  }
+
+  &.hero--tall .hero-slider__slide {
+    min-height: 430px;
+
+    @include from-desktop {
+      min-height: 620px;
+    }
+  }
+
+  &.hero--full .hero-slider__slide {
+    min-height: calc(100vh - var(--header-height));
+  }
+
+  .hero-slide__bg {
+    @apply absolute inset-0 bg-cover bg-center;
+    transform: scale(1.06);
+    transition: transform 8s var(--s-ease);
+  }
+
+  .swiper-slide-active .hero-slide__bg {
+    transform: scale(1);
+  }
+
+  .hero-slide__bg--mobile {
+    @apply lg:hidden;
+  }
+
+  .hero-slide__bg--desktop {
+    @apply hidden lg:block;
+  }
+
+  .hero-slide__overlay {
+    @apply absolute inset-0;
+    background-image: linear-gradient(
+      to top,
+      rgba(18, 16, 14, 0.7) 0%,
+      rgba(18, 16, 14, 0.25) 45%,
+      rgba(18, 16, 14, 0.1) 100%
+    );
+  }
+
+  .hero-slide__content {
+    @apply relative z-2 w-full max-w-xl py-16;
+    color: #fff;
+
+    .kicker {
+      color: #e9d8a6;
+    }
+
+    h2 {
+      @apply mb-4 text-3xl font-bold leading-tight sm:text-4xl lg:text-title-size;
+      color: #fff;
+      text-wrap: balance;
+    }
+
+    p {
+      @apply mb-6 max-w-lg text-sm leading-7 sm:text-base;
+      color: rgba(255, 255, 255, 0.88);
+    }
+  }
+
+  &.align--center .hero-slide__content {
+    @apply mx-auto text-center;
+
+    p {
+      @apply mx-auto;
+    }
+  }
+
+  &.align--end .hero-slide__content {
+    @apply rtl:mr-auto ltr:ml-auto;
+  }
+}
+
+/* --------------------------------------------------------- collections */
+.s-block--collections {
+  .collection-card {
+    @apply relative block overflow-hidden text-center;
+    border-radius: var(--s-radius);
+
+    &__media {
+      @apply relative overflow-hidden;
+      background-color: var(--color-sand);
+      border-radius: var(--s-radius);
+
+      img {
+        @apply h-full w-full object-cover;
+        transition: transform 0.9s var(--s-ease);
+      }
+    }
+
+    &:hover &__media img,
+    &:hover .collection-card__media img {
+      transform: scale(1.07);
+    }
+
+    &__title {
+      @apply mt-3 text-sm font-bold sm:text-base;
+      color: var(--color-ink);
+    }
+
+    &__count {
+      @apply text-xs;
+      color: var(--color-muted);
+    }
+  }
+
+  &.shape--circle .collection-card__media {
+    @apply mx-auto;
+    aspect-ratio: 1;
+    border-radius: 999px;
+    max-width: 190px;
+  }
+
+  &.shape--square .collection-card__media {
+    aspect-ratio: 1;
+  }
+
+  &.shape--portrait .collection-card__media {
+    aspect-ratio: 3 / 4;
+  }
+
+  /* Overlay title for the portrait variant. */
+  &.shape--portrait .collection-card {
+    &__media::after {
+      @apply absolute inset-0;
+      background-image: linear-gradient(to top, rgba(18, 16, 14, 0.6), transparent 55%);
+      content: '';
+    }
+
+    &__title {
+      @apply absolute inset-x-0 bottom-4 z-2 mt-0 px-3;
+      color: #fff;
+    }
+  }
+}
+
+/* ----------------------------------------------------------- promises */
+.s-block--promises {
+  .promise-item {
+    @apply flex items-start gap-3 p-5;
+
+    i {
+      @apply inline-flex h-11 w-11 shrink-0 items-center justify-center text-xl;
+      background-color: var(--color-sand);
+      border-radius: var(--s-radius-pill);
+      color: var(--color-primary);
+    }
+
+    h3 {
+      @apply text-sm font-bold sm:text-base;
+    }
+
+    p {
+      @apply text-xs sm:text-sm;
+      color: var(--color-muted);
+    }
+  }
+
+  &.layout--cards .promise-item {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--s-radius);
+  }
+
+  &.layout--bar {
+    .promises-wrap {
+      @apply divide-y sm:divide-y-0 sm:rtl:divide-x-reverse sm:divide-x;
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-line);
+      border-radius: var(--s-radius);
+      border-color: var(--color-line);
+    }
+
+    .promise-item {
+      border-color: var(--color-line);
+    }
+  }
+}
+
+/* ----------------------------------------------------- editorial split */
+.s-block--split {
+  &.with-bg {
+    background-color: var(--color-sand);
+    padding-block: 3rem;
+
+    @include from-desktop {
+      padding-block: 5rem;
+    }
+  }
+
+  .split-media {
+    @apply overflow-hidden;
+    border-radius: var(--s-radius-lg);
+
+    img {
+      @apply h-full w-full object-cover;
+      aspect-ratio: 4 / 5;
+    }
+  }
+
+  .split-content {
+    @apply flex flex-col justify-center;
+
+    h2 {
+      @apply mb-4 text-2xl font-bold leading-snug sm:text-3xl;
+      text-wrap: balance;
+    }
+
+    p {
+      @apply mb-6 text-sm leading-8 sm:text-base;
+      color: var(--color-ink-soft);
+    }
+  }
+}
+
+/* -------------------------------------------------------- showcase/bg */
+.s-block--showcase {
+  &.with-bg {
+    background-color: var(--color-invert-bg);
+    color: var(--color-invert-ink);
+    padding-block: 3rem;
+
+    @include from-desktop {
+      padding-block: 4.5rem;
+    }
+
+    .s-block__title h2,
+    .s-block__title p {
+      color: var(--color-invert-ink);
+    }
+
+    .s-block__display-all {
+      color: var(--color-gold);
+    }
+  }
+}
+
+/* ------------------------------------------------------------ countdown */
+.s-block--countdown {
+  .countdown-banner {
+    @apply relative overflow-hidden px-6 py-12 text-center sm:px-12 sm:py-16;
+    background-color: var(--color-invert-bg);
+    border-radius: var(--s-radius-lg);
+    color: var(--color-invert-ink);
+
+    &__bg {
+      @apply absolute inset-0 bg-cover bg-center;
+      opacity: 0.35;
+    }
+
+    &__content {
+      @apply relative z-2 mx-auto max-w-2xl;
+    }
+
+    h2 {
+      @apply mb-3 text-2xl font-bold sm:text-3xl;
+      color: var(--color-invert-ink);
+    }
+
+    p {
+      @apply mb-6 text-sm sm:text-base;
+      color: color-mix(in srgb, var(--color-invert-ink) 80%, transparent);
+    }
+  }
+
+  salla-count-down {
+    @apply mb-6 flex justify-center;
+  }
+}
+
+/* ----------------------------------------------------------- size guide */
+.s-block--size-guide {
+  .size-guide-band {
+    @apply overflow-hidden p-6 sm:p-10;
+    background-color: var(--color-sand);
+    border-radius: var(--s-radius-lg);
+  }
+
+  .size-step {
+    @apply relative flex flex-col gap-2 p-5 text-center;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--s-radius);
+
+    &__num {
+      @apply absolute top-3 rtl:left-4 ltr:right-4 text-2xl font-bold;
+      color: var(--color-sand-dark);
+    }
+
+    i {
+      @apply mx-auto inline-flex h-12 w-12 items-center justify-center text-2xl;
+      background-color: var(--color-sand);
+      border-radius: var(--s-radius-pill);
+      color: var(--color-primary);
+    }
+
+    h3 {
+      @apply text-sm font-bold sm:text-base;
+    }
+
+    p {
+      @apply text-xs leading-6 sm:text-sm;
+      color: var(--color-muted);
+    }
+  }
+}
+
+/* -------------------------------------------------------------- lookbook */
+.s-block--lookbook {
+  .lookbook-item {
+    @apply relative block overflow-hidden;
+    border-radius: var(--s-radius);
+
+    img {
+      @apply h-full w-full object-cover;
+      aspect-ratio: 4 / 5;
+      transition: transform 0.9s var(--s-ease);
+    }
+
+    &:hover img {
+      transform: scale(1.06);
+    }
+
+    &__text {
+      @apply absolute inset-x-0 bottom-0 z-2 p-4 text-sm font-bold;
+      background-image: linear-gradient(to top, rgba(18, 16, 14, 0.7), transparent);
+      color: #fff;
+    }
+  }
+}
+
+/* ---------------------------------------------------------- banners/etc */
+.s-block--banners {
+  .banner-entry {
+    @apply relative flex items-end justify-center overflow-hidden;
+    background-color: var(--color-sand);
+    background-position: center;
+    background-size: cover;
+    border-radius: var(--s-radius);
+    min-height: 220px;
+
+    &.has-overlay::after {
+      @apply absolute inset-0;
+      background-image: linear-gradient(to top, rgba(18, 16, 14, 0.6), transparent 60%);
+      content: '';
+    }
+
+    &__text,
+    h3 {
+      @apply relative z-2 p-5 text-center;
+      color: #fff;
+    }
+
+    .banner__description {
+      @apply text-xs;
+      color: rgba(255, 255, 255, 0.85);
+    }
+  }
+
+  .square-photos .lazy__bg {
+    @apply absolute inset-0;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+}
+
+.s-block--fixed-banner {
+  .banner--fixed {
+    @apply block overflow-hidden;
+    border-radius: var(--s-radius);
+  }
+}
+
+.s-block--full-banner {
+  .full-banner-entry {
+    @apply relative flex items-center justify-center bg-cover bg-fixed bg-center text-center;
+    min-height: 380px;
+
+    h2,
+    a {
+      color: #fff;
+    }
+  }
+}
+
+.s-block--features {
+  &__item {
+    @apply flex flex-col items-center gap-2 p-5 text-center;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--s-radius);
+
+    .feature-icon {
+      @apply inline-flex h-12 w-12 items-center justify-center text-2xl;
+      background-color: var(--color-sand);
+      border-radius: var(--s-radius-pill);
+      color: var(--color-primary);
+    }
+
+    h2 {
+      @apply text-sm font-bold sm:text-base;
+    }
+
+    p {
+      @apply text-xs;
+      color: var(--color-muted);
+    }
+  }
+}
+
+.s-block--categories {
+  .slide--cat-entry {
+    @apply flex flex-col items-center gap-2 p-3 text-center text-sm font-bold;
+
+    i {
+      @apply inline-flex h-16 w-16 items-center justify-center text-2xl;
+      background-color: var(--color-sand);
+      border-radius: var(--s-radius-pill);
+      color: var(--color-primary);
+    }
+
+    img {
+      @apply h-16 w-16 object-cover;
+      border-radius: var(--s-radius-pill);
+    }
+
+    h2 {
+      @apply text-xs sm:text-sm;
+    }
+  }
+
+  &.merge-with-top-component {
+    @apply -mt-10 relative z-2;
+  }
+}
+
+.s-block--logos-slider {
+  background-color: var(--color-sand);
+  padding-block: 2.5rem;
+}
+
+.text-with-border span {
+  @apply inline-block px-4 py-2;
+  background-color: rgba(18, 16, 14, 0.45);
+  border-radius: var(--s-radius-pill);
+}
+
+/* Home grid helpers shared by several blocks. */
+.blocks-grid {
+  @apply grid gap-4 sm:gap-6;
+}

@@ -1,0 +1,154 @@
+/* Footer — light by default, switches to ink when `footer_is_dark` is on. */
+.store-footer {
+  @apply mt-14 sm:mt-20;
+  background-color: var(--color-surface-2);
+  border-top: 1px solid var(--color-line);
+
+  &__inner {
+    @apply py-12 sm:py-16;
+  }
+
+  h3,
+  .s-contacts-title {
+    @apply mb-4 text-base font-bold;
+  }
+
+  a:hover {
+    color: var(--color-primary);
+  }
+
+  li {
+    @apply mb-2;
+  }
+
+  .copyright-text {
+    color: var(--color-muted);
+  }
+}
+
+.footer-brand {
+  @apply mb-4 flex items-center gap-3;
+
+  img {
+    max-height: 44px;
+    width: auto;
+  }
+}
+
+.footer-note {
+  @apply mb-6 max-w-sm text-sm leading-7;
+  color: var(--color-muted);
+}
+
+.footer-bottom {
+  @apply flex flex-col items-center justify-between gap-4 py-5 text-sm md:flex-row;
+  border-top: 1px solid var(--color-line);
+}
+
+/* Help / contact strip above the footer columns. */
+.footer-cta {
+  @apply rounded p-6 sm:p-8;
+  background-color: var(--color-sand);
+
+  h3 {
+    @apply mb-1 text-lg font-bold;
+  }
+
+  p {
+    @apply mb-4 text-sm;
+    color: var(--color-muted);
+  }
+}
+
+/* Dark footer variant — uses the emphasis tokens so it stays dark in both
+   schemes instead of inverting to cream when the page itself goes dark. */
+.footer-is-dark .store-footer {
+  background-color: var(--color-invert-bg);
+  border-color: transparent;
+  color: var(--color-invert-ink);
+
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  span,
+  a,
+  li {
+    color: var(--color-invert-ink);
+  }
+
+  .footer-note,
+  .copyright-text,
+  .s-contacts-value {
+    color: color-mix(in srgb, var(--color-invert-ink) 70%, transparent);
+  }
+
+  .footer-bottom,
+  .footer-cta {
+    border-color: color-mix(in srgb, var(--color-invert-ink) 14%, transparent);
+  }
+
+  .footer-cta {
+    background-color: color-mix(in srgb, var(--color-invert-ink) 7%, transparent);
+  }
+
+  /* The blanket colour rule above must not swallow branded buttons. */
+  .btn--primary,
+  .s-button-primary:not(.s-button-outline):not(.s-button-link) {
+    color: var(--color-primary-reverse);
+  }
+
+  .btn--outline-light {
+    border-color: color-mix(in srgb, var(--color-invert-ink) 30%, transparent);
+    color: var(--color-invert-ink);
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--color-invert-ink) 10%, transparent);
+    }
+  }
+
+  .form-input {
+    background-color: color-mix(in srgb, var(--color-invert-ink) 8%, transparent);
+    border-color: color-mix(in srgb, var(--color-invert-ink) 18%, transparent);
+    color: var(--color-invert-ink);
+
+    &::placeholder {
+      color: color-mix(in srgb, var(--color-invert-ink) 55%, transparent);
+    }
+  }
+
+  a:hover {
+    color: var(--color-gold);
+  }
+}
+
+/* Salla footer widgets */
+salla-social a,
+.s-social-share a {
+  @apply inline-flex h-10 w-10 items-center justify-center;
+  background-color: var(--color-sand);
+  border-radius: var(--s-radius-pill);
+  color: var(--color-ink);
+  transition: var(--s-transition);
+
+  &:hover {
+    background-color: var(--color-primary);
+    color: var(--color-primary-reverse);
+  }
+}
+
+.footer-is-dark salla-social a {
+  background-color: color-mix(in srgb, var(--color-invert-ink) 8%, transparent);
+  color: var(--color-invert-ink);
+
+  &:hover {
+    background-color: var(--color-primary);
+    color: var(--color-primary-reverse);
+  }
+}
+
+salla-payments img,
+.s-payments-item {
+  @apply h-7 object-contain;
+}

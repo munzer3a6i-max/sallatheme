@@ -1,0 +1,48 @@
+{#
+| Variable                      | Type   | Description                                          |
+|-------------------------------|--------|------------------------------------------------------|
+| items                         | array  | tab sections                                         |
+| items[].title                 | string | Section title                                        |
+| items[].products.source       | string |                                                      |
+| items[].products.source_value | ?int[] | ids of sources                                       |
+| items[].products.limit        | int    | Number of products to be shown                       |
+| items[].id                    | String | Section id                                           |
+| is_slider                     | Bool   | Products movable or static                           |
+| position                      | int    | Sorting number starts from zero                      |
+#}
+{% set component_id = 'featured-products-style2-' ~ position %}
+{% set is_vertical = theme.settings.get('vertical_fixed_products', true) %}
+<section component-id="{{ componentId }}" data-testid="store-home-featured-products-tabs"
+         id="{{ component_id }}"
+         class="s-block s-block-tabs s-block--tabs-produtcs s-block--full-bg sand-bg py-10 sm:py-16 js-reveal">
+    <div class="container">
+        {% if items|length > 1 %}
+            <div class="tabs hide-scroll">
+                {% for section in items %}
+                    <salla-button class="tab-trigger {{ loop.first ? 'is-active' : '' }}"
+                                  data-target="{{ component_id }}-{{ section.id }}"
+                                  data-component-id="{{ component_id }}"
+                                  fill="outline">{{ section.title }}</salla-button>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="tabs-wrapper">
+            {% for section in items %}
+                <div id="{{ component_id }}-{{ section.id }}" class="tabs__item {{ loop.first ? 'is-active' : '' }}">
+                    {% if is_slider %}
+                        <salla-products-slider slider-id="section-{{ section.id }}-slider"
+                                               source="{{ section.products.source }}"
+                                               limit="{{ section.products.limit }}"
+                                               source-value="{{ section.products.source_value|json_encode }}"></salla-products-slider>
+                    {% else %}
+                        <salla-products-list source="{{ section.products.source }}"
+                                             limit="{{ section.products.limit }}"
+                                             source-value="{{ section.products.source_value|json_encode }}"
+                                             {{ is_vertical ? '' : 'horizontal-cards' }}></salla-products-list>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>

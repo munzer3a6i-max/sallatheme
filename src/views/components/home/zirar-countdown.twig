@@ -1,0 +1,50 @@
+{#
+| Variable              | Type      | Description                          |
+|-----------------------|-----------|--------------------------------------|
+| component.background  | ?string   | background image url                 |
+| component.title       | ?string   |                                      |
+| component.description | ?string   |                                      |
+| component.end_date    | ?string   | `Y-m-d`, drives the countdown        |
+| component.products    | Product[] | products shown under the banner      |
+| component.url         | ?string   | button destination                   |
+| component.button_text | ?string   |                                      |
+| position              | int       | Sorting number start from zero       |
+#}
+{% set product_ids = component.products|map((product) => product.id)|join(',') %}
+<section component-id="{{ componentId }}"
+         data-testid="store-home-countdown"
+         class="s-block s-block--countdown container js-reveal">
+
+    <div class="countdown-banner">
+        {% if component.background %}
+            <div class="countdown-banner__bg" style="background-image:url('{{ component.background }}');"></div>
+        {% endif %}
+
+        <div class="countdown-banner__content">
+            {% if component.title %}<h2>{{ component.title }}</h2>{% endif %}
+            {% if component.description %}<p>{{ component.description }}</p>{% endif %}
+
+            {% if component.end_date %}
+                <salla-count-down data-testid="store-home-countdown-timer"
+                                  date="{{ component.end_date }}"
+                                  end-of-day
+                                  boxed
+                                  labeled></salla-count-down>
+            {% endif %}
+
+            {% if component.button_text and component.url %}
+                <a href="{{ component.url }}" class="btn btn--ghost-white">{{ component.button_text }}</a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if component.products|length %}
+        <div class="mt-8 overflow-hidden">
+            <salla-products-slider data-testid="store-home-countdown-products"
+                                   source="selected"
+                                   source-value="[{{ product_ids }}]"
+                                   block-title=" "
+                                   slider-id="countdown-{{ position }}"></salla-products-slider>
+        </div>
+    {% endif %}
+</section>

@@ -1,0 +1,35 @@
+{#
+| Variable                  | Type    | Description                     |
+|---------------------------|---------|---------------------------------|
+| component.image           | string  | image url                       |
+| component.image_position  | string  | start, end                      |
+| component.kicker          | ?string | small label above the title     |
+| component.title           | ?string |                                 |
+| component.description     | ?string |                                 |
+| component.button_text     | ?string |                                 |
+| component.url             | ?string |                                 |
+| component.with_bg         | bool    | sand background for the section |
+| position                  | int     | Sorting number start from zero  |
+#}
+<section component-id="{{ componentId }}"
+         data-testid="store-home-split-banner"
+         class="s-block s-block--split {{ component.with_bg ? 'with-bg s-block--full-bg' : '' }} js-reveal">
+    <div class="container">
+        <div class="grid items-center gap-8 lg:grid-cols-2 lg:gap-14">
+            <div class="split-media {{ component.image_position == 'end' ? 'lg:order-2' : '' }}">
+                <img src="{{ component.image }}" alt="{{ component.title }}" loading="lazy" width="800" height="1000">
+            </div>
+            <div class="split-content">
+                {% if component.kicker %}<span class="kicker mb-3 block">{{ component.kicker }}</span>{% endif %}
+                {% if component.title %}<h2>{{ component.title }}</h2>{% endif %}
+                {% if component.description %}<p>{{ component.description }}</p>{% endif %}
+                {% if component.button_text and component.url %}
+                    <a href="{{ component.url }}" class="btn btn--ink self-start">
+                        {{ component.button_text }}
+                        <i class="sicon-keyboard_arrow_left {{ theme.is_rtl ? '' : 'flip-x' }}"></i>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>

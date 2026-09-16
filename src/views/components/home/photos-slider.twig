@@ -1,0 +1,31 @@
+{#
+| Variable          | Type    | Description                                      |
+|-------------------|---------|--------------------------------------------------|
+| items             | array   | List of slides                                   |
+| items[].url       | string  |                                                  |
+| items[].link_type | ?string | category,product,offers,page,external_link,brand |
+| items[].image.url | string  |                                                  |
+| items[].image.alt | string  |                                                  |
+| position          | Int     | Sorting number start from zero                   |
+#}
+<section component-id="{{ componentId }}" data-testid="store-home-photos-slider"
+         class="s-block s-block--photos-slider container js-reveal">
+    <salla-slider type="carousel"
+                  class="home-slider photos-slider"
+                  centered
+                  auto-play
+                  pagination
+                  id="photos-{{ position }}-slider">
+        <div slot="items">
+            {% for index, item in items %}
+                <div class="swiper-slide">
+                    <a href="{{ item.url }}" {% if item.link_type == 'external_link' %}target="_blank" rel="noopener"{% endif %}>
+                        <img src="{{ item.image.url }}" class="w-full rounded object-cover" loading="lazy"
+                             width="1200" height="400"
+                             alt="{{ item.image.alt|default(store.name ~ ' - ' ~ (index + 1)) }}">
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </salla-slider>
+</section>

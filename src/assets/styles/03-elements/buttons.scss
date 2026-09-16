@@ -1,0 +1,229 @@
+/**
+ * Buttons.
+ *
+ * Twilight's `<salla-button>` renders in the light DOM with `s-button-*`
+ * classes, so the theme restyles those directly. `.btn` covers the plain
+ * markup buttons the theme writes itself.
+ */
+salla-button {
+  &[width='wide'] {
+    @apply w-full;
+  }
+
+  &.copied .s-button-text {
+    color: var(--color-success);
+  }
+}
+
+.s-button-element {
+  border-radius: var(--s-radius-pill);
+  font-weight: 700;
+  letter-spacing: 0;
+  transition: transform var(--s-transition), opacity var(--s-transition),
+    background-color var(--s-transition), color var(--s-transition),
+    border-color var(--s-transition);
+
+  &:hover {
+    opacity: 0.92;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+.s-button-primary:not(.s-button-outline):not(.s-button-link) {
+  background-color: var(--color-primary);
+  color: var(--color-primary-reverse);
+
+  &:hover {
+    background-color: var(--color-primary-dark);
+  }
+}
+
+.s-button-primary.s-button-outline {
+  background-color: transparent;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+
+  &:hover {
+    background-color: var(--color-primary);
+    color: var(--color-primary-reverse);
+  }
+}
+
+.s-button-light,
+.s-button-gray {
+  &:not(.s-button-link) {
+    background-color: var(--color-sand);
+    color: var(--color-ink);
+
+    &:hover {
+      background-color: var(--color-sand-dark);
+    }
+  }
+}
+
+.s-button-dark:not(.s-button-outline):not(.s-button-link) {
+  background-color: var(--color-invert-bg);
+  color: var(--color-invert-ink);
+}
+
+.s-button-danger:not(.s-button-outline):not(.s-button-link) {
+  background-color: var(--color-danger);
+  color: #fff;
+}
+
+.s-button-icon {
+  border-radius: var(--s-radius-pill);
+}
+
+/* ------------------------------------------------------------- theme buttons */
+.btn {
+  @apply inline-flex items-center justify-center gap-2 whitespace-nowrap px-6 py-3 text-sm font-bold;
+  border-radius: var(--s-radius-pill);
+  transition: var(--s-transition);
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &--primary {
+    background-color: var(--color-primary);
+    color: var(--color-primary-reverse);
+
+    &:hover {
+      background-color: var(--color-primary-dark);
+    }
+  }
+
+  &--ink {
+    background-color: var(--color-invert-bg);
+    color: var(--color-invert-ink);
+
+    &:hover {
+      opacity: 0.88;
+    }
+  }
+
+  &--outline-primary {
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+
+    &:hover {
+      background-color: var(--color-primary);
+      color: var(--color-primary-reverse);
+    }
+  }
+
+  &--outline-light {
+    border: 1px solid var(--color-line);
+    color: var(--color-ink);
+
+    &:hover {
+      background-color: var(--color-sand);
+    }
+  }
+
+  &--ghost-white {
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    color: #fff;
+
+    &:hover {
+      background-color: #fff;
+      color: var(--color-ink);
+    }
+  }
+
+  &--rounded-full {
+    border-radius: var(--s-radius-pill);
+  }
+
+  &--rounded-gray {
+    @apply inline-flex items-center justify-center gap-1.5 px-3.5 py-2 text-sm font-medium;
+    background-color: var(--color-sand);
+    border-radius: var(--s-radius-pill);
+    color: var(--color-ink);
+
+    &:hover {
+      background-color: var(--color-sand-dark);
+    }
+  }
+
+  &--circle-gray {
+    @apply inline-flex h-9 w-9 items-center justify-center text-sm;
+    background-color: var(--color-sand);
+    border-radius: var(--s-radius-pill);
+
+    &:hover {
+      background-color: var(--color-sand-dark);
+    }
+  }
+
+  &--wishlist {
+    &.is-added i::before,
+    &.s-product-card-wishlist-added i::before {
+      color: var(--color-danger);
+      content: '\e9d2';
+    }
+  }
+
+  &--close,
+  &--close-sm {
+    @apply inline-flex items-center justify-center;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--s-radius-pill);
+    color: var(--color-danger);
+    height: 40px;
+    width: 40px;
+  }
+
+  &--close {
+    @apply absolute top-3 rtl:left-3 ltr:right-3 z-50;
+  }
+}
+
+.btn-tab {
+  @apply inline-flex items-center px-4 py-2 text-sm font-bold;
+  background-color: var(--color-sand);
+  border-radius: var(--s-radius-pill);
+  color: var(--color-ink);
+
+  &.is-opened {
+    background-color: var(--color-primary);
+    color: var(--color-primary-reverse);
+  }
+}
+
+.collapse-content {
+  @apply overflow-hidden;
+  max-height: 0;
+  transition: max-height 0.35s var(--s-ease);
+
+  &.is-opened {
+    max-height: 420px;
+  }
+}
+
+.filters-trigger {
+  @apply inline-flex items-center justify-center h-10 w-10;
+  background-color: var(--color-sand);
+  border-radius: var(--s-radius-pill);
+}
+
+/* Icon-only header buttons (search, user, cart…). */
+.header-btn {
+  @apply relative inline-flex h-11 w-11 items-center justify-center;
+  border-radius: var(--s-radius-pill);
+  color: var(--color-ink);
+  transition: var(--s-transition);
+
+  &:hover {
+    background-color: var(--color-sand);
+  }
+
+  &__icon {
+    @apply text-xl;
+  }
+}

@@ -1,0 +1,47 @@
+{#
+    Shared shell for every customer page (profile, orders, wallet, wishlist…).
+    Extend it with `{% extends "layouts.customer" %}` and fill `{% block inner_content %}`.
+#}
+{% extends "layouts.master" %}
+
+{% block content %}
+    <div class="profile-header gradient-bg">
+        <div class="container relative flex h-full items-center justify-between">
+            <nav class="breadcrumbs w-full self-start py-5">
+                <salla-breadcrumb></salla-breadcrumb>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container lg:mb-24">
+        <div class="flex flex-col items-start justify-center lg:flex-row">
+            <nav aria-label="Sidebar"
+                 class="sidebar w-full shrink-0 space-y-px lg:sticky lg:top-24 lg:-mt-28 lg:w-72 lg:pb-11 lg:pt-8 rtl:lg:ml-8 ltr:lg:mr-8 s-card">
+                {% if is_page('customer.profile') %}
+                    <div class="text-center md:mb-8">
+                        <div class="avatar-wrap m-auto h-20 w-20 rounded-full sand-bg">
+                            <salla-file-upload data-testid="store-profile-avatar-upload" profile-image value="{{ user.avatar }}">
+                                <span class="avatar-placeholder flex flex-col items-center justify-center">
+                                    <span class="sicon-user"></span>
+                                    <span class="text">{{ trans('common.uploader.choose_suitable_picture') }}</span>
+                                </span>
+                            </salla-file-upload>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="hidden lg:block">
+                    <salla-user-menu data-testid="store-sidebar-user-menu" inline></salla-user-menu>
+                </div>
+            </nav>
+
+            <div class="main-content w-full max-w-3xl flex-1 lg:pt-10">
+                {% block inner_title %}
+                    <h1 class="mb-4 text-center text-lg font-bold sm:rtl:text-right sm:ltr:text-left">{{ page.title }}</h1>
+                {% endblock %}
+
+                {% block inner_content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,110 @@
+/* Inputs, selects and the Twilight form elements. */
+.form-input,
+input[type='text'],
+input[type='email'],
+input[type='tel'],
+input[type='number'],
+input[type='password'],
+input[type='search'],
+input[type='date'],
+select,
+textarea {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--s-radius-sm);
+  color: var(--color-ink);
+  font-size: 0.875rem;
+  padding: 0.65rem 0.9rem;
+  transition: border-color var(--s-transition), box-shadow var(--s-transition);
+  width: 100%;
+
+  &::placeholder {
+    color: var(--color-muted);
+  }
+
+  &:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 18%, transparent);
+    outline: none;
+  }
+
+  &:disabled {
+    background-color: var(--color-sand);
+    cursor: not-allowed;
+  }
+}
+
+select {
+  background-position: left 0.75rem center;
+}
+
+[dir='ltr'] select {
+  background-position: right 0.75rem center;
+}
+
+.form-label,
+label {
+  color: var(--color-ink);
+  font-size: 0.875rem;
+}
+
+.form--inline {
+  @apply flex items-center gap-3;
+}
+
+/* Twilight file upload / filepond */
+.filepond--root,
+.s-file-upload {
+  border-radius: var(--s-radius-sm);
+}
+
+.product-option-uploader,
+.profile-filepond-placholder,
+.product-option-uploader-placholder {
+  @apply flex flex-col items-center justify-center gap-1 py-6 text-center text-sm;
+  background-color: var(--color-surface-2);
+  border: 1px dashed var(--color-line);
+  border-radius: var(--s-radius-sm);
+  color: var(--color-muted);
+
+  &-icon,
+  .product-option-uploader-placholder-icon {
+    @apply text-2xl;
+    color: var(--color-primary);
+  }
+}
+
+.filepond--label-action {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.avatar-wrap {
+  @apply relative overflow-hidden;
+
+  .avatar-placeholder {
+    @apply h-full w-full text-center text-xs;
+    color: var(--color-muted);
+
+    .sicon-user {
+      @apply text-2xl;
+    }
+
+    .text {
+      @apply hidden;
+    }
+  }
+}
+
+/* Newsletter / inline form pairs */
+.inline-form {
+  @apply flex w-full;
+
+  .form-input {
+    @apply flex-1 rtl:rounded-l-none ltr:rounded-r-none;
+  }
+
+  .btn {
+    @apply rtl:rounded-r-none ltr:rounded-l-none;
+  }
+}

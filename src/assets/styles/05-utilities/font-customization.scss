@@ -1,0 +1,22 @@
+/**
+ * Merchants may pick a Salla font whose Arabic metrics differ from the
+ * theme default; these nudges keep headings optically aligned.
+ */
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+.text-title-size,
+.text-display-size {
+  line-height: 1.15;
+}
+
+/* Numbers stay LTR even inside Arabic sentences. */
+.unicode,
+.text-unicode,
+.s-price,
+bdi {
+  direction: ltr;
+  unicode-bidi: isolate;
+}

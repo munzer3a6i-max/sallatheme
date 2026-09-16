@@ -1,0 +1,26 @@
+/* Account dropdown in the header + inline variant on account pages. */
+salla-user-menu {
+  .s-user-menu-dropdown,
+  .s-user-menu-list {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--s-radius);
+    box-shadow: var(--s-shadow);
+  }
+
+  .s-user-menu-item,
+  a {
+    @apply text-sm;
+    border-radius: var(--s-radius-sm);
+
+    &:hover {
+      background-color: var(--color-sand);
+      color: var(--color-primary);
+    }
+  }
+
+  .s-user-menu-avatar,
+  img {
+    border-radius: var(--s-radius-pill);
+  }
+}

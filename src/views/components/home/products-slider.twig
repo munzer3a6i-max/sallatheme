@@ -1,0 +1,25 @@
+{#
+| Variable              | Type    | Description                                                  |
+|-----------------------|---------|--------------------------------------------------------------|
+| products.source       | string  |                                                              |
+| products.source_value | ?int[]  | ids of sources (product_ids, categories_ids, brands_id…)      |
+| title                 | string  | Section title                                                |
+| display_all_url       | ?string | when set, a "show all" link is rendered                       |
+| limit                 | int     | Number of products to be shown                               |
+| position              | Int     | Sorting number start from zero                               |
+#}
+<section component-id="{{ componentId }}" data-testid="store-home-products-slider"
+         id="products-slider-{{ position }}"
+         class="s-block s-block--best-offers container overflow-hidden js-reveal">
+    {% if products|length %}
+        <salla-products-slider data-testid="store-home-products-slider-widget"
+                               source="{{ products.source }}"
+                               limit="{{ limit }}"
+                               autoplay
+                               source-value="{{ products.source_value|json_encode }}"
+                               display-all-url="{{ display_all_url }}"
+                               block-title="{{ title }}"
+                               block-subTitle="{{ sub_title|raw }}"
+                               slider-id="home-slider-{{ position }}"></salla-products-slider>
+    {% endif %}
+</section>

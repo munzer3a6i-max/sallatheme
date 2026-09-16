@@ -1,0 +1,117 @@
+{#
+| Variable         | Type    | Description                     |
+|------------------|---------|---------------------------------|
+| cart             | object  |                                 |
+| cart.items_count | int     |                                 |
+| cart.total       | string  | Formatted total ex: "١٠٠ ر.س"   |
+#}
+{% set important_links   = theme.settings.get('important_links', true) %}
+{% set announcement      = theme.settings.get('announcement_text') %}
+{% set show_announcement = theme.settings.get('show_announcement', true) and announcement %}
+{% set show_search       = theme.settings.get('show_header_search', true) %}
+
+<header data-testid="store-header" class="store-header">
+
+    {# ---------------------------------------------------------- announcement #}
+    {% if show_announcement %}
+        <div id="announcement-bar" class="announcement-bar is-hidden" data-hash="{{ announcement|length }}{{ announcement|slice(0, 12)|url_encode }}">
+            <div class="container announcement-bar__inner">
+                <i class="sicon-shipping-fast {{ theme.is_rtl ? 'flip-x' : '' }}"></i>
+                <span class="announcement-bar__text">{{ announcement }}</span>
+                <button type="button" class="announcement-bar__close" aria-label="{{ trans('common.elements.close') }}">
+                    <i class="sicon-cancel"></i>
+                </button>
+            </div>
+        </div>
+    {% endif %}
+
+    {# Delivery promise tag — mobile gets its own full-width row #}
+    <div class="lg:hidden">
+        <salla-bullet-delivery-tag></salla-bullet-delivery-tag>
+    </div>
+
+    {# ------------------------------------------------------------- top nav #}
+    <div class="top-navbar">
+        <div class="container">
+            <div class="flex flex-1 items-center gap-3">
+                {% if important_links %}
+                    <salla-menu data-testid="store-header-topnav" source="footer" topnav></salla-menu>
+                {% endif %}
+
+                <div class="header-buttons">
+                    {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
+                        <salla-localization-modal data-testid="store-header-localization" show-trigger></salla-localization-modal>
+                    {% endif %}
+                </div>
+
+                <div class="hidden lg:block">
+                    <salla-bullet-delivery-tag></salla-bullet-delivery-tag>
+                </div>
+
+                {% if store.scope %}
+                    <button class="btn--rounded-gray" onclick="salla.event.dispatch('scopes::open', {'mode': 'default'})">
+                        <i class="sicon-location"></i> {{ store.scope.name }}
+                    </button>
+                {% endif %}
+            </div>
+
+            <salla-contacts data-testid="store-header-contacts" is-header></salla-contacts>
+        </div>
+    </div>
+
+    {# ------------------------------------------------------------ main nav #}
+    <div id="mainnav" class="main-nav-container">
+        <div class="inner">
+            <div class="container">
+                <div class="flex items-stretch justify-between gap-3">
+
+                    <div class="flex items-center">
+                        <a data-testid="store-header-mobile-toggle"
+                           class="mburger mburger--collapse rtl:ml-1 ltr:mr-1"
+                           href="#mobile-menu"
+                           aria-label="{{ trans('blocks.header.main_menu') }}">
+                            <i class="sicon-menu text-2xl"></i>
+                        </a>
+
+                        <a data-testid="store-header-logo" class="navbar-brand" href="{{ store.url }}">
+                            <img fetchpriority="high" width="160" height="46" loading="eager"
+                                 src="{{ store.logo|cdn(175) }}" alt="{{ store.name }}">
+                            {% if is_page('index') %}
+                                <h1 class="sr-only">{{ store.name }}</h1>
+                            {% else %}
+                                <h2 class="sr-only">{{ store.name }}</h2>
+                            {% endif %}
+                        </a>
+
+                        <custom-main-menu></custom-main-menu>
+                    </div>
+
+                    <div class="header-actions">
+                        {% if show_search %}
+                            <div class="header-search hidden xl:block rtl:ml-2 ltr:mr-2">
+                                <salla-search data-testid="store-header-search" inline oval height="40"></salla-search>
+                            </div>
+                            <button type="button" class="header-btn xl:hidden" aria-label="{{ trans('blocks.header.search') }}"
+                                    onclick="salla.event.dispatch('search::open')">
+                                <i class="header-btn__icon sicon-search"></i>
+                            </button>
+                        {% endif %}
+
+                        {% if theme.settings.get('enable_color_switcher', true) %}
+                            <button type="button" class="scheme-toggle" aria-label="{{ trans('blocks.header.switch_theme') }}" aria-pressed="false">
+                                <i class="sicon-moon text-xl"></i>
+                                <i class="sicon-sun text-xl"></i>
+                            </button>
+                        {% endif %}
+
+                        <salla-user-menu data-testid="store-header-user-menu" avatar-only show-header show-trigger></salla-user-menu>
+
+                        <salla-cart-summary data-testid="store-header-cart" class="rtl:mr-1 ltr:ml-1">
+                            <i slot="icon" class="header-btn__icon icon sicon-shopping-bag"></i>
+                        </salla-cart-summary>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

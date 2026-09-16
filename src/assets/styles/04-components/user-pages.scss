@@ -1,0 +1,106 @@
+@use '../01-settings/breakpoints' as *;
+
+/* Account area: profile, orders, wallet, wishlist, notifications. */
+.profile-header {
+  @apply relative;
+  min-height: 150px;
+
+  @include from-desktop {
+    min-height: 190px;
+  }
+}
+
+.sidebar {
+  salla-user-menu {
+    @apply block;
+  }
+}
+
+.form--user-profile {
+  .profile-field-item {
+    @apply flex flex-col;
+  }
+}
+
+/* Orders */
+.single-order-header-item {
+  border-bottom: 1px solid var(--color-line);
+
+  @include from-desktop {
+    border-bottom: 0;
+    border-inline-end: 1px solid var(--color-line);
+
+    &:last-child {
+      border-inline-end: 0;
+    }
+  }
+}
+
+.order-item {
+  background-color: var(--color-surface);
+  border-color: var(--color-line);
+}
+
+.shipping-orders {
+  @apply overflow-hidden;
+  border: 1px solid var(--color-line);
+  border-radius: var(--s-radius);
+}
+
+.rating-header {
+  @apply flex flex-col gap-4 rounded p-5 sm:flex-row sm:items-center sm:justify-between;
+}
+
+.rating-actions {
+  @apply flex items-center gap-2;
+}
+
+.thankyou-block {
+  @apply mb-6 flex flex-1 flex-col items-center justify-center p-8 text-center;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--s-radius);
+}
+
+.thanks-item {
+  @apply opacity-0;
+  animation: zirar-fade-up 0.6s var(--s-ease) forwards;
+
+  &:nth-child(2) {
+    animation-delay: 0.1s;
+  }
+  &:nth-child(3) {
+    animation-delay: 0.2s;
+  }
+}
+
+/* Salla account widgets */
+salla-orders,
+salla-wallet,
+salla-notifications,
+salla-user-settings,
+salla-order-totals-card,
+salla-cart-summary-card,
+salla-order-details {
+  .s-orders-table,
+  .s-wallet-table,
+  .s-cart-summary-wrapper,
+  .s-order-details-wrapper {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--s-radius);
+  }
+
+  table {
+    color: var(--color-ink);
+  }
+
+  th {
+    background-color: var(--color-sand);
+  }
+
+  td,
+  th {
+    border-color: var(--color-line);
+  }
+}

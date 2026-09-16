@@ -1,0 +1,61 @@
+{#
+| Variable                       | Type     | Description                                                                  |
+|--------------------------------|----------|------------------------------------------------------------------------------|
+| component                      | object   | Contains merchant settings for fields from twilight.json `component` section |
+| component.height               | string   | medium, tall, full                                                           |
+| component.show_thumbs          | bool     | show pagination dots                                                         |
+| component.slides[]             | object[] | list of slides                                                               |
+| component.slides[].image       | string   | desktop image url                                                            |
+| component.slides[].mobile_image| ?string  | portrait image used under `lg`                                               |
+| component.slides[].title       | ?string  |                                                                              |
+| component.slides[].description | ?string  |                                                                              |
+| component.slides[].button_text | ?string  |                                                                              |
+| component.slides[].url         | ?string  |                                                                              |
+| component.slides[].align       | string   | start, center, end                                                           |
+| position                       | int      | Sorting number start from zero                                               |
+#}
+{% set slides = component.slides %}
+<section component-id="{{ componentId }}"
+         data-testid="store-home-hero"
+         class="s-block s-block--hero s-block--full-bg hero--{{ component.height|default('tall') }} wide-placeholder">
+    <salla-slider id="hero-slider-{{ position }}"
+                  auto-play
+                  static-when-single
+                  type="fullwidth"
+                  {{ component.show_thumbs ? 'pagination' : '' }}
+                  {{ slides|length > 1 ? '' : 'show-controls="false"' }}>
+        <div slot="items">
+            {% for slide in slides %}
+                <div class="swiper-slide hero-slider__slide align--{{ slide.align|default('start') }}">
+                    {% if slide.mobile_image %}
+                        <div class="hero-slide__bg hero-slide__bg--mobile" style="background-image:url('{{ slide.mobile_image }}');"></div>
+                        <div class="hero-slide__bg hero-slide__bg--desktop" style="background-image:url('{{ slide.image }}');"></div>
+                    {% else %}
+                        <div class="hero-slide__bg" style="background-image:url('{{ slide.image }}');"></div>
+                    {% endif %}
+
+                    {% if not slide.without_overlay %}
+                        <div class="hero-slide__overlay"></div>
+                    {% endif %}
+
+                    <div class="container">
+                        <div class="hero-slide__content">
+                            {% if slide.title %}
+                                <h2 data-swiper-parallax="-400">{{ slide.title }}</h2>
+                            {% endif %}
+                            {% if slide.description %}
+                                <p data-swiper-parallax="-250">{{ slide.description }}</p>
+                            {% endif %}
+                            {% if slide.button_text and slide.url %}
+                                <a href="{{ slide.url }}" class="btn btn--ghost-white" data-swiper-parallax="-150">
+                                    {{ slide.button_text }}
+                                    <i class="sicon-keyboard_arrow_left {{ theme.is_rtl ? '' : 'flip-x' }}"></i>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </salla-slider>
+</section>

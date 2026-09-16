@@ -1,0 +1,24 @@
+{#
+| Variable        | Type    | Description                    |
+|-----------------|---------|--------------------------------|
+| url             | string  |                                |
+| image.url       | string  |                                |
+| image.alt       | ?string |                                |
+| image.small_url | ?string | image used on small screens    |
+| position        | Int     | Sorting number start from zero |
+#}
+{% set alt_text = image.alt|trim ? image.alt : store.name %}
+<section component-id="{{ componentId }}" data-testid="store-home-fixed-banner"
+         class="s-block s-block--fixed-banner wide-placeholder js-reveal">
+    <div class="container">
+        <a href="{{ url }}" class="banner banner--fixed" aria-label="{{ alt_text }}">
+            <picture>
+                {% if image.small_url %}
+                    <source media="(max-width: 767px)" srcset="{{ image.small_url }}"/>
+                {% endif %}
+                <img src="{{ image.url }}" width="1200" height="300" loading="lazy" fetchpriority="high"
+                     alt="{{ alt_text }}" style="height:auto;max-width:100%;object-fit:cover;">
+            </picture>
+        </a>
+    </div>
+</section>

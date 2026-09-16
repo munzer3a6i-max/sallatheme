@@ -1,0 +1,53 @@
+{
+  "name": "theme-zirar",
+  "version": "1.0.0",
+  "description": "Zirar — a Salla Twilight theme crafted for thobe & men's traditional wear stores",
+  "license": "MIT",
+  "author": "Zirar",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/munzer3a6i-max/sallatheme.git"
+  },
+  "scripts": {
+    "production": "webpack --mode production",
+    "prod": "webpack --mode production",
+    "build": "webpack --mode production",
+    "development": "webpack --mode development",
+    "dev": "webpack --mode development",
+    "watch": "webpack --mode development --watch"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.24.0",
+    "animejs": "^3.2.2",
+    "fslightbox": "^3.7.5",
+    "lite-youtube-embed": "^0.3.4",
+    "mmenu-light": "^3.2.2",
+    "sweetalert2": "^11.10.7"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.0",
+    "@babel/plugin-transform-runtime": "^7.24.0",
+    "@babel/preset-env": "^7.24.0",
+    "@salla.sa/twilight": "^2.14.551",
+    "@salla.sa/twilight-components": "^2.14.551",
+    "@tailwindcss/forms": "^0.5.7",
+    "autoprefixer": "^10.4.18",
+    "babel-loader": "^9.1.3",
+    "copy-webpack-plugin": "^12.0.2",
+    "css-loader": "^6.10.0",
+    "css-minimizer-webpack-plugin": "^6.0.0",
+    "mini-css-extract-plugin": "^2.8.1",
+    "postcss": "^8.4.35",
+    "postcss-import": "^16.0.1",
+    "postcss-loader": "^8.1.1",
+    "postcss-nesting": "^12.0.4",
+    "sass": "^1.71.1",
+    "sass-loader": "^14.1.1",
+    "tailwindcss": "^3.4.1",
+    "webpack": "^5.90.3",
+    "webpack-cli": "^5.1.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,21 @@
+/**
+ * Salla injects the merchant's chosen font stylesheet in `master.twig`
+ * (`theme.font.path`), exposed to CSS through `--font-main`. The theme only
+ * adds the display treatment used by headings and section titles.
+ */
+:root {
+  --font-display: var(--font-main);
+  --tracking-display: -0.01em;
+  --tracking-kicker: 0.22em;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: var(--tracking-display);
+}
+
+.kicker {
+  @apply text-xs font-bold uppercase;
+  color: var(--color-gold);
+  letter-spacing: var(--tracking-kicker);
+}

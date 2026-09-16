@@ -1,0 +1,20 @@
+@use '../01-settings/breakpoints' as *;
+
+/* Keep third-party chat widgets clear of the mobile bars. */
+@include desktop {
+  #fc_frame,
+  .zsiq_floatmain,
+  .intercom-lightweight-app-launcher,
+  iframe#launcher {
+    bottom: 72px !important;
+  }
+
+  body.is-sticky-product-bar {
+    #fc_frame,
+    .zsiq_floatmain,
+    .intercom-lightweight-app-launcher,
+    iframe#launcher {
+      bottom: 88px !important;
+    }
+  }
+}

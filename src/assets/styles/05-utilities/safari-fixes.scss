@@ -1,0 +1,21 @@
+/* Safari / iOS specifics. */
+@supports (-webkit-touch-callout: none) {
+  .min-h-screen {
+    min-height: -webkit-fill-available;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 16px; /* stops iOS from zooming on focus */
+  }
+}
+
+/* Safari ignores `gap` on some flex versions used by Twilight widgets. */
+@media not all and (min-resolution: 0.001dpcm) {
+  @supports (-webkit-appearance: none) {
+    .swiper-slide {
+      -webkit-transform: translateZ(0);
+    }
+  }
+}

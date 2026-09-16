@@ -1,0 +1,65 @@
+{#
+| Variable | Type         | Description                                                |
+|----------|--------------|------------------------------------------------------------|
+| brands   | Collection[] | Brands grouped by char, ex:{b:[{'name':'brand1',...},...]} |
+#}
+{% extends "layouts.master" %}
+
+{% block content %}
+    <div class="container mb-20">
+        <nav class="breadcrumbs w-full py-5">
+            <salla-breadcrumb></salla-breadcrumb>
+        </nav>
+
+        <div class="flex justify-between pb-6 pt-2">
+            <h1 class="text-2xl font-bold">{{ page.title }}</h1>
+        </div>
+
+        {% if brands|length %}
+            <div class="brands-nav-wrap">
+                <ul id="brands-nav" class="brands-nav">
+                    {% for char, brands_group in brands %}
+                        <li>
+                            <a class="brands-nav__item" href="#brand-section-{{ loop.index }}" data-id="{{ loop.index }}">
+                                <span class="fix-align">{{ char }}</span>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div>
+                {% hook 'brands:index.items.start' %}
+
+                {% for char, brandGroup in brands %}
+                    <section id="brand-section-{{ loop.index }}" class="pt-14 first:pt-10">
+                        <div class="mb-8 flex items-center">
+                            <span data-id="{{ loop.index }}" class="brand-char"><span class="fix-align">{{ char }}</span></span>
+                            <div class="h-px flex-1" style="background-color: var(--color-line);"></div>
+                        </div>
+
+                        <div class="grid grid-flow-row grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 md:gap-6">
+                            {% for brand in brandGroup %}
+                                <a data-testid="store-brand-item" href="{{ brand.url }}" class="brand-item">
+                                    <img src="{{ brand.logo }}" alt="{{ brand.name }}" width="300" height="120" loading="lazy">
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </section>
+                {% endfor %}
+
+                {% hook 'brands:index.items.end' %}
+            </div>
+        {% else %}
+            <div class="no-content-placeholder">
+                <i class="sicon-award-ribbon icon"></i>
+                <h2 class="text-sm font-bold">{{ trans('pages.brands.non_brands') }}</h2>
+                <small>{{ trans('pages.brands.try_again') }}</small>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script defer src="{{ 'pages.js' | asset }}"></script>
+{% endblock %}

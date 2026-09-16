@@ -1,0 +1,84 @@
+/**
+ * Zirar — design tokens.
+ *
+ * `--color-primary*` and `--font-main` are injected per store by
+ * `layouts/master.twig` (the merchant owns them from the Salla dashboard).
+ * Everything below is the theme's own sand-and-ink identity, redefined for the
+ * dark scheme on `html.dark`.
+ */
+:root {
+  /* Surfaces & ink — light scheme */
+  --color-ivory: #f8f5f0;
+  --color-surface: #ffffff;
+  --color-surface-2: #fbf9f5;
+  --color-sand: #efe8dd;
+  --color-sand-dark: #e2d7c6;
+  --color-line: #e7ded0;
+  --color-ink: #1c1a17;
+  --color-ink-soft: #3b372f;
+  --color-muted: #8a8071;
+  --color-gold: #b08d3f;
+
+  /* Emphasis blocks (announcement bar, dark footer, countdown…).
+     These deliberately do NOT swap with the scheme: an inverted block should
+     read as "deeper than the page" in dark mode, not flip to cream. */
+  --color-invert-bg: #1c1a17;
+  --color-invert-ink: #f8f5f0;
+
+  /* Feedback */
+  --color-success: #2f7d55;
+  --color-danger: #a4161a;
+  --color-warning: #b4690e;
+
+  /* Shape & motion */
+  --s-radius: 14px;
+  --s-radius-sm: 10px;
+  --s-radius-lg: 22px;
+  --s-radius-pill: 999px;
+  --s-ease: cubic-bezier(0.55, 0, 0.1, 1);
+  --s-transition: 0.28s var(--s-ease);
+
+  /* Elevation */
+  --s-shadow-soft: 0 2px 10px rgba(28, 26, 23, 0.06);
+  --s-shadow: 0 10px 30px -12px rgba(28, 26, 23, 0.14);
+  --s-shadow-lg: 0 24px 50px -24px rgba(28, 26, 23, 0.3);
+  --s-shadow-top: 0 -6px 20px rgba(28, 26, 23, 0.08);
+
+  /* Layout */
+  --header-height: 76px;
+  --mm-ocd-width: calc(100% - 51px);
+}
+
+html.dark {
+  --color-ivory: #141210;
+  --color-surface: #1c1917;
+  --color-surface-2: #221e1a;
+  --color-sand: #24201b;
+  --color-sand-dark: #2e2921;
+  --color-line: #332c24;
+  --color-ink: #f4efe7;
+  --color-ink-soft: #ddd5c8;
+  --color-muted: #9c9284;
+  --color-gold: #d3ab56;
+  --color-invert-bg: #0e0c0b;
+  --color-invert-ink: #f4efe7;
+
+  --s-shadow-soft: 0 2px 10px rgba(0, 0, 0, 0.4);
+  --s-shadow: 0 12px 34px -14px rgba(0, 0, 0, 0.7);
+  --s-shadow-lg: 0 26px 60px -26px rgba(0, 0, 0, 0.8);
+  --s-shadow-top: 0 -6px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Corner presets driven by the `corners_style` theme setting. */
+body.corners--round {
+  --s-radius: 24px;
+  --s-radius-sm: 16px;
+  --s-radius-lg: 34px;
+}
+
+body.corners--sharp {
+  --s-radius: 2px;
+  --s-radius-sm: 2px;
+  --s-radius-lg: 4px;
+  --s-radius-pill: 4px;
+}

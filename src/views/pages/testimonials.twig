@@ -1,0 +1,40 @@
+{#
+| Variable   | Type   | Description |
+|------------|--------|-------------|
+| page.title | string |             |
+| page.slug  | string |             |
+#}
+{% extends "layouts.master" %}
+
+{% block content %}
+    <div class="container">
+        <nav class="breadcrumbs w-full py-5">
+            <salla-breadcrumb></salla-breadcrumb>
+        </nav>
+
+        <div class="flex justify-center">
+            <div class="s-card mt-4 w-full p-6 lg:mt-10 lg:w-10/12 lg:p-10">
+                <div class="products-toolbar">
+                    <h1 class="text-2xl font-bold">{{ page.title }}</h1>
+                    <div class="flex items-center gap-3">
+                        <label class="hidden whitespace-nowrap sm:block" for="testimonials-filter">
+                            {{ trans('pages.categories.sorting') }}
+                        </label>
+                        <select id="testimonials-filter" class="form-input">
+                            <option value="latest">{{ trans('pages.testimonials.sort_by_date_desc') }}</option>
+                            <option value="oldest">{{ trans('pages.testimonials.sort_by_date_asc') }}</option>
+                            <option value="top_rating">{{ trans('pages.testimonials.sort_by_rating_desc') }}</option>
+                            <option value="bottom_rating">{{ trans('pages.testimonials.sort_by_rating_asc') }}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <salla-comments data-testid="store-testimonials-comments" testimonials></salla-comments>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script defer src="{{ 'testimonials.js' | asset }}"></script>
+{% endblock %}

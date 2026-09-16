@@ -1,0 +1,17 @@
+{#
+| Variable     | Type  | Description                    |
+|--------------|-------|--------------------------------|
+| reservations | array | booking slots for the item     |
+#}
+<ul class="text-xs font-medium" style="color: var(--color-muted);">
+    {% for reservation in reservations %}
+        <li class="py-1">
+            <span class="text-unicode">
+                {{ reservation.day|date|number }}
+                {% if reservation.from_timestamp is not empty %}
+                    ({{ reservation.from|number({'PM': 'م', 'AM': 'ص'}) }} - {{ reservation.to|number({'PM': 'م', 'AM': 'ص'}) }})
+                {% endif %}
+            </span>
+        </li>
+    {% endfor %}
+</ul>

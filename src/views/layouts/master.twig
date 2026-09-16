@@ -1,0 +1,139 @@
+{# ############################ Zirar — master layout ############################
+| Shared variables available in every view (provided by Twilight):             |
+|------------------------------------------------------------------------------|
+| store                    | Store  | name, logo, url, description, slogan      |
+| store.contacts           | object | mobile, phone, email, whatsapp, telegram  |
+| store.social             | object | instagram, snapchat, twitter, youtube...  |
+| store.settings           | object | auth, cart, product, tax, rating…         |
+| theme.is_rtl             | bool   | direction of the current language         |
+| theme.color.primary      | string | merchant primary colour                   |
+| theme.color.darker(a)    | string | darker shade of the primary colour        |
+| theme.color.lighter(a)   | string | lighter shade of the primary colour       |
+| theme.color.reverse_text | string | readable text colour over the primary     |
+| theme.font               | object | Salla font: `name` + `path`               |
+| theme.settings.get(k, d) | mixed  | values of `settings` from twilight.json   |
+| page.slug / page.title   | mixed  | current page identity                     |
+| user                     | object | current customer (guest when not signed)  |
+#}
+{% set scheme = theme.settings.get('color_scheme', 'light') %}
+{% set corners = theme.settings.get('corners_style', 'soft') %}
+<!DOCTYPE html>
+<html lang="{{ language.code }}" dir="{{ theme.is_rtl ? 'rtl' : 'ltr' }}">
+<!-- بسم الله الرحمن الرحيم -->
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="{{ theme.color.primary }}">
+    {{ theme.settings.set('placeholder', 'images/placeholder.png') }}
+
+    <script defer data-cfasync="false" crossorigin="anonymous" src="{{ 'product-card.js'|asset }}"></script>
+    <script defer src="{{ 'main-menu.js'|asset }}"></script>
+    {% if theme.settings.get('enable_add_product_toast', true) %}
+        <script defer src="{{ 'add-product-toast.js'|asset }}"></script>
+    {% endif %}
+
+    {% block head_scripts %}{% endblock %}
+
+    <script data-cfasync="false">
+        window.header_is_sticky = "{{ theme.settings.get('header_is_sticky', true) }}";
+        window.imageZoom = "{{ theme.settings.get('imageZoom', true) }}";
+        window.can_access_wallet = {{ user.can_access_wallet | json_encode }};
+        window.enable_more_menu = "{{ theme.settings.get('enable_more_menu', true) }}";
+        window.enable_add_product_toast = "{{ theme.settings.get('enable_add_product_toast', true) }}";
+        window.notify_when_available_in_card = "{{ theme.settings.get('notify_when_available_in_card', true) }}";
+        window.zirar_color_scheme = "{{ scheme }}";
+        window.zirar_enable_motion = {{ theme.settings.get('enable_motion', true) ? 'true' : 'false' }};
+
+        /* Resolve the colour scheme before first paint so the page never flashes. */
+        (function () {
+            try {
+                var stored = localStorage.getItem('zirar::color-scheme');
+                var preferred = stored || window.zirar_color_scheme;
+                if (preferred === 'auto') {
+                    preferred = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                }
+                if (preferred === 'dark') {
+                    document.documentElement.classList.add('dark');
+                }
+                document.documentElement.dataset.scheme = preferred;
+            } catch (e) {}
+        })();
+    </script>
+
+    {% hook 'head:start' %}
+    {% hook head %}
+    {% block styles %}{% endblock %}
+    <link rel="stylesheet" href="{{ 'app.css' | asset }}">
+    <link rel="stylesheet" href="{{ theme.font.path|cdn }}"/>
+    <link rel="stylesheet" href="{{ 'fonts/sallaicons.css'|cdn }}"/>
+
+    <style>
+        :root {
+            --font-main: '{{ theme.font.name }}';
+            --color-primary: {{ theme.color.primary }};
+            --color-primary-dark: {{ theme.color.darker(0.15) }};
+            --color-primary-light: {{ theme.color.lighter(0.15) }};
+            --color-primary-reverse: {{ theme.color.reverse_text }};
+        }
+        {% if theme.color.is_dark %}
+        /* A dim brand colour disappears against the dark scheme, so lift it
+           there (and flip the text that sits on top of it). */
+        html.dark {
+            --color-primary: {{ theme.color.lighter(0.4) }};
+            --color-primary-dark: {{ theme.color.lighter(0.25) }};
+            --color-primary-light: {{ theme.color.lighter(0.55) }};
+            --color-primary-reverse: #14120f;
+        }
+        {% endif %}
+    </style>
+    {# tracking services, merchant custom css. #}
+    {% hook 'head:end' %}
+</head>
+<body id="app"
+      class="theme-zirar corners--{{ corners }} overflow-x-hidden {% hook 'body:classes' %}
+      {{ theme.settings.get('footer_is_dark', true) ? ' footer-is-dark' : ' footer-is-light' }}
+      {{ theme.settings.get('topnav_is_dark') ? ' topnav-is-dark' : '' }}
+      {{ theme.settings.get('sticky_add_to_cart', true) ? ' is-sticky-product-bar' : '' }}
+      {{ theme.settings.get('show_mobile_bottom_bar', true) ? ' has-bottom-bar' : '' }}">
+<noscript>
+    To get full functionality of this site you need to enable JavaScript. Here is how
+    <a href="https://www.enable-javascript.com/" rel="noreferrer" target="_blank">to enable JavaScript on webpage</a>.
+</noscript>
+
+<a href="#main-content" class="sr-only sr-only-focusable">{{ trans('common.elements.skip_to_content') }}</a>
+
+<div class="app-inner flex flex-col min-h-full">
+    {% hook 'body:start' %}
+    {% component 'header.header' %}
+
+    <main id="main-content" role="main" class="flex-1">
+        {% block content %}{% endblock %}
+    </main>
+
+    {% component 'footer.footer' %}
+</div>
+
+{% if theme.settings.get('show_mobile_bottom_bar', true) %}
+    {% component 'header.mobile-bar' %}
+{% endif %}
+
+{% hook 'body:end' %}
+
+{% if theme.settings.get('enable_add_product_toast', true) %}
+    <salla-add-product-toast data-testid="store-add-product-toast"></salla-add-product-toast>
+{% endif %}
+
+<script defer crossorigin="anonymous" src="{{ 'app.js' | asset }}"></script>
+
+{# Twilight modals shared by every page #}
+<salla-offer-modal data-testid="store-offer-modal"></salla-offer-modal>
+<salla-search data-testid="store-search-modal"></salla-search>
+<salla-login-modal data-testid="store-login-modal"></salla-login-modal>
+{% if store.scope %}
+    <salla-scopes data-testid="store-scopes" selection="{{ store.scope.display_as == 'popup' ? 'mandatory' : 'optional' }}"></salla-scopes>
+{% endif %}
+
+{% block scripts %}{% endblock %}
+</body>
+</html>

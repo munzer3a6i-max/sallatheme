@@ -1,0 +1,47 @@
+{#
+    Mobile bottom navigation.
+
+    Routes that Twilight resolves at runtime (`salla.url.get`) are wired by
+    `app.js`; the `href` rendered here is the store-relative fallback so the bar
+    still works before (or without) JavaScript. `app.js` also hides the bar while
+    the visitor scrolls down, and the product page's sticky buy bar replaces it.
+#}
+{% set store_root = store.url|trim('/') %}
+<nav id="mobile-bottom-bar" class="mobile-bottom-bar" aria-label="{{ trans('blocks.header.main_menu') }}">
+    <div class="mobile-bottom-bar__inner">
+        <a href="{{ store.url }}" class="mobile-bottom-bar__item {{ is_page('index') ? 'is-active' : '' }}">
+            <i class="sicon-home"></i>
+            <span>{{ trans('blocks.zirar.home') }}</span>
+        </a>
+
+        <a href="#mobile-menu" class="mobile-bottom-bar__item">
+            <i class="sicon-menu-2"></i>
+            <span>{{ trans('blocks.zirar.categories') }}</span>
+        </a>
+
+        <button type="button" class="mobile-bottom-bar__item" onclick="salla.event.dispatch('search::open')">
+            <i class="sicon-search"></i>
+            <span>{{ trans('blocks.zirar.search') }}</span>
+        </button>
+
+        <a href="{{ store_root }}/cart" data-route="cart" class="mobile-bottom-bar__item {{ is_page('cart') ? 'is-active' : '' }}">
+            <span class="relative">
+                <i class="sicon-shopping-bag"></i>
+                <span data-cart-count class="mobile-bottom-bar__badge {{ cart.items_count ? '' : 'is-empty' }}">{{ cart.items_count }}</span>
+            </span>
+            <span>{{ trans('blocks.header.cart') }}</span>
+        </a>
+
+        {% if user.type == 'user' %}
+            <a href="{{ store_root }}/profile" data-route="profile" class="mobile-bottom-bar__item {{ is_page('customer.profile') ? 'is-active' : '' }}">
+                <i class="sicon-user"></i>
+                <span>{{ trans('blocks.zirar.account') }}</span>
+            </a>
+        {% else %}
+            <button type="button" class="mobile-bottom-bar__item" onclick="salla.event.dispatch('login::open')">
+                <i class="sicon-user"></i>
+                <span>{{ trans('blocks.zirar.login') }}</span>
+            </button>
+        {% endif %}
+    </div>
+</nav>

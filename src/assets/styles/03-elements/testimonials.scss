@@ -1,0 +1,68 @@
+/* Reviews — both Twilight's `salla-reviews` and the theme's custom block. */
+.s-reviews-container {
+  @apply relative;
+}
+
+.s-reviews-header-wrapper {
+  @apply mb-6 text-center;
+}
+
+.s-reviews-header,
+.s-reviews-summary-title {
+  @apply text-xl font-bold sm:text-2xl;
+  color: var(--color-ink);
+}
+
+.s-reviews-testimonial {
+  @apply h-full;
+
+  &__inner {
+    @apply relative flex h-full flex-col items-center gap-4 p-6 text-center sm:p-8;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--s-radius-lg);
+  }
+
+  &__avatar img {
+    @apply h-16 w-16 rounded-full object-cover;
+    border: 2px solid var(--color-sand);
+  }
+
+  &__text p {
+    @apply text-sm leading-7;
+    color: var(--color-ink-soft);
+  }
+
+  &__name_wrapper {
+    @apply mt-4 flex flex-col items-center gap-1;
+  }
+
+  &__info h2 {
+    @apply text-sm font-bold;
+  }
+
+  &__icon {
+    @apply absolute top-5 rtl:left-5 ltr:right-5;
+    color: var(--color-sand-dark);
+
+    svg {
+      fill: currentColor;
+      height: 26px;
+      width: 26px;
+    }
+  }
+}
+
+.s-rating-stars i,
+salla-rating-stars i {
+  color: var(--color-gold);
+}
+
+.s-comments-item {
+  @apply py-5;
+  border-bottom: 1px solid var(--color-line);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}

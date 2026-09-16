@@ -1,0 +1,37 @@
+{#
+| Variable            | Type     | Description                        |
+|---------------------|----------|------------------------------------|
+| component.title     | ?string  |                                    |
+| component.description | ?string|                                    |
+| component.steps[]   | object[] | icon, title, text                  |
+| component.url       | ?string  | size guide page                    |
+| component.button_text | ?string|                                    |
+| position            | int      | Sorting number start from zero     |
+#}
+<section component-id="{{ componentId }}"
+         data-testid="store-home-size-guide"
+         class="s-block s-block--size-guide container js-reveal">
+    <div class="size-guide-band">
+        <div class="mb-8 text-center">
+            {% if component.title %}<h2 class="text-xl font-bold sm:text-2xl">{{ component.title }}</h2>{% endif %}
+            {% if component.description %}<p class="mt-2 text-sm sm:text-base">{{ component.description }}</p>{% endif %}
+        </div>
+
+        <div class="grid gap-4 sm:gap-6 md:grid-cols-{{ component.steps|length > 2 ? 3 : 2 }}">
+            {% for step in component.steps %}
+                <div class="size-step">
+                    <span class="size-step__num">{{ loop.index }}</span>
+                    <i class="{{ step.icon|default('sicon-pencil-ruler') }}"></i>
+                    <h3>{{ step.title }}</h3>
+                    <p>{{ step.text }}</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if component.button_text and component.url %}
+            <div class="mt-8 text-center">
+                <a href="{{ component.url }}" class="btn btn--ink">{{ component.button_text }}</a>
+            </div>
+        {% endif %}
+    </div>
+</section>

@@ -1,0 +1,112 @@
+{#
+  Shared by the product page and the cart (where `product` is a cart item).
+
+| Variable                       | Type                       | Description                                                                                  |
+|--------------------------------|----------------------------|----------------------------------------------------------------------------------------------|
+| product.options                | ?ProductOption *Collection |                                                                                              |
+| product.options[].name         | string                     |                                                                                              |
+| product.options[].type         | string                     | single-option,date,image,text,textarea,number,multi-options,splitter,color,thumbnail,donation |
+| product.options[].details      | OptionDetail *Collection   | id, name, full_name, additional_price, option_value, image, color, is_selected, is_out        |
+| product.weight                 | ?string                    |                                                                                              |
+| product.has_size_guide         | bool                       |                                                                                              |
+| product.can_add_note           | bool                       |                                                                                              |
+| product.can_upload_file        | bool                       |                                                                                              |
+#}
+{% if product.options|length %}
+    <salla-product-options data-testid="store-product-options"
+                           options="{{ product.options }}"
+                           product-id="{{ product.id }}"></salla-product-options>
+{% endif %}
+
+{% if product.has_bundle_products %}
+    <salla-multiple-bundle-product bundle-sections='{{ product|json_encode }}'></salla-multiple-bundle-product>
+{% endif %}
+
+{% if product.weight or product.has_size_guide %}
+    <section class="product-panel">
+        {% if product.weight %}
+            <div class="center-between {{ product.has_size_guide ? 'mb-4 border-b pb-4 hairline' : '' }}">
+                <b class="form-label inline-flex items-center gap-1.5">
+                    <i class="sicon-luggage-cart"></i>
+                    <span>{{ trans('pages.products.weight') }}</span>
+                </b>
+                <span class="product-weight text-sm">{{ product.weight }}</span>
+            </div>
+        {% endif %}
+
+        {% if product.has_size_guide %}
+            <div class="center-between">
+                <b class="form-label inline-flex items-center gap-1.5">
+                    <i class="sicon-pencil-ruler"></i>
+                    <span>{{ trans('pages.products.size_guides') }}</span>
+                </b>
+
+                <salla-button shape="link" color="primary" class="!p-0 text-sm"
+                              onclick="salla.event.dispatch('size-guide::open', '{{ product.id }}')">
+                    {{ trans('pages.products.show_size_guides') }}
+                    <i class="sicon-keyboard_arrow_left {{ theme.is_rtl ? '' : 'flip-x' }}"></i>
+                </salla-button>
+            </div>
+            <salla-product-size-guide data-testid="store-product-size-guide"></salla-product-size-guide>
+        {% endif %}
+    </section>
+{% endif %}
+
+{% if product.can_add_note or product.can_upload_file %}
+    <section class="product-panel">
+        <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4">
+            <label class="form-label">
+                <b class="block">{{ trans('pages.products.attachments') }}</b>
+            </label>
+
+            <div class="mt-2 sm:col-span-2 sm:mt-0 text-end">
+                <div class="flex flex-wrap gap-2 rtl:justify-start ltr:justify-end">
+                    {% if product.can_add_note %}
+                        <button data-testid="store-product-add-note" type="button"
+                                class="btn-tab btn--collapse" data-show="note_{{ product.id }}">
+                            <i class="sicon-chat-conversation-alt rtl:ml-1.5 ltr:mr-1.5"></i>
+                            <span class="fix-align">{{ trans('pages.products.add_note') }}</span>
+                        </button>
+                    {% endif %}
+
+                    {% if product.can_upload_file %}
+                        <button data-testid="store-product-attach-file" type="button"
+                                class="btn-tab btn--collapse" data-show="file_{{ product.id }}">
+                            <i class="sicon-paperclip rtl:ml-1.5 ltr:mr-1.5"></i>
+                            <span class="fix-align">{{ trans('pages.products.add_file') }}</span>
+                        </button>
+                    {% endif %}
+                </div>
+
+                {% if product.can_add_note %}
+                    <div class="collapse-content" id="note_{{ product.id }}">
+                        <div class="pt-4">
+                            <textarea class="form-input h-16 block" name="notes" cols="30" rows="10"
+                                      placeholder="{{ trans('pages.products.notes_placeholder') }}">{{ product.notes }}</textarea>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if product.can_upload_file %}
+                    {# Notice that "product" is actually cart.items[*] on the cart page, so {product.id} is {item.id} #}
+                    <div class="collapse-content" id="file_{{ product.id }}">
+                        <div class="px-1 pt-4">
+                            <salla-file-upload class="product-option-uploader"
+                                               accept="image/png, image/jpeg, image/jpg, image/gif, video/*, application/pdf"
+                                               {% if is_page('cart') %}
+                                                   files="{{ product.attachments|json_encode }}"
+                                                   cart-item-id="{{ product.id }}"
+                                               {% endif %}>
+                                <div class="product-option-uploader-placholder">
+                                    <span class="product-option-uploader-placholder-icon"><i class="sicon-camera"></i></span>
+                                    <p>{{ trans('common.uploader.drag_and_drop') }}</p>
+                                    <span class="filepond--label-action">{{ trans('common.uploader.browse') }}</span>
+                                </div>
+                            </salla-file-upload>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endif %}

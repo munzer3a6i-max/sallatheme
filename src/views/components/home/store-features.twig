@@ -1,0 +1,21 @@
+{#
+| Variable      | Type   | Description                      |
+|---------------|--------|----------------------------------|
+| items[]       | array  | List of features                 |
+| items[].icon  | string | SallaIcons css class `sicon-*`   |
+| items[].title | string |                                  |
+| items[].text  | string |                                  |
+| position      | Int    | Sorting number start from zero   |
+#}
+<section component-id="{{ componentId }}" data-testid="store-home-features"
+         class="s-block s-block--features container js-reveal">
+    <div class="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-3">
+        {% for item in items %}
+            <div class="s-block--features__item">
+                <div class="feature-icon"><i class="{{ item.icon }}"></i></div>
+                <h2>{{ item.title }}</h2>
+                <p>{{ item.text }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</section>

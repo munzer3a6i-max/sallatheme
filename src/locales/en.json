@@ -1,0 +1,33 @@
+{
+  "blocks": {
+    "zirar": {
+      "home": "Home",
+      "categories": "Categories",
+      "search": "Search",
+      "account": "Account",
+      "login": "Sign in",
+      "filters": "Filters",
+      "save": "Save",
+      "brand": "Brand"
+    },
+    "header": {
+      "search": "Search the store",
+      "switch_theme": "Toggle dark mode"
+    },
+    "footer": {
+      "help_title": "Not sure which size to pick?",
+      "help_text": "The Zirar team is on hand for questions about sizing, fabrics and delivery times.",
+      "chat_with_us": "Chat on WhatsApp"
+    }
+  },
+  "common": {
+    "elements": {
+      "skip_to_content": "Skip to content",
+      "close": "Close",
+      "delete": "Delete"
+    },
+    "titles": {
+      "wishlist": "Wishlist"
+    }
+  }
+}

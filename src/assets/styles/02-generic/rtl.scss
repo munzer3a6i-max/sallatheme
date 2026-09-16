@@ -1,0 +1,18 @@
+/* Arabic-first: the theme is authored RTL, these are the RTL-only touches. */
+[dir='rtl'] {
+  .flip-in-rtl {
+    transform: scaleX(-1);
+  }
+
+  .s-block__display-all:hover i {
+    transform: translateX(-4px);
+  }
+
+  .hero-slide__content {
+    text-align: right;
+  }
+
+  .sicon-arrow-left::before {
+    display: inline-block;
+  }
+}

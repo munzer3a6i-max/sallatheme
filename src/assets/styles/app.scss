@@ -1,0 +1,57 @@
+/*
+ * Zirar — a Salla Twilight theme for thobe & men's traditional wear stores.
+ *
+ * The theme is built on Tailwind, but the DOM stays readable: Tailwind classes
+ * are composed here with @apply so the Twig templates carry intent, not long
+ * utility strings.
+ *
+ * SETTINGS      tokens, fonts, breakpoints
+ * GENERIC       reset, shared helpers, motion, rtl/ltr
+ * ELEMENTS      buttons, forms, product card, reviews
+ * COMPONENTS    header, menus, footer, home blocks, product, account…
+ * UTILITIES     third-party widget fixes
+ */
+
+@use './01-settings/tailwind';
+@use './01-settings/global';
+@use './01-settings/fonts';
+@use './01-settings/breakpoints';
+
+@use './02-generic/mixins';
+@use './02-generic/reset';
+@use './02-generic/common';
+@use './02-generic/animations';
+@use './02-generic/lazyload';
+@use './02-generic/tooltip';
+@use './02-generic/rtl';
+@use './02-generic/ltr';
+
+@use './03-elements/buttons';
+@use './03-elements/form';
+@use './03-elements/radio';
+@use './03-elements/radio-images';
+@use './03-elements/product-card';
+@use './03-elements/testimonials';
+
+@use './04-components/header';
+@use './04-components/menus';
+@use './04-components/footer';
+@use './04-components/home-blocks';
+@use './04-components/slider';
+@use './04-components/product';
+@use './04-components/filters';
+@use './04-components/user-menu';
+@use './04-components/user-pages';
+@use './04-components/brands';
+@use './04-components/no-content-placeholder';
+@use './04-components/gifting';
+@use './04-components/loyalty';
+@use './04-components/add-product-toast';
+
+@use './05-utilities/swal';
+@use './05-utilities/chat-bots';
+@use './05-utilities/safari-fixes';
+@use './05-utilities/font-customization';
+
+@import 'lite-youtube-embed/src/lite-yt-embed.css';
+@import 'mmenu-light/dist/mmenu-light.css';

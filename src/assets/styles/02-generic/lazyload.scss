@@ -1,0 +1,45 @@
+/* Placeholder shimmer while background images and product photos load. */
+.lazy__bg,
+.lazy {
+  background-color: var(--color-sand);
+  background-position: center;
+  background-size: cover;
+}
+
+img {
+  &.loaded {
+    animation: zirar-fade-up 0.4s var(--s-ease) both;
+  }
+}
+
+.img-skeleton {
+  @apply relative overflow-hidden;
+  background-color: var(--color-sand);
+
+  &::after {
+    @apply absolute inset-0;
+    animation: zirar-shimmer 1.4s infinite;
+    background-image: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.35),
+      transparent
+    );
+    content: '';
+    transform: translateX(-100%);
+  }
+}
+
+.header-skel-item {
+  @apply inline-block h-3 rounded;
+  background-color: var(--color-sand-dark);
+  opacity: 0.6;
+}
+
+.main-menu-skel {
+  @apply hidden lg:flex items-center gap-6 rtl:mr-8 ltr:ml-8;
+}
+
+.wide-placeholder:empty {
+  @apply hidden;
+}

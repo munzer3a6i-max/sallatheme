@@ -1,0 +1,38 @@
+/* Custom radio & checkbox used by product options and filters. */
+.s-radio,
+.custom-radio {
+  @apply relative inline-flex cursor-pointer items-center gap-2;
+
+  input {
+    @apply absolute opacity-0;
+  }
+
+  &__mark {
+    @apply inline-flex h-5 w-5 items-center justify-center;
+    border: 1px solid var(--color-line);
+    border-radius: var(--s-radius-pill);
+    transition: var(--s-transition);
+  }
+
+  input:checked + &__mark {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+
+    &::after {
+      @apply block h-2 w-2;
+      background-color: var(--color-primary-reverse);
+      border-radius: var(--s-radius-pill);
+      content: '';
+    }
+  }
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+  border-color: var(--color-line);
+  color: var(--color-primary);
+
+  &:focus {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 18%, transparent);
+  }
+}

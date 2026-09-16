@@ -1,0 +1,42 @@
+/**
+ * Colour & image swatches in product options — the part a thobe store leans on
+ * most (fabric colours, collar styles).
+ */
+.s-product-options-option-image,
+.s-product-options-option-color {
+  border-radius: var(--s-radius-sm);
+  overflow: hidden;
+  transition: var(--s-transition);
+}
+
+.s-product-options-option-color {
+  border-radius: var(--s-radius-pill);
+}
+
+.s-product-options-option-selected,
+.s-product-options-option-image.is-selected,
+.s-product-options-option-color.is-selected {
+  box-shadow: 0 0 0 2px var(--color-surface), 0 0 0 4px var(--color-primary);
+}
+
+.s-product-options-option-out-of-stock {
+  opacity: 0.45;
+  position: relative;
+
+  &::after {
+    @apply absolute inset-0;
+    background-image: linear-gradient(
+      to top left,
+      transparent calc(50% - 1px),
+      var(--color-danger) 50%,
+      transparent calc(50% + 1px)
+    );
+    content: '';
+  }
+}
+
+.s-product-options-label,
+.s-product-options-option-label {
+  color: var(--color-ink);
+  font-weight: 700;
+}

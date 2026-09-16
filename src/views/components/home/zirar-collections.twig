@@ -1,0 +1,43 @@
+{#
+| Variable                | Type     | Description                                           |
+|-------------------------|----------|-------------------------------------------------------|
+| component.title         | ?string  | Section title                                         |
+| component.sub_title     | ?string  | Section subtitle                                      |
+| component.shape         | string   | circle, square, portrait                              |
+| component.categories[]  | Category[]| selected categories: name, url, image, products_count |
+| position                | int      | Sorting number start from zero                        |
+#}
+{% set shape = component.shape|default('portrait') %}
+<section component-id="{{ componentId }}"
+         data-testid="store-home-collections"
+         class="s-block s-block--collections shape--{{ shape }} container js-reveal">
+
+    {% if component.title or component.sub_title %}
+        <div class="s-block__title">
+            <div class="right-side">
+                {% if component.title %}<h2>{{ component.title }}</h2>{% endif %}
+                {% if component.sub_title %}<p>{{ component.sub_title }}</p>{% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-3 lg:grid-cols-{{ shape == 'circle' ? '6' : '4' }}">
+        {% for category in component.categories %}
+            <a href="{{ category.url }}" class="collection-card group" aria-label="{{ category.name }}">
+                <div class="collection-card__media">
+                    {% if category.image %}
+                        <img src="{{ category.image }}" alt="{{ category.name }}" loading="lazy" width="400" height="500">
+                    {% else %}
+                        <img src="{{ 'images/placeholder.png'|asset }}" alt="{{ category.name }}" loading="lazy" width="400" height="500">
+                    {% endif %}
+                    {% if shape == 'portrait' %}
+                        <h3 class="collection-card__title">{{ category.name }}</h3>
+                    {% endif %}
+                </div>
+                {% if shape != 'portrait' %}
+                    <h3 class="collection-card__title">{{ category.name }}</h3>
+                {% endif %}
+            </a>
+        {% endfor %}
+    </div>
+</section>

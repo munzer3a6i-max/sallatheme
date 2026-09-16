@@ -1,0 +1,47 @@
+{#
+| Variable                 | Type      | Description                              |
+|--------------------------|-----------|------------------------------------------|
+| component.title          | ?string   | Section title                            |
+| component.sub_title      | ?string   | Section subtitle                         |
+| component.display        | string    | slider, grid                             |
+| component.products       | Product[] | selected products                        |
+| component.display_all_url| ?string   | "show all" destination                   |
+| component.with_bg        | bool      | dark background for the section          |
+| position                 | int       | Sorting number start from zero           |
+#}
+{% set display_all = component.display_all_url %}
+{% set product_ids = component.products|map((product) => product.id)|join(',') %}
+<section component-id="{{ componentId }}"
+         data-testid="store-home-showcase"
+         class="s-block s-block--showcase {{ component.with_bg ? 'with-bg s-block--full-bg' : '' }} js-reveal">
+    <div class="container overflow-hidden">
+        {% if component.title or component.sub_title %}
+            <div class="s-block__title">
+                <div class="right-side">
+                    {% if component.title %}<h2>{{ component.title }}</h2>{% endif %}
+                    {% if component.sub_title %}<p>{{ component.sub_title }}</p>{% endif %}
+                </div>
+                {% if display_all and display_all != '#' and theme.settings.get('is_more_button_enabled', true) %}
+                    <a href="{{ display_all }}" class="s-block__display-all">
+                        {{ trans('blocks.home.display_all') }} <i class="sicon-arrow-left {{ theme.is_rtl ? '' : 'flip-x' }}"></i>
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {% if component.products|length %}
+            {% if component.display == 'grid' %}
+                <salla-products-list data-testid="store-home-showcase-list"
+                                     source="selected"
+                                     source-value="[{{ product_ids }}]"></salla-products-list>
+            {% else %}
+                <salla-products-slider data-testid="store-home-showcase-slider"
+                                       source="selected"
+                                       source-value="[{{ product_ids }}]"
+                                       {% if display_all and display_all != '#' %}display-all-url="{{ display_all }}"{% endif %}
+                                       block-title=" "
+                                       slider-id="showcase-{{ position }}"></salla-products-slider>
+            {% endif %}
+        {% endif %}
+    </div>
+</section>

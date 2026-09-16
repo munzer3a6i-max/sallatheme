@@ -1,0 +1,149 @@
+{#
+| Variable                             | Type          | Description                                  |
+|--------------------------------------|---------------|----------------------------------------------|
+| loyalty.name / description / image   | string        |                                              |
+| loyalty.points[]                     | Point[]       | name, description, type, url, points, icon, color |
+| loyalty.prizes[]                     | PrizesGroup[] | title, type, items[]                         |
+| loyalty.prizes[].items[]             | Prize[]       | id, name, description, image, url, cost_points |
+| user.loyalty_points                  | ?int          |                                              |
+#}
+{% extends "layouts.master" %}
+
+{% block content %}
+    <div class="container space-y-10 lg:space-y-16">
+        <nav class="breadcrumbs w-full py-5">
+            <salla-breadcrumb></salla-breadcrumb>
+        </nav>
+
+        <div data-testid="store-loyalty-banner" class="loyalty__banner">
+            <div class="loyalty__banner-inner">
+                <i class="sicon-star2 star-anime text-6xl" style="color: var(--color-gold);"></i>
+
+                <div class="loyalty__banner-content">
+                    <div class="info">
+                        <h1>{{ loyalty.name }}</h1>
+                        <p>{{ loyalty.description }}</p>
+
+                        {% if user.loyalty_points %}
+                            <div class="loyalty-points">
+                                {{ trans('pages.loyalty_program.you_have') }}
+                                <span data-testid="store-loyalty-points-count" class="count-number count-anime"
+                                      data-count="{{ user.loyalty_points }}">0</span>
+                                {{ trans('pages.loyalty_program.point') }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <salla-loyalty data-testid="store-loyalty-exchange" customer-points="{{ user.loyalty_points }}">
+                        <salla-button data-testid="store-loyalty-exchange-btn" slot="widget"
+                                      onclick="document.querySelector('salla-loyalty').open();">
+                            {{ trans('pages.loyalty_program.exchange_points') }}
+                        </salla-button>
+                    </salla-loyalty>
+                </div>
+            </div>
+
+            <div class="loyalty-star loyalty-star--first"><i class="sicon-star2"></i></div>
+            <div class="loyalty-star loyalty-star--second"><i class="sicon-star2"></i></div>
+        </div>
+
+        {# ------------------------------------------------------ ways to get points #}
+        <section data-testid="store-loyalty-points-ways" class="points-ways">
+            <div class="s-block__title">
+                <div class="right-side"><h2>{{ trans('pages.loyalty_program.ways_to_get_points') }}</h2></div>
+            </div>
+
+            <div class="points-ways__list">
+                {% for point in loyalty.points %}
+                    <div data-testid="store-loyalty-way-item" class="way-item">
+                        <div class="flex gap-4">
+                            <span class="way-item__icon {{ point.icon ?: 'sicon-star' }}" style="color: {{ point.color }};">
+                                <span style="background-color: {{ point.color }};"></span>
+                            </span>
+                            <div class="way-item__content">
+                                <h3 style="color: {{ point.color }};">{{ point.points }} {{ trans('pages.loyalty_program.point') }}</h3>
+                                <p>{{ point.description }}</p>
+                            </div>
+                        </div>
+
+                        {% if user.type == 'user' %}
+                            <div class="way-item__action">
+                                {% if point.type == 'share' %}
+                                    <div class="relative rounded-full border px-4 py-1.5" style="border-color: var(--color-primary);">
+                                        <salla-button shape="link" data-content="{{ point.url }}"
+                                                      class="absolute top-0 h-full px-3 rtl:left-0 ltr:right-0"
+                                                      title="{{ trans('pages.loyalty_program.copy_link') }}"
+                                                      onclick="app.copyToClipboard(event)">
+                                            <i class="copy-icon sicon-swap-fill"></i>
+                                        </salla-button>
+                                        <h3 class="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-bold"
+                                            style="color: var(--color-primary);" dir="ltr">{{ point.url }}</h3>
+                                    </div>
+                                {% elseif customer.is_profile_completed and point.type == 'profile' %}
+                                    <div class="rounded-full px-4 py-1.5 text-center" style="color: var(--color-success); background-color: color-mix(in srgb, var(--color-success) 12%, transparent);">
+                                        <i class="sicon-check-circle"></i>
+                                        <span class="break-all">{{ trans('pages.loyalty_program.completed') }}</span>
+                                    </div>
+                                {% else %}
+                                    <salla-button fill="outline" width="wide" href="{{ point.url }}" class="text-sm">
+                                        {{ point.name }}
+                                    </salla-button>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        {# ------------------------------------------------------------------ prizes #}
+        {% for prize_group in loyalty.prizes %}
+            <div>
+                <salla-slider type="carousel"
+                              loop="{{ prize_group.items|length < 4 ? 'false' : 'true' }}"
+                              block-title="{{ prize_group.title }}"
+                              id="loyalty-slider-{{ prize_group.type }}">
+                    <div slot="items">
+                        {% for prize in prize_group.items %}
+                            <div class="slide--one-fourth">
+                                <div class="product-entry flex-col">
+                                    {% set img %}
+                                        <img class="w-full rounded-t object-cover sm:h-full" src="{{ prize.image }}"
+                                             loading="lazy" alt="{{ prize.name }}"/>
+                                    {% endset %}
+
+                                    {% if prize.url %}
+                                        <a href="{{ prize.url }}" class="product-entry__image h-40">{{ img }}</a>
+                                    {% else %}
+                                        {{ img }}
+                                    {% endif %}
+
+                                    <div class="flex-1 p-5">
+                                        <h3 class="product-entry__title mb-2 leading-6">
+                                            {% if prize.url %}
+                                                <a href="{{ prize.url }}">{{ prize.name }}</a>
+                                            {% else %}
+                                                {{ prize.name }}
+                                            {% endif %}
+                                        </h3>
+                                        <p class="text-sm leading-6" style="color: var(--color-muted);">{{ prize.description }}</p>
+                                    </div>
+
+                                    {% if user.type == 'user' %}
+                                        <div class="border-t p-4 text-center font-bold hairline" style="color: var(--color-primary);">
+                                            {{ prize.cost_points }} {{ trans('pages.loyalty_program.point') }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </salla-slider>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script defer src="{{ 'pages.js' | asset }}"></script>
+{% endblock %}

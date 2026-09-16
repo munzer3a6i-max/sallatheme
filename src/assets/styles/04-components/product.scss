@@ -1,0 +1,238 @@
+@use '../01-settings/breakpoints' as *;
+
+/**
+ * Single product page — the centrepiece for a thobe store: a tall gallery, a
+ * calm detail column, fabric/care facts, and a sticky buy bar on mobile.
+ */
+.container--product-details {
+  @apply pb-12;
+}
+
+.product-brand .brand-logo {
+  @apply inline-flex h-12 w-12 items-center justify-center p-1;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--s-radius-pill);
+}
+
+.product-entry__sub-title {
+  color: var(--color-muted);
+}
+
+.product__description {
+  color: var(--color-ink-soft);
+
+  .article--main {
+    @apply leading-8;
+  }
+}
+
+#btn-show-more {
+  @apply inline-flex cursor-pointer items-center gap-1 text-sm font-bold;
+  color: var(--color-primary);
+
+  &::after {
+    content: '\e93a';
+    font-family: 'sallaicons';
+    font-size: 10px;
+  }
+}
+
+/* Panels stacked in the buy column. */
+.product-panel {
+  @apply mb-4 p-5;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--s-radius);
+}
+
+.product-price-row {
+  @apply flex flex-wrap items-center gap-3;
+
+  .total-price {
+    @apply text-2xl font-bold;
+    color: var(--color-ink);
+  }
+
+  .price_is_on_sale .total-price {
+    color: var(--color-danger);
+  }
+
+  .before-price {
+    @apply text-sm line-through;
+    color: var(--color-muted);
+  }
+
+  .starting-price-title {
+    @apply text-xs;
+    color: var(--color-muted);
+  }
+}
+
+.out-of-stock {
+  color: var(--color-danger);
+  font-weight: 700;
+}
+
+.discount-badge {
+  @apply inline-flex items-center px-3 py-1 text-xs font-bold;
+  background-color: color-mix(in srgb, var(--color-danger) 12%, transparent);
+  border-radius: var(--s-radius-pill);
+  color: var(--color-danger);
+}
+
+/* Fabric & care facts — thobe-specific detail table. */
+.fabric-facts {
+  @apply grid gap-px overflow-hidden;
+  background-color: var(--color-line);
+  border: 1px solid var(--color-line);
+  border-radius: var(--s-radius);
+
+  &__item {
+    @apply flex items-center justify-between gap-3 px-4 py-3 text-sm;
+    background-color: var(--color-surface);
+  }
+
+  &__label {
+    @apply inline-flex items-center gap-2;
+    color: var(--color-muted);
+  }
+
+  &__value {
+    @apply font-bold;
+    color: var(--color-ink);
+  }
+}
+
+.size-hint {
+  @apply flex items-start gap-3 p-4 text-sm;
+  background-color: var(--color-sand);
+  border-radius: var(--s-radius);
+  color: var(--color-ink-soft);
+
+  i {
+    @apply mt-0.5 shrink-0 text-lg;
+    color: var(--color-primary);
+  }
+}
+
+.product-meta-row {
+  @apply flex items-center justify-between gap-3 px-4 py-3 text-sm;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--s-radius);
+}
+
+.product-tags a {
+  @apply inline-flex items-center gap-1 px-3 py-1 text-xs;
+  background-color: var(--color-sand);
+  border-radius: var(--s-radius-pill);
+  color: var(--color-ink-soft);
+
+  &:hover {
+    color: var(--color-primary);
+  }
+}
+
+/* Twilight option groups */
+salla-product-options {
+  @apply block;
+
+  .s-product-options-option-wrapper {
+    @apply mb-4;
+  }
+}
+
+/* --------------------------------------------------- sticky mobile bar */
+.sticky-product-bar {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--s-radius);
+}
+
+body.is-sticky-product-bar {
+  @include desktop {
+    .sticky-product-bar {
+      @apply fixed inset-x-0 bottom-0 z-40 flex items-center gap-3 rounded-none border-x-0 border-b-0 p-3;
+      box-shadow: var(--s-shadow-top);
+      padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
+
+      &__quantity {
+        @apply mb-0 w-auto shrink-0;
+
+        .form-label {
+          @apply hidden;
+        }
+      }
+
+      &__btn {
+        @apply mt-0 flex-1;
+      }
+    }
+
+    /* The buy bar replaces the navigation bar while it is on screen. */
+    .mobile-bottom-bar {
+      @apply hidden;
+    }
+  }
+}
+
+/* Quantity stepper */
+salla-quantity-input {
+  .s-quantity-input-container,
+  .s-quantity-input-wrapper {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--s-radius-pill);
+    overflow: hidden;
+  }
+
+  button:hover {
+    color: var(--color-primary);
+  }
+}
+
+/* Comments / reviews on the product page */
+salla-comments {
+  @apply mt-8 block;
+
+  .s-comments-wrapper {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--s-radius);
+  }
+}
+
+/* ------------------------------------------------------------- the cart */
+.cart-item {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--s-radius);
+}
+
+.cart-summary-card,
+salla-cart-summary-card .s-cart-summary-wrapper {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--s-radius);
+}
+
+.free-ribbon {
+  background-color: var(--color-danger);
+}
+
+#free-shipping {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--s-radius);
+
+  .progress-bg {
+    background-color: var(--color-primary);
+  }
+}
+
+/* Breadcrumb-free spacing helper used by product pages. */
+.s-before-product-info:empty,
+.s-after-related:empty {
+  @apply hidden;
+}

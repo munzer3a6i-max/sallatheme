@@ -1,0 +1,32 @@
+{#
+| Variable           | Type     | Description                     |
+|--------------------|----------|---------------------------------|
+| component.title    | ?string  |                                 |
+| component.items[]  | object[] | image, text, url                |
+| position           | int      | Sorting number start from zero  |
+#}
+<section component-id="{{ componentId }}"
+         data-testid="store-home-lookbook"
+         class="s-block s-block--lookbook container js-reveal">
+    {% if component.title %}
+        <div class="s-block__title">
+            <div class="right-side"><h2>{{ component.title }}</h2></div>
+        </div>
+    {% endif %}
+
+    <div class="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4">
+        {% for item in component.items %}
+            {% if item.url %}
+                <a href="{{ item.url }}" class="lookbook-item" aria-label="{{ item.text|default('lookbook') }}">
+                    <img src="{{ item.image }}" alt="{{ item.text|default(store.name) }}" loading="lazy" width="500" height="625">
+                    {% if item.text %}<span class="lookbook-item__text">{{ item.text }}</span>{% endif %}
+                </a>
+            {% else %}
+                <div class="lookbook-item">
+                    <img src="{{ item.image }}" alt="{{ item.text|default(store.name) }}" loading="lazy" width="500" height="625">
+                    {% if item.text %}<span class="lookbook-item__text">{{ item.text }}</span>{% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</section>

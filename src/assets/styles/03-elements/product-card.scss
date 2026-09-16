@@ -1,0 +1,306 @@
+/**
+ * Product card.
+ *
+ * `custom-salla-product-card` (src/assets/js/partials/product-card.js) renders
+ * the `s-product-card-*` markup that Twilight lists expect; everything below is
+ * Zirar's own look for it: a quiet sand frame, a tall image well suited to
+ * full-length thobes, and actions that surface on hover.
+ */
+.s-product-card-entry {
+  @apply relative flex h-full justify-between overflow-hidden;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--s-radius);
+  transition: box-shadow var(--s-transition), transform var(--s-transition),
+    border-color var(--s-transition);
+
+  &:hover {
+    border-color: var(--color-sand-dark);
+    box-shadow: var(--s-shadow);
+    transform: translateY(-3px);
+  }
+}
+
+.s-product-card-vertical {
+  @apply flex-col;
+}
+
+.s-product-card-horizontal {
+  @apply flex-row items-stretch;
+
+  .s-product-card-image {
+    @apply w-32 shrink-0 sm:w-44;
+  }
+}
+
+.s-product-card-image,
+.s-product-card-image-full {
+  @apply relative overflow-hidden;
+  background-color: var(--color-sand);
+
+  a {
+    @apply block h-full w-full;
+  }
+
+  img {
+    @apply h-full w-full;
+    aspect-ratio: 3 / 4;
+    transition: transform 0.8s var(--s-ease);
+  }
+}
+
+.s-product-card-entry:hover .s-product-card-image img {
+  transform: scale(1.05);
+}
+
+.s-product-card-image-cover {
+  @apply object-cover;
+}
+
+.s-product-card-image-contain {
+  @apply object-contain p-4;
+}
+
+/* Merchants can force one card height from the dashboard (unite-cards-height). */
+.s-product-card-fit-height .s-product-card-image {
+  @apply h-56 sm:h-72;
+
+  img {
+    aspect-ratio: auto;
+  }
+}
+
+.s-product-card-full-image {
+  @apply min-h-[320px];
+
+  .s-product-card-image-full {
+    @apply absolute inset-0;
+  }
+
+  .s-product-card-content {
+    @apply relative z-2 mt-auto;
+    color: #fff;
+
+    .s-product-card-content-title a,
+    .s-product-card-price,
+    h4 {
+      color: #fff;
+    }
+  }
+}
+
+.s-product-card-overlay {
+  @apply absolute inset-0 z-1;
+  background-image: linear-gradient(to top, rgba(18, 16, 14, 0.75), rgba(18, 16, 14, 0) 60%);
+  opacity: 1;
+}
+
+.s-product-card-minimal {
+  @apply flex-row;
+
+  .s-product-card-image {
+    @apply w-28 shrink-0 sm:w-32;
+  }
+
+  .s-product-card-content {
+    @apply flex flex-1 flex-col justify-center overflow-hidden p-4;
+  }
+
+  .s-product-card-content-title a {
+    @apply line-clamp-2;
+  }
+}
+
+.s-product-card-content {
+  @apply flex flex-1 flex-col gap-2 p-4;
+
+  &-main {
+    @apply flex-1;
+  }
+
+  &-title {
+    @apply text-sm font-bold leading-6 sm:text-base;
+
+    a {
+      @apply line-clamp-2;
+      color: var(--color-ink);
+
+      &:hover {
+        color: var(--color-primary);
+      }
+    }
+  }
+
+  &-subtitle {
+    @apply line-clamp-1 text-xs;
+    color: var(--color-muted);
+  }
+
+  &-sub {
+    @apply flex items-center justify-between gap-2;
+  }
+
+  &-footer {
+    @apply mt-2 flex items-center gap-2;
+  }
+
+  &-extra-padding {
+    @apply px-1;
+  }
+}
+
+/* --------------------------------------------------------------- pricing */
+.s-product-card-price,
+.s-product-card-sale-price h4,
+.s-product-card-starting-price h4 {
+  @apply text-base font-bold;
+  color: var(--color-ink);
+}
+
+.s-product-card-sale-price {
+  @apply flex flex-wrap items-baseline gap-2;
+
+  h4 {
+    color: var(--color-danger);
+  }
+
+  span {
+    @apply text-xs line-through;
+    color: var(--color-muted);
+  }
+}
+
+.s-product-card-starting-price p {
+  @apply text-xxs;
+  color: var(--color-muted);
+}
+
+.s-product-card-rating {
+  @apply inline-flex items-center gap-1 text-xs;
+  color: var(--color-muted);
+
+  i {
+    color: var(--color-gold);
+  }
+}
+
+/* ---------------------------------------------------------------- badges */
+.s-product-card-promotion-title,
+.s-product-card-quantity,
+.s-product-card-out-badge {
+  @apply absolute top-3 rtl:right-3 ltr:left-3 z-2 px-3 py-1 text-xxs font-bold;
+  border-radius: var(--s-radius-pill);
+}
+
+.s-product-card-promotion-title {
+  background-color: var(--color-invert-bg);
+  color: var(--color-invert-ink);
+}
+
+.s-product-card-quantity {
+  background-color: var(--color-sand);
+  color: var(--color-ink);
+}
+
+.s-product-card-out-badge {
+  background-color: var(--color-danger);
+  color: #fff;
+}
+
+.s-product-card-out-of-stock img {
+  filter: grayscale(1);
+  opacity: 0.85;
+}
+
+/* -------------------------------------------------------------- wishlist */
+.s-product-card-wishlist-btn {
+  @apply absolute top-2.5 z-2 rtl:left-2.5 ltr:right-2.5;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: var(--s-transition);
+
+  .s-button-element {
+    background-color: color-mix(in srgb, var(--color-surface) 88%, transparent);
+    border: 1px solid var(--color-line);
+    backdrop-filter: blur(6px);
+  }
+
+  i::before {
+    color: var(--color-ink);
+  }
+
+  &.s-product-card-wishlist-added {
+    opacity: 1;
+    transform: none;
+
+    i::before {
+      color: var(--color-danger);
+    }
+  }
+}
+
+.s-product-card-entry:hover .s-product-card-wishlist-btn,
+.s-product-card-wishlist-btn:focus-within {
+  opacity: 1;
+  transform: none;
+}
+
+@media (hover: none) {
+  .s-product-card-wishlist-btn {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* --------------------------------------------------- countdown / special */
+.s-product-card-special {
+  .s-product-card-content-pie {
+    @apply relative flex items-center justify-center;
+    height: 64px;
+    width: 64px;
+
+    span {
+      @apply absolute text-center text-xxs leading-tight;
+      color: var(--color-muted);
+
+      b {
+        @apply block text-sm;
+        color: var(--color-ink);
+      }
+    }
+  }
+
+  .s-product-card-content-pie-svg {
+    transform: rotate(-90deg);
+
+    circle {
+      fill: none;
+      stroke-width: 2.2;
+    }
+  }
+
+  .s-product-card-content-pie-svg-base {
+    stroke: var(--color-sand-dark);
+  }
+
+  .s-product-card-content-pie-svg-bar {
+    stroke: var(--color-primary);
+    stroke-dasharray: 100 100;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1s var(--s-ease);
+  }
+}
+
+.s-product-card-donation-input {
+  @apply mt-2 text-xs;
+
+  label {
+    @apply mb-1 block font-bold;
+  }
+}
+
+/* Row cards on the wishlist page. */
+.s-products-list-horizontal-cards .s-product-card-entry,
+.horizontal-products .s-product-card-entry {
+  @apply flex-row;
+}

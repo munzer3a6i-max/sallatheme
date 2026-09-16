@@ -1,0 +1,15 @@
+{#
+| Variable | Type       | Description                    |
+|----------|------------|--------------------------------|
+| products | Products[] |                                |
+| position | Int        | Sorting number start from zero |
+#}
+<section component-id="{{ componentId }}" data-testid="store-home-products-section"
+         class="s-block s-block--latest-products container js-reveal">
+    <div class="s-block__title">
+        <div class="right-side">
+            <h2>{{ trans('blocks.home.latest_products') }}</h2>
+        </div>
+    </div>
+    <salla-products-list data-testid="store-home-latest-products-list" source="latest"></salla-products-list>
+</section>

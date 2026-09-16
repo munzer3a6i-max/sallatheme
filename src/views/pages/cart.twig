@@ -1,0 +1,196 @@
+{#
+| Variable                                 | Type       | Description                                        |
+|------------------------------------------|------------|----------------------------------------------------|
+| cart.id                                  | string     | Unique string for the current cart                 |
+| cart.items[]                             | CartItem[] | id, url, quantity, price, total, product_image…    |
+| cart.items[].is_hidden_quantity          | bool       |                                                    |
+| cart.items[].offer                       | ?object    | discount, is_free, names                           |
+| cart.items[].attachments[]               | ?array     | id, url, name                                      |
+| cart.options                             | CartOptions[] | cart-level options                              |
+| cart.free_shipping_bar                   | ?object    | minimum_amount, has_free_shipping, percent, remaining |
+#}
+{% extends "layouts.master" %}
+
+{% block content %}
+    <div class="container">
+        <nav class="breadcrumbs w-full py-5">
+            <salla-breadcrumb></salla-breadcrumb>
+        </nav>
+
+        <h1 class="sr-only">{{ trans('blocks.header.cart') }}</h1>
+        <salla-conditional-offer data-testid="store-cart-conditional-offer"></salla-conditional-offer>
+
+        <div class="flex flex-col items-start pb-32 pt-5 lg:flex-row lg:pb-20">
+
+            {# ---------------------------------------------------------- cart items #}
+            <div class="main-content w-full lg:w-[calc(100%-384px)]">
+                {% hook 'cart:items.start' %}
+
+                {% for item in cart.items %}
+                    <form onchange="salla.form.onChange('cart.updateItem', event)" id="item-{{ item.id }}">
+                        <section data-testid="store-cart-item-{{ item.id }}" class="cart-item relative mb-5 p-5 xs:p-6">
+                            <input type="hidden" name="id" value="{{ item.id }}">
+
+                            <div class="mb-6 items-start justify-between last:mb-0 md:flex md:gap-10">
+                                <div class="flex flex-1 gap-4">
+                                    <a href="{{ item.url }}" class="relative shrink-0 overflow-hidden">
+                                        <img src="{{ item.product_image }}" alt="{{ item.product_name }}"
+                                             {{ loop.first ? 'loading="eager"' : 'loading="lazy"' }}
+                                             class="h-24 w-20 flex-none rounded object-cover sand-bg">
+
+                                        <div class="free-ribbon absolute top-[11px] w-32 rotate-45 py-1 text-center text-xs font-bold text-white rtl:left-[-38px] ltr:right-[-38px] {{ (item.price.getMoney().amount == 0 and item.has_discount) ? '' : 'hidden' }}">
+                                            {{ trans('pages.loyalty_program.free_product') }}
+                                        </div>
+                                    </a>
+
+                                    <div class="space-y-1">
+                                        <h2 class="text-base leading-6">
+                                            <a href="{{ item.url }}">{{ item.product_name }}</a>
+                                        </h2>
+
+                                        <span class="item-regular-price text-sm line-through {{ item.offer ? '' : 'hidden' }}" style="color: var(--color-muted);">{{ item.product_price|money }}</span>
+                                        <span id="original_price" class="item-original-price inline-flex gap-1 text-sm leading-4 line-through {{ item.is_on_sale ? '' : 'hidden' }}" style="color: var(--color-muted);">{{ item.original_price|money }}</span>
+                                        <span id="has_discount" data-testid="store-cart-item-price" class="item-price inline-flex gap-1 text-sm leading-4 {{ item.has_discount ? 'font-bold' : '' }}" {% if item.has_discount %}style="color: var(--color-danger);"{% endif %}>{{ item.price|money }}</span>
+
+                                        <p class="item-weight-row text-sm {{ item.weight_label ? '' : 'hidden' }}" style="color: var(--color-muted);">
+                                            {{ trans('pages.products.weight') }}
+                                            <span class="item-weight">{{ item.weight_label }}</span>
+                                        </p>
+
+                                        <span class="old-offers mx-1.5 flex items-center gap-1 {{ item.detailed_offers ? 'hidden' : '' }}">
+                                            <i class="sicon-discount-calculator offer-icon {{ item.offer ? '' : 'hidden' }}" style="color: var(--color-muted);"></i>
+                                            <span class="offer-name text-sm {{ item.offer ? '' : 'hidden' }}" style="color: var(--color-muted);">{{ item.offer.names }}</span>
+                                        </span>
+
+                                        <salla-cart-item-offers quantity="{{ item.quantity }}"
+                                                                item-id="{{ item.id }}"
+                                                                product-price="{{ item.product_price }}"
+                                                                offers="{{ item.detailed_offers|json_encode }}"></salla-cart-item-offers>
+                                    </div>
+                                </div>
+
+                                <div class="mt-5 flex items-center justify-between gap-8 border-b border-t py-3 hairline md:mt-0 md:items-start md:border-none md:p-0">
+                                    {% if item.type == 'donating' %}
+                                        <span></span>
+                                    {% elseif item.is_hidden_quantity %}
+                                        <input type="hidden" value="{{ item.quantity }}" name="quantity" aria-label="Quantity"/>
+                                        <span class="w-10 text-center">{{ item.quantity }}</span>
+                                    {% else %}
+                                        <salla-quantity-input cart-item-id="{{ item.id }}"
+                                                              max="{{ item.max_quantity }}"
+                                                              value="{{ item.quantity }}"
+                                                              name="quantity"
+                                                              aria-label="Quantity"></salla-quantity-input>
+                                    {% endif %}
+
+                                    {% set item_total = item.detailed_offers|length > 0 ? item.total_special_price|money : item.total|money %}
+                                    <p class="flex-none text-sm font-bold rtl:md:pl-10 ltr:md:pr-10" style="color: var(--color-primary);">
+                                        <span>{{ trans('pages.cart.total') }}:</span>
+                                        <span data-testid="store-cart-item-total" class="item-total inline-block">{{ item.is_available ? item_total : trans('pages.cart.out_of_stock') }}</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            {% include 'pages.partials.product.options' with { product: item } %}
+
+                            <span class="absolute top-2 rtl:left-2 ltr:right-2 xs:top-4 rtl:xs:left-4 ltr:xs:right-4">
+                                <salla-button data-testid="store-cart-delete-item" type="button" shape="icon" size="small"
+                                              color="danger" class="btn--delete" aria-label="{{ trans('common.elements.delete') }}"
+                                              onclick="salla.cart.deleteItem('{{ item.id }}').then(() => document.querySelector('#item-{{ item.id }}').remove())">
+                                    <i class="sicon-cancel"></i>
+                                </salla-button>
+                            </span>
+                        </section>
+                    </form>
+                {% else %}
+                    <div data-testid="store-cart-empty" class="no-content-placeholder">
+                        <i class="sicon-shopping-bag icon"></i>
+                        <p>{{ trans('pages.cart.empty_cart') }}</p>
+                        <a data-testid="store-cart-back-home" href="{{ link('/') }}" class="btn btn--outline-primary">
+                            {{ trans('common.elements.back_home') }}
+                        </a>
+                    </div>
+                {% endfor %}
+
+                {% if cart.options|length %}
+                    <div class="cart-options">
+                        {% for product_option in cart.options %}
+                            <form class="relative first:pt-5" onchange="salla.form.onChange('cart.updateItem', event)" id="item-{{ product_option.id }}">
+                                <input type="hidden" name="id" value="{{ product_option.id }}">
+                                <input type="hidden" name="quantity" value="{{ product_option.quantity }}">
+                                {% include 'pages.partials.product.options' with { product: product_option } %}
+                            </form>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <salla-offer data-testid="store-cart-offer"></salla-offer>
+
+                {% hook 'cart:items.end' %}
+            </div>
+
+            {% hook 'cart:summary.start' %}
+
+            {# -------------------------------------------------------------- summary #}
+            {% if cart.items|length %}
+                <div class="sticky top-24 w-full lg:w-96 rtl:lg:mr-8 ltr:lg:ml-8">
+
+                    <div id="free-shipping" class="relative mb-5 p-5 xs:p-6 {{ cart.free_shipping_bar ? '' : 'hidden' }}">
+                        <div class="flex items-center gap-3">
+                            <i class="rounded-icon sicon-shipping-fast {{ theme.is_rtl ? 'flip-x' : '' }}"
+                               style="background-color: var(--color-primary); color: var(--color-primary-reverse);"></i>
+                            {% set is_free = cart.free_shipping_bar.has_free_shipping %}
+                            <div class="flex-1">
+                                <h4 class="shipping-item mb-1.5 text-sm font-bold">{{ trans('pages.cart.free_shipping') }}</h4>
+                                <p class="shipping-item text-sm" style="color: var(--color-muted);">
+                                    <span id="free-shipping-msg">{{ (is_free
+                                        ? trans('pages.cart.has_free_shipping')
+                                        : trans('pages.cart.free_shipping_alert', {'amount': cart.free_shipping_bar.remaining|money}))|raw }}</span>
+                                    <span class="emoji {{ is_free ? '' : 'hidden' }}" id="free-shipping-applied">🎉</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div id="free-shipping-bar" class="mt-6 rounded-full sand-bg {{ is_free ? 'hidden' : '' }}">
+                            <div class="progress-bg relative flex h-2.5 justify-end rounded-full transition-all duration-500"
+                                 style="width:{{ cart.free_shipping_bar.percent }}%">
+                                <i class="sicon-shipping-fast absolute -top-5 rtl:left-0 ltr:right-0 {{ theme.is_rtl ? 'flip-x' : '' }}"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if loyalty %}
+                        <salla-loyalty-panel data-testid="store-cart-loyalty"
+                                             prize-points="{{ loyalty.prize.points }}"
+                                             prize-title="{{ loyalty.prize.title }}"></salla-loyalty-panel>
+                    {% endif %}
+
+                    <div id="cart-gifting" class="relative mb-5 {{ gift.enabled ? '' : 'hidden' }}">
+                        <salla-gifting data-testid="store-cart-gifting" id="salla-gifting" class="mt-5"
+                                       widget-title="{{ trans('pages.cart.gift_widget_title') }}"
+                                       widget-subtitle="{{ gift.text }}" {{ gift.type }}-products vertical></salla-gifting>
+                    </div>
+
+                    {% if store.settings.cart.apply_coupon_enabled %}
+                        <div class="s-card mb-5 px-5 xs:px-6">
+                            {% hook 'cart:coupon.start' %}
+                            <salla-cart-coupons data-testid="store-cart-coupons"></salla-cart-coupons>
+                            {% hook 'cart:coupon.end' %}
+                        </div>
+                    {% endif %}
+
+                    {% hook 'cart:summary-card.start' %}
+                    <salla-cart-summary-card data-testid="store-cart-summary"></salla-cart-summary-card>
+                    {% hook 'cart:summary-card.end' %}
+                    {% hook 'cart:summary.end' %}
+
+                    <salla-tiered-offer data-testid="store-cart-tiered-offer"></salla-tiered-offer>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script defer src="{{ 'checkout.js' | asset }}"></script>
+{% endblock %}

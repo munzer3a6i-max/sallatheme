@@ -1,0 +1,19 @@
+/* `salla-add-product-toast` — the enhanced "added to cart" confirmation. */
+salla-add-product-toast {
+  .s-add-product-toast-wrapper,
+  .s-add-product-toast {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--s-radius);
+    box-shadow: var(--s-shadow-lg);
+    color: var(--color-ink);
+  }
+
+  img {
+    border-radius: var(--s-radius-sm);
+  }
+}
+
+.add-product-toast-enter {
+  animation: zirar-fade-up 0.4s var(--s-ease) both;
+}

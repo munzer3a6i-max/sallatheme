@@ -1,0 +1,177 @@
+@use '../01-settings/breakpoints' as *;
+
+/**
+ * Main menu (desktop dropdowns + mega menu) and the mmenu-light mobile drawer.
+ * The markup comes from `custom-main-menu` (src/assets/js/partials/main-menu.js).
+ */
+.main-menu {
+  @apply flex items-center gap-1 rtl:mr-6 ltr:ml-6;
+
+  > .root-level {
+    @apply relative;
+
+    > a {
+      @apply inline-flex items-center gap-1.5 px-3 py-6 text-sm font-bold;
+      color: var(--color-ink);
+      position: relative;
+
+      &::after {
+        @apply absolute bottom-4 rtl:right-3 ltr:left-3;
+        background-color: var(--color-primary);
+        content: '';
+        height: 2px;
+        transition: width var(--s-transition);
+        width: 0;
+      }
+
+      &:hover {
+        color: var(--color-primary);
+
+        &::after {
+          width: calc(100% - 1.5rem);
+        }
+      }
+    }
+
+    &.has-children > a::before {
+      @apply inline-block align-middle text-[10px] opacity-60 rtl:ml-1 ltr:mr-1;
+      content: '\e93a';
+      font-family: 'sallaicons';
+    }
+  }
+}
+
+.sub-menu {
+  @apply invisible absolute top-full z-30 rtl:right-0 ltr:left-0 p-3 opacity-0;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--s-radius);
+  box-shadow: var(--s-shadow);
+  transform: translateY(10px);
+  transition: opacity var(--s-transition), transform var(--s-transition), visibility var(--s-transition);
+
+  li {
+    @apply relative;
+
+    > a {
+      @apply block rounded px-3 py-2 text-sm;
+      color: var(--color-ink-soft);
+
+      &:hover {
+        background-color: var(--color-sand);
+        color: var(--color-primary);
+      }
+    }
+  }
+
+  /* third level opens beside its parent */
+  li.has-children > .sub-menu {
+    @apply top-0 rtl:right-full ltr:left-full;
+  }
+}
+
+.root-level:hover > .sub-menu,
+.sub-menu li:hover > .sub-menu {
+  @apply visible opacity-100;
+  transform: translateY(0);
+}
+
+.change-menu-dir {
+  .sub-menu li.has-children > .sub-menu {
+    @apply rtl:right-auto rtl:left-full ltr:left-auto ltr:right-full;
+  }
+}
+
+/* Mega menu: category column + product preview. */
+.mega-menu > .sub-menu {
+  @apply rtl:right-0 ltr:left-0 w-full;
+
+  salla-products-list {
+    @apply flex-1 p-4;
+  }
+}
+
+#more-menu-dropdown > a {
+  @apply cursor-pointer;
+}
+
+/* ------------------------------------------------------- mobile drawer */
+.mobile-menu {
+  background-color: var(--color-surface);
+
+  ul {
+    @apply list-none;
+  }
+
+  li > a,
+  li > span {
+    @apply flex items-center gap-3 px-5 py-3.5 text-sm font-bold;
+    border-bottom: 1px solid var(--color-line);
+    color: var(--color-ink);
+  }
+
+  img {
+    @apply h-11 w-11 shrink-0 object-cover;
+    border-radius: var(--s-radius-pill);
+  }
+}
+
+.mm-ocd__content {
+  background-color: var(--color-surface);
+}
+
+.mm-spn {
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+
+  &.mm-spn--navbar::after {
+    color: var(--color-ink);
+    font-weight: 700;
+    opacity: 1;
+  }
+
+  li::after {
+    border-color: var(--color-line);
+  }
+
+  a,
+  span {
+    color: var(--color-ink);
+  }
+}
+
+.close-mobile-menu {
+  @apply absolute top-3 rtl:left-3 ltr:right-3 z-50 inline-flex h-9 w-9 items-center justify-center;
+  background-color: var(--color-sand);
+  border-radius: var(--s-radius-pill);
+  color: var(--color-danger);
+}
+
+/* ------------------------------------------------------------ dropdowns */
+.dropdown-toggler {
+  @apply relative;
+
+  .dropdown__menu {
+    @apply invisible absolute top-full z-30 rtl:right-0 ltr:left-0 mt-2 w-60 p-2 opacity-0;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--s-radius);
+    box-shadow: var(--s-shadow);
+    transition: var(--s-transition);
+  }
+
+  &.is-opened .dropdown__menu {
+    @apply visible opacity-100;
+  }
+
+  .is-active {
+    color: var(--color-primary);
+    font-weight: 700;
+  }
+}
+
+@include desktop {
+  .dropdown-toggler.is-opened .dropdown__menu {
+    @apply fixed inset-x-0 bottom-0 top-auto z-50 m-0 w-full rounded-b-none;
+  }
+}

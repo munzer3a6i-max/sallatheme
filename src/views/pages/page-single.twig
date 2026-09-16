@@ -1,0 +1,31 @@
+{#
+| Variable     | Type   | Description                     |
+|--------------|--------|---------------------------------|
+| page         | Page   |                                 |
+| page.title   | string |                                 |
+| page.content | string | HTML                            |
+| page.type    | string | `customised` for builder pages  |
+#}
+{% extends "layouts.master" %}
+
+{% block content %}
+    {% if page.type == 'customised' %}
+        <div class="s-blocks-wrapper s-information-page">{% hook 'information_page.information_page' %}</div>
+    {% else %}
+        <div class="container">
+            <nav class="breadcrumbs w-full py-5">
+                <salla-breadcrumb></salla-breadcrumb>
+            </nav>
+
+            <div class="flex justify-center">
+                <div class="content content--single-page s-card mt-4 w-full p-6 lg:mt-10 lg:w-10/12 lg:p-10">
+                    <h1 class="mb-6 text-2xl font-bold">{{ page.title }}</h1>
+                    <div class="content-entry">
+                        {{ page.content|raw }}
+                    </div>
+                    <salla-comments data-testid="store-page-comments" item-id="{{ page.id }}" type="page"></salla-comments>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

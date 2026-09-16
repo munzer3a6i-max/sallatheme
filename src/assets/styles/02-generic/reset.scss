@@ -1,0 +1,68 @@
+/* Base document styling — the theme's typographic floor. */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-ivory);
+  color: var(--color-ink);
+  font-family: var(--font-main), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.75;
+  min-height: 100vh;
+  transition: background-color 0.3s var(--s-ease), color 0.3s var(--s-ease);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  letter-spacing: var(--tracking-display);
+  line-height: 1.35;
+}
+
+p {
+  color: var(--color-ink-soft);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--s-transition), opacity var(--s-transition);
+}
+
+hr {
+  border-color: var(--color-line);
+}
+
+img {
+  max-width: 100%;
+}
+
+::selection {
+  background-color: var(--color-primary);
+  color: var(--color-primary-reverse);
+}
+
+/* Keyboard users keep a visible focus ring even though Tailwind's outline
+   core plugin is disabled for pointer interactions. */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Salla's icon font ships its own line-height expectations. */
+[class^='sicon-'],
+[class*=' sicon-'] {
+  line-height: 1;
+}
+
+.sr-only-focusable:focus {
+  @apply not-sr-only fixed top-3 rtl:right-3 ltr:left-3 z-50 px-4 py-2 rounded;
+  background-color: var(--color-surface);
+  box-shadow: var(--s-shadow);
+}

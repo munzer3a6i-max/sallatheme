@@ -1,0 +1,26 @@
+{#
+| Variable   | Type   | Description                      |
+|------------|--------|----------------------------------|
+| image.url  | string | Image url                        |
+| url        | string | Link url                         |
+| title      | string | Section title                    |
+| link_text  | String | Link title                       |
+| is_opacity | Bool   | Overlay the background or not    |
+| position   | Int    | Sorting number start from zero   |
+#}
+<section component-id="{{ componentId }}" data-testid="store-home-parallax-banner"
+         class="s-block s-block--full-banner s-block--full-bg">
+    <div class="full-banner-entry" style="background-image:url('{{ image.url }}');">
+        {% if is_opacity %}
+            <div class="absolute inset-0 bg-black opacity-60"></div>
+        {% endif %}
+        <div class="container relative z-2 py-16 text-center">
+            {% if title %}
+                <h2 class="mb-6 text-2xl font-bold leading-snug sm:text-3xl">{{ title }}</h2>
+            {% endif %}
+            {% if url and link_text %}
+                <a href="{{ url }}" class="btn btn--ghost-white">{{ link_text }}</a>
+            {% endif %}
+        </div>
+    </div>
+</section>

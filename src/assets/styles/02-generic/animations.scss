@@ -1,0 +1,71 @@
+/* Small, purposeful motion. Anything decorative respects reduced-motion. */
+@keyframes zirar-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes zirar-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.12);
+  }
+}
+
+@keyframes zirar-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes zirar-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(var(--marquee-shift, -50%));
+  }
+}
+
+.fade-up {
+  animation: zirar-fade-up 0.6s var(--s-ease) both;
+}
+
+.scale-pulse {
+  animation: zirar-pulse 0.45s var(--s-ease);
+}
+
+.pulse-anime i::before {
+  animation: zirar-pulse 0.5s var(--s-ease);
+}
+
+.fade-out-collapse {
+  height: 0 !important;
+  margin: 0 !important;
+  opacity: 0;
+  overflow: hidden;
+  padding: 0 !important;
+  transition: opacity 0.3s var(--s-ease), height 0.4s var(--s-ease) 0.1s,
+    padding 0.4s var(--s-ease) 0.1s, margin 0.4s var(--s-ease) 0.1s;
+}
+
+.star-anime {
+  animation: zirar-pulse 2.4s var(--s-ease) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-up,
+  .scale-pulse,
+  .star-anime,
+  .pulse-anime i::before {
+    animation: none;
+  }
+}
