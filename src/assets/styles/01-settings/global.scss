@@ -16,8 +16,20 @@
   --color-line: #e7ded0;
   --color-ink: #1c1a17;
   --color-ink-soft: #3b372f;
-  --color-muted: #8a8071;
-  --color-gold: #b08d3f;
+  --color-muted: #6f6759;
+
+  /* The gold accent carries the theme: kickers, ornament dividers, "show all"
+     links and the primary call to action on media.
+     `--color-gold` fills shapes; `--color-gold-text` is the darker shade used
+     wherever gold becomes type, so it keeps its contrast on a light surface. */
+  --color-gold: #c08f4e;
+  --color-gold-text: #8a6124;
+  --color-gold-soft: #ddb37a;
+  --color-gold-ink: #241a0d;
+
+  /* Image wells stay light in both schemes so garment photography on a white
+     backdrop never sits on a dark plate. */
+  --color-media: #f1eee9;
 
   /* Emphasis blocks (announcement bar, dark footer, countdown…).
      These deliberately do NOT swap with the scheme: an inverted block should
@@ -46,20 +58,25 @@
 
   /* Layout */
   --header-height: 76px;
+  --marquee-duration: 38s;
   --mm-ocd-width: calc(100% - 51px);
 }
 
 html.dark {
-  --color-ivory: #141210;
-  --color-surface: #1c1917;
-  --color-surface-2: #221e1a;
-  --color-sand: #24201b;
-  --color-sand-dark: #2e2921;
-  --color-line: #332c24;
-  --color-ink: #f4efe7;
-  --color-ink-soft: #ddd5c8;
-  --color-muted: #9c9284;
-  --color-gold: #d3ab56;
+  --color-ivory: #0d0c0b;
+  --color-surface: #151413;
+  --color-surface-2: #1b1917;
+  --color-sand: #1f1d1a;
+  --color-sand-dark: #2a2622;
+  --color-line: #2c2825;
+  --color-ink: #f5f1ea;
+  --color-ink-soft: #d9d3c9;
+  --color-muted: #9a9288;
+  --color-gold: #d7a86a;
+  --color-gold-text: #e0b47c;
+  --color-gold-soft: #e8c79b;
+  --color-gold-ink: #17120b;
+  --color-media: #edeae5;
   --color-invert-bg: #0e0c0b;
   --color-invert-ink: #f4efe7;
 

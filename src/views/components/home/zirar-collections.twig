@@ -12,14 +12,10 @@
          data-testid="store-home-collections"
          class="s-block s-block--collections shape--{{ shape }} container js-reveal">
 
-    {% if component.title or component.sub_title %}
-        <div class="s-block__title">
-            <div class="right-side">
-                {% if component.title %}<h2>{{ component.title }}</h2>{% endif %}
-                {% if component.sub_title %}<p>{{ component.sub_title }}</p>{% endif %}
-            </div>
-        </div>
-    {% endif %}
+    {% include 'components.partials.section-head' with {
+        title: component.title,
+        sub_title: component.sub_title
+    } %}
 
     <div class="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-3 lg:grid-cols-{{ shape == 'circle' ? '6' : '4' }}">
         {% for category in component.categories %}

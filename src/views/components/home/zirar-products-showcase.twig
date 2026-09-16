@@ -15,19 +15,10 @@
          data-testid="store-home-showcase"
          class="s-block s-block--showcase {{ component.with_bg ? 'with-bg s-block--full-bg' : '' }} js-reveal">
     <div class="container overflow-hidden">
-        {% if component.title or component.sub_title %}
-            <div class="s-block__title">
-                <div class="right-side">
-                    {% if component.title %}<h2>{{ component.title }}</h2>{% endif %}
-                    {% if component.sub_title %}<p>{{ component.sub_title }}</p>{% endif %}
-                </div>
-                {% if display_all and display_all != '#' and theme.settings.get('is_more_button_enabled', true) %}
-                    <a href="{{ display_all }}" class="s-block__display-all">
-                        {{ trans('blocks.home.display_all') }} <i class="sicon-arrow-left {{ theme.is_rtl ? '' : 'flip-x' }}"></i>
-                    </a>
-                {% endif %}
-            </div>
-        {% endif %}
+        {% include 'components.partials.section-head' with {
+            title: component.title,
+            sub_title: component.sub_title
+        } %}
 
         {% if component.products|length %}
             {% if component.display == 'grid' %}
@@ -42,6 +33,10 @@
                                        block-title=" "
                                        slider-id="showcase-{{ position }}"></salla-products-slider>
             {% endif %}
+        {% endif %}
+
+        {% if theme.settings.get('is_more_button_enabled', true) %}
+            {% include 'components.partials.rule-link' with { url: display_all } %}
         {% endif %}
     </div>
 </section>

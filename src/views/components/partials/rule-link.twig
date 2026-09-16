@@ -1,0 +1,16 @@
+{#
+  The centred "show all" link that closes a products block.
+
+| Variable | Type    | Description            |
+|----------|---------|------------------------|
+| url      | ?string | destination            |
+| label    | ?string | defaults to "show all" |
+#}
+{% if url and url != '#' %}
+    <div class="rule-link">
+        <a href="{{ url }}" class="rule-link__btn">
+            <span>{{ label|default(trans('blocks.home.display_all')) }}</span>
+            <i class="sicon-keyboard_arrow_left {{ theme.is_rtl ? '' : 'flip-x' }}"></i>
+        </a>
+    </div>
+{% endif %}

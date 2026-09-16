@@ -8,3 +8,8 @@
     transform: scaleX(-1);
   }
 }
+
+[dir='ltr'] .s-block--hero {
+  --scrim-dir: right;
+  --scrim-dir-r: left;
+}

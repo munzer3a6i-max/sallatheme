@@ -6,6 +6,37 @@ window.fslightbox = Lightbox;
 class Home extends BasePage {
     onReady() {
         this.initFeaturedTabs();
+        this.initReels();
+    }
+
+    /**
+     * Video reels: the poster is replaced by the real video on first click, so
+     * nothing is downloaded until the visitor asks for it.
+     * used in views/components/home/zirar-reels.twig
+     */
+    initReels() {
+        app.all('.reel__play', btn => {
+            btn.addEventListener('click', () => {
+                const reel = btn.closest('.reel');
+                const src = reel?.dataset.video;
+                if (!reel || !src) return;
+
+                const media = reel.querySelector('.reel__media');
+                const youtube = src.match(/(?:youtu\.be\/|v=|embed\/)([\w-]{6,})/);
+
+                if (youtube) {
+                    media.insertAdjacentHTML('beforeend',
+                        `<iframe class="reel__frame" src="https://www.youtube.com/embed/${youtube[1]}?autoplay=1&rel=0"
+                                 title="${reel.querySelector('img')?.alt || ''}" loading="lazy" allow="autoplay; encrypted-media"
+                                 allowfullscreen></iframe>`);
+                } else {
+                    media.insertAdjacentHTML('beforeend',
+                        `<video class="reel__frame" src="${src}" autoplay muted loop playsinline controls></video>`);
+                }
+
+                reel.classList.add('is-playing');
+            });
+        });
     }
 
     /**

@@ -1,13 +1,18 @@
+@use '../01-settings/breakpoints' as *;
+
 /**
- * Header — announcement bar, utility top nav, and the sticky main nav.
- * `app.js` toggles `.fixed-header` / `.fixed-pinned` on `#mainnav` while the
- * visitor scrolls, so the sticky state lives here.
+ * Header.
+ *
+ * Three stacked bars: a marquee announcement, a slim utility bar, then the main
+ * bar with a centred logo and the menu beneath it. On the home page the whole
+ * header floats over the first block (`body.has-overlay-header`) and `app.js`
+ * adds `.is-solid` once the visitor scrolls past it.
  */
 .store-header {
   @apply relative z-30;
 }
 
-/* ---------------------------------------------------------- announcement */
+/* --------------------------------------------------------- announcement */
 .announcement-bar {
   @apply relative overflow-hidden text-center text-xs sm:text-sm;
   background-color: var(--color-invert-bg);
@@ -32,22 +37,69 @@
   }
 
   &__close {
-    @apply absolute top-1/2 rtl:left-2 ltr:right-2 inline-flex h-7 w-7 -translate-y-1/2 items-center justify-center text-sm;
+    @apply absolute top-1/2 z-2 inline-flex h-6 w-6 -translate-y-1/2 items-center justify-center text-[10px] rtl:left-2 ltr:right-2;
+    background-color: color-mix(in srgb, var(--color-invert-ink) 16%, transparent);
     border-radius: var(--s-radius-pill);
-    opacity: 0.7;
+    opacity: 0.75;
 
     &:hover {
-      background-color: rgba(255, 255, 255, 0.12);
       opacity: 1;
+    }
+  }
+}
+
+/* ------------------------------------------------------------- marquee */
+.marquee {
+  @apply flex w-full overflow-hidden;
+  user-select: none;
+
+  &__track {
+    @apply flex shrink-0 items-center gap-10 py-2.5;
+    animation: zirar-marquee var(--marquee-duration) linear infinite;
+    min-width: 100%;
+  }
+
+  &__item {
+    @apply whitespace-nowrap;
+  }
+
+  /* pause on hover so a visitor can read a long promise */
+  &:hover &__track {
+    animation-play-state: paused;
+  }
+}
+
+[dir='ltr'] .marquee__track {
+  animation-direction: reverse;
+}
+
+.marquee--reverse .marquee__track {
+  animation-direction: reverse;
+}
+
+[dir='ltr'] .marquee--reverse .marquee__track {
+  animation-direction: normal;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track {
+    animation: none;
+  }
+
+  .marquee {
+    @apply justify-center;
+
+    &__track:nth-child(2) {
+      @apply hidden;
     }
   }
 }
 
 /* -------------------------------------------------------------- top nav */
 .top-navbar {
-  @apply hidden border-b lg:block;
+  @apply hidden lg:block;
   background-color: var(--color-surface);
-  border-color: var(--color-line);
+  border-bottom: 1px solid var(--color-line);
   color: var(--color-ink-soft);
   font-size: 0.8125rem;
 
@@ -55,24 +107,29 @@
     @apply flex items-center justify-between gap-4 py-2;
   }
 
-  a:hover {
-    color: var(--color-primary);
+  &__contacts,
+  &__meta {
+    @apply flex items-center gap-3;
+  }
+
+  &__link {
+    @apply inline-flex items-center gap-1.5;
+
+    &:hover {
+      color: var(--color-gold-text);
+    }
+  }
+
+  &__sep {
+    @apply inline-block h-3.5 w-px;
+    background-color: var(--color-line);
   }
 }
 
 .topnav-is-dark .top-navbar {
   background-color: var(--color-invert-bg);
   border-color: transparent;
-  color: var(--color-invert-ink);
-
-  .btn--rounded-gray {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: inherit;
-  }
-}
-
-.header-buttons {
-  @apply flex items-center gap-2;
+  color: color-mix(in srgb, var(--color-invert-ink) 82%, transparent);
 }
 
 /* ------------------------------------------------------------- main nav */
@@ -88,72 +145,117 @@
   }
 
   &.fixed-header .inner {
-    @apply fixed top-0 rtl:right-0 ltr:left-0 z-40;
+    @apply fixed top-0 z-40 rtl:right-0 ltr:left-0;
     background-color: color-mix(in srgb, var(--color-surface) 92%, transparent);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--color-line);
     box-shadow: var(--s-shadow-soft);
   }
+}
 
-  &.fixed-pinned.animated .inner {
-    animation: zirar-fade-up 0.35s var(--s-ease) both;
+.main-nav__bar {
+  @apply relative flex items-center justify-between gap-3 py-3;
+}
+
+.main-nav__side {
+  @apply flex flex-1 items-center gap-1;
+
+  &--end {
+    @apply justify-end;
   }
 }
 
 .navbar-brand {
-  @apply flex shrink-0 items-center;
+  @apply flex shrink-0 items-center justify-center;
 
   img {
     @apply object-contain;
-    max-height: 46px;
+    max-height: 52px;
     width: auto;
   }
 }
 
-.header-actions {
-  @apply flex items-center gap-1;
-}
+/* The centred variant puts the logo in the middle and the menu on its own row. */
+.store-header--centered {
+  .main-nav__menu {
+    @apply hidden justify-center pb-2 lg:flex;
+  }
 
-.header-search {
-  @apply w-full max-w-md;
+  .main-menu {
+    @apply justify-center;
+    margin: 0;
+  }
 
-  salla-search {
-    @apply block w-full;
+  .main-menu > .root-level > a {
+    @apply py-2.5;
+
+    &::after {
+      @apply bottom-0.5;
+    }
   }
 }
 
-/* The cart pill carries a live count badge. */
+/* The inline variant keeps the logo at the start with the menu beside it. */
+.store-header--inline {
+  .main-nav__bar {
+    @apply justify-start;
+  }
+
+  .navbar-brand {
+    @apply rtl:ml-6 ltr:mr-6;
+  }
+
+  .main-nav__side--start {
+    @apply flex-none order-3;
+  }
+
+  .main-nav__menu {
+    @apply hidden flex-1 lg:block;
+  }
+}
+
+.header-btn {
+  @apply relative inline-flex h-10 w-10 items-center justify-center;
+  border-radius: var(--s-radius-pill);
+  color: inherit;
+  transition: var(--s-transition);
+
+  i {
+    @apply text-xl;
+  }
+
+  &:hover {
+    background-color: color-mix(in srgb, currentColor 10%, transparent);
+  }
+
+  &__icon {
+    @apply text-xl;
+  }
+}
+
 salla-cart-summary {
   @apply relative inline-flex;
 
   .s-cart-summary-count,
   [data-cart-count] {
-    @apply absolute -top-1 rtl:-left-1 ltr:-right-1 flex h-5 min-w-[20px] items-center justify-center px-1 text-xxs font-bold;
-    background-color: var(--color-primary);
+    @apply absolute -top-0.5 flex h-5 min-w-[20px] items-center justify-center px-1 text-xxs font-bold rtl:-left-1 ltr:-right-1;
+    background-color: var(--color-gold);
     border-radius: var(--s-radius-pill);
-    color: var(--color-primary-reverse);
+    color: var(--color-gold-ink);
   }
 }
 
 .mburger {
-  @apply inline-flex h-11 w-11 items-center justify-center lg:hidden;
+  @apply inline-flex h-10 w-10 items-center justify-center lg:hidden;
   border-radius: var(--s-radius-pill);
 
   &:hover {
-    background-color: var(--color-sand);
+    background-color: color-mix(in srgb, currentColor 10%, transparent);
   }
 }
 
 /* --------------------------------------------------------- scheme toggle */
 .scheme-toggle {
-  @apply relative inline-flex h-10 w-10 items-center justify-center;
-  border-radius: var(--s-radius-pill);
-  color: var(--color-ink);
-
-  &:hover {
-    background-color: var(--color-sand);
-  }
-
   .sicon-sun {
     @apply hidden;
   }
@@ -166,6 +268,86 @@ html.dark .scheme-toggle {
 
   .sicon-moon {
     @apply hidden;
+  }
+}
+
+/* ------------------------------------------------------- overlay header */
+body.has-overlay-header {
+  .store-header {
+    @apply absolute inset-x-0 top-0;
+
+    /* The hero photo is the merchant's, and it may be bright. This gradient
+       sits behind the floating header so the white type always has something
+       dark underneath it. */
+    &::before {
+      @apply absolute inset-x-0 top-0 -z-1 block;
+      background-image: linear-gradient(
+        to bottom,
+        rgba(8, 7, 6, 0.72) 0%,
+        rgba(8, 7, 6, 0.45) 55%,
+        rgba(8, 7, 6, 0) 100%
+      );
+      content: '';
+      height: 230px;
+      pointer-events: none;
+      transition: opacity var(--s-transition);
+    }
+
+    &.is-solid::before {
+      opacity: 0;
+    }
+  }
+
+  .store-header,
+  .main-nav-container {
+    text-shadow: 0 1px 10px rgba(8, 7, 6, 0.35);
+  }
+
+  .store-header.is-solid,
+  .store-header.is-solid .main-nav-container {
+    text-shadow: none;
+  }
+
+  .top-navbar {
+    background-color: color-mix(in srgb, #000 22%, transparent);
+    border-bottom-color: color-mix(in srgb, #fff 12%, transparent);
+    color: color-mix(in srgb, #fff 88%, transparent);
+
+    .top-navbar__sep {
+      background-color: color-mix(in srgb, #fff 25%, transparent);
+    }
+  }
+
+  .main-nav-container {
+    background-color: transparent;
+    border-bottom-color: transparent;
+    color: #fff;
+
+    .inner {
+      background-color: transparent;
+    }
+  }
+
+  .main-menu > .root-level > a {
+    color: #fff;
+  }
+
+  /* Once scrolled, the floating header becomes a solid bar again. */
+  .store-header.is-solid {
+    .main-nav-container .inner,
+    .top-navbar {
+      background-color: color-mix(in srgb, var(--color-surface) 94%, transparent);
+      backdrop-filter: blur(12px);
+      color: var(--color-ink);
+    }
+
+    .main-nav-container {
+      color: var(--color-ink);
+    }
+
+    .main-menu > .root-level > a {
+      color: var(--color-ink);
+    }
   }
 }
 
@@ -197,15 +379,15 @@ html.dark .scheme-toggle {
 
     &.is-active,
     &:hover {
-      color: var(--color-primary);
+      color: var(--color-gold-text);
     }
   }
 
   &__badge {
-    @apply absolute -top-0.5 rtl:-left-2 ltr:-right-2 flex h-4 min-w-[16px] items-center justify-center px-1 text-xxxs font-bold;
-    background-color: var(--color-primary);
+    @apply absolute -top-0.5 flex h-4 min-w-[16px] items-center justify-center px-1 text-xxxs font-bold rtl:-left-2 ltr:-right-2;
+    background-color: var(--color-gold);
     border-radius: var(--s-radius-pill);
-    color: var(--color-primary-reverse);
+    color: var(--color-gold-ink);
 
     &.is-empty {
       @apply hidden;
@@ -213,7 +395,73 @@ html.dark .scheme-toggle {
   }
 }
 
-/* Keep the sticky add-to-cart bar above the bottom bar. */
-body.is-sticky-product-bar .mobile-bottom-bar {
-  @apply lg:hidden;
+/* ------------------------------------------------------ floating actions */
+.floating-actions {
+  @apply fixed z-40 flex flex-col gap-3 rtl:left-4 ltr:right-4;
+  bottom: 88px;
+
+  @include from-desktop {
+    bottom: 24px;
+  }
+
+  &__btn {
+    @apply inline-flex h-12 w-12 items-center justify-center text-xl text-white;
+    border-radius: var(--s-radius-pill);
+    box-shadow: var(--s-shadow);
+    transition: transform var(--s-transition);
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+
+    &--whatsapp {
+      background-color: #25d366;
+    }
+
+    &--call {
+      background-color: #e0245e;
+    }
+  }
+}
+
+.scroll-top {
+  @apply fixed z-40 inline-flex h-11 w-11 items-center justify-center rtl:right-4 ltr:left-4;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--s-radius-pill);
+  bottom: 88px;
+  color: var(--color-ink);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: var(--s-transition);
+
+  @include from-desktop {
+    bottom: 24px;
+  }
+
+  &.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+  }
+
+  &__ring {
+    @apply absolute inset-0 h-full w-full -rotate-90;
+
+    circle {
+      fill: none;
+      stroke-width: 2;
+    }
+  }
+
+  &__ring-base {
+    stroke: transparent;
+  }
+
+  &__ring-bar {
+    stroke: var(--color-gold);
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.15s linear;
+  }
 }

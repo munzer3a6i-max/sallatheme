@@ -135,6 +135,15 @@ salla-button {
     }
   }
 
+  &--gold {
+    background-color: var(--color-gold);
+    color: var(--color-gold-ink);
+
+    &:hover {
+      background-color: var(--color-gold-soft);
+    }
+  }
+
   &--rounded-full {
     border-radius: var(--s-radius-pill);
   }

@@ -18,6 +18,10 @@ class ProductCard extends HTMLElement {
   onReady(){
       this.fitImageHeight = salla.config.get('store.settings.product.fit_type');
       this.placeholder = salla.url.asset(salla.config.get('theme.settings.placeholder'));
+      // Zirar card extras — each is a theme setting the merchant can switch off.
+      this.showRating = salla.config.get('theme.settings.card_show_rating') !== false;
+      this.showCategory = salla.config.get('theme.settings.card_show_category') !== false;
+      this.showOptions = salla.config.get('theme.settings.card_show_options') !== false;
       this.getProps()
 
       salla.lang.onLoaded(() => {
@@ -27,6 +31,7 @@ class ProductCard extends HTMLElement {
         this.startingPrice = salla.lang.get('pages.products.starting_price');
         this.addToCart = salla.lang.get('pages.cart.add_to_cart');
         this.outOfStock = salla.lang.get('pages.products.out_of_stock');
+        this.categoryLabel = salla.lang.get('blocks.zirar.category_label');
 
         // re-render to update translations
         this.render();
@@ -65,6 +70,51 @@ class ProductCard extends HTMLElement {
       return `<div class="s-product-card-out-badge">${this.outOfStock}</div>`
     }
     return '';
+  }
+
+  /**
+   * The category line under the title ("الفئة: رجالي").
+   */
+  getCategory() {
+    const name = this.product?.category?.name;
+    if (!this.showCategory || !name || this.minimal) return '';
+    return `<p class="s-product-card-content-category">${this.categoryLabel || ''} ${this.escapeHTML(name)}</p>`;
+  }
+
+  /**
+   * Five stars, filled to the product's rating.
+   */
+  getStars() {
+    const stars = Number(this.product?.rating?.stars || 0);
+    if (!this.showRating || !stars) return '';
+
+    const icons = Array.from({ length: 5 }, (_, i) =>
+      `<i class="sicon-star2 ${i < Math.round(stars) ? 'is-filled' : ''}"></i>`).join('');
+
+    return `<div class="s-product-card-stars" aria-label="${stars}">${icons}</div>`;
+  }
+
+  /**
+   * Quick variant chips (sizes, colours). Twilight only sends options with the
+   * product on some sources, so this renders when they happen to be there.
+   */
+  getOptionChips() {
+    if (!this.showOptions || this.minimal || this.fullImage) return '';
+
+    const option = (this.product?.options || [])
+      .find(opt => ['single-option', 'thumbnail', 'color'].includes(opt?.type) && opt?.details?.length);
+    if (!option) return '';
+
+    const chips = option.details.slice(0, 4).map(detail => {
+      const label = this.escapeHTML(detail.name || '');
+      if (option.type === 'color' && detail.color) {
+        return `<span class="s-product-card-chip s-product-card-chip--color" title="${label}"
+                      style="background:${this.escapeHTML(detail.color)}"></span>`;
+      }
+      return `<span class="s-product-card-chip ${detail.is_out ? 'is-out' : ''}">${label}</span>`;
+    }).join('');
+
+    return `<div class="s-product-card-chips">${chips}</div>`;
   }
 
   getPriceFormat(price) {
@@ -232,6 +282,9 @@ class ProductCard extends HTMLElement {
             ${this.product?.subtitle && !this.minimal ?
               `<p class="s-product-card-content-subtitle opacity-80">${this.product?.subtitle}</p>`
               : ``}
+            ${this.getCategory()}
+            ${this.getStars()}
+            ${this.getOptionChips()}
           </div>
           ${this.product?.donation && !this.minimal && !this.fullImage ?
           `<salla-progress-bar donation=${JSON.stringify(this.product?.donation)}></salla-progress-bar>
@@ -253,9 +306,9 @@ class ProductCard extends HTMLElement {
             : ''}
           <div class="s-product-card-content-sub ${this.isSpecial ? 's-product-card-content-extra-padding' : ''}">
             ${this.product?.donation?.can_donate ? '' : this.getProductPrice()}
-            ${this.product?.rating?.stars ?
+            ${this.product?.rating?.stars && !this.showRating ?
               `<div class="s-product-card-rating">
-                <i class="sicon-star2 before:text-orange-300"></i>
+                <i class="sicon-star2"></i>
                 <span>${this.product.rating.stars}</span>
               </div>`
                : ``}

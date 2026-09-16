@@ -1,0 +1,33 @@
+{#
+| Variable            | Type     | Description                                  |
+|---------------------|----------|----------------------------------------------|
+| component.title     | ?string  |                                              |
+| component.sub_title | ?string  |                                              |
+| component.items[]   | object[] | image, text, url — 5 items fill the mosaic   |
+| position            | int      | Sorting number start from zero               |
+
+  An asymmetric mosaic: a tall card, a wide card with two small cards beneath
+  it, and a second tall card. Fewer than five items degrade to an even grid.
+#}
+{% set items = component.items %}
+{% set is_mosaic = items|length == 5 %}
+<section component-id="{{ componentId }}"
+         data-testid="store-home-bento"
+         class="s-block s-block--bento container js-reveal">
+
+    {% include 'components.partials.section-head' with {
+        title: component.title,
+        sub_title: component.sub_title
+    } %}
+
+    <div class="bento {{ is_mosaic ? 'bento--mosaic' : 'bento--even' }}">
+        {% for item in items %}
+            {% set tag = item.url ? 'a' : 'div' %}
+            <{{ tag }} class="bento__cell bento__cell--{{ loop.index }}"
+                       {% if item.url %}href="{{ item.url }}" aria-label="{{ item.text|default('category') }}"{% endif %}>
+                <img src="{{ item.image }}" alt="{{ item.text|default(store.name) }}" loading="lazy" width="800" height="1000">
+                {% if item.text %}<span class="bento__label">{{ item.text }}</span>{% endif %}
+            </{{ tag }}>
+        {% endfor %}
+    </div>
+</section>

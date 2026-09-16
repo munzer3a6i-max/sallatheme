@@ -1,17 +1,19 @@
 {
   "blocks": {
     "zirar": {
-      "home": "الرئيسية",
-      "categories": "التصنيفات",
-      "search": "البحث",
       "account": "حسابي",
-      "login": "دخول",
+      "back_to_top": "العودة لأعلى",
+      "brand": "الماركة",
+      "categories": "التصنيفات",
+      "category_label": "الفئة:",
+      "close": "إغلاق",
       "filters": "تصفية",
+      "home": "الرئيسية",
+      "login": "دخول",
+      "play": "تشغيل المقطع",
       "save": "وفّر",
-      "brand": "الماركة"
-    },
-    "header": {
-      "search": "ابحث في المتجر",
+      "search": "البحث",
+      "shop_the_look": "تسوّقي الإطلالة",
       "switch_theme": "تبديل الوضع الليلي"
     },
     "footer": {

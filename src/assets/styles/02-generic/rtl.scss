@@ -16,3 +16,9 @@
     display: inline-block;
   }
 }
+
+/* The hero scrim leans towards the side the copy sits on. */
+[dir='rtl'] .s-block--hero {
+  --scrim-dir: left;
+  --scrim-dir-r: right;
+}

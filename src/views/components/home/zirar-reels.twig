@@ -1,0 +1,45 @@
+{#
+| Variable            | Type     | Description                                   |
+|---------------------|----------|-----------------------------------------------|
+| component.title     | ?string  |                                               |
+| component.sub_title | ?string  |                                               |
+| component.items[]   | object[] | poster, video, caption, url                   |
+| position            | int      | Sorting number start from zero                |
+
+  Vertical clips with a play button. Clicking one plays it in place
+  (see `reels()` in assets/js/home.js); a clip without a video just links out.
+#}
+<section component-id="{{ componentId }}"
+         data-testid="store-home-reels"
+         class="s-block s-block--reels container js-reveal">
+
+    {% include 'components.partials.section-head' with {
+        title: component.title,
+        sub_title: component.sub_title
+    } %}
+
+    <div class="reels">
+        {% for item in component.items %}
+            <article class="reel" data-video="{{ item.video }}">
+                <div class="reel__media">
+                    <img src="{{ item.poster }}" alt="{{ item.caption|default(store.name) }}" loading="lazy" width="500" height="750">
+
+                    {% if item.video %}
+                        <button type="button" class="reel__play" aria-label="{{ trans('blocks.zirar.play') }}">
+                            <i class="sicon-play"></i>
+                        </button>
+                    {% endif %}
+
+                    {% if item.url %}
+                        <a href="{{ item.url }}" class="reel__shop">
+                            <i class="sicon-shopping-bag"></i>
+                            <span>{{ trans('blocks.zirar.shop_the_look') }}</span>
+                        </a>
+                    {% endif %}
+                </div>
+
+                {% if item.caption %}<h3 class="reel__caption">{{ item.caption }}</h3>{% endif %}
+            </article>
+        {% endfor %}
+    </div>
+</section>

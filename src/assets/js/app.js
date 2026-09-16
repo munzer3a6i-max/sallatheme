@@ -38,6 +38,8 @@ class App extends AppHelpers {
     initTootTip();
     initReveal();
     this.initMobileBottomBar();
+    this.initOverlayHeader();
+    this.initScrollTop();
     this.loadModalImgOnclick();
 
     salla.comment.event.onAdded(() => window.location.reload());
@@ -113,6 +115,49 @@ isElementLoaded(selector){
 
   
   };
+
+  /**
+   * On the home page the header floats over the hero; once the visitor scrolls
+   * past it the bar takes on a solid background so the links stay readable.
+   */
+  initOverlayHeader() {
+    if (!window.zirar_header_overlay) return;
+
+    const header = this.element('.store-header');
+    if (!header) return;
+
+    const onScroll = () => header.classList.toggle('is-solid', window.scrollY > 40);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  /**
+   * Back-to-top button: appears after a screenful and its ring tracks how far
+   * down the page the visitor is.
+   */
+  initScrollTop() {
+    const btn = this.element('#scroll-top');
+    if (!btn) return;
+
+    const bar = btn.querySelector('.scroll-top__ring-bar');
+    const circumference = bar ? 2 * Math.PI * 20 : 0;
+
+    if (bar) {
+      bar.style.strokeDasharray = `${circumference}`;
+      bar.style.strokeDashoffset = `${circumference}`;
+    }
+
+    const onScroll = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = max > 0 ? Math.min(window.scrollY / max, 1) : 0;
+      btn.classList.toggle('is-visible', window.scrollY > 400);
+      if (bar) bar.style.strokeDashoffset = `${circumference * (1 - progress)}`;
+    };
+
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  }
 
   /**
    * The mobile bottom bar hides while the visitor scrolls down and comes back

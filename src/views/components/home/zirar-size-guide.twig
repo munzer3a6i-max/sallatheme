@@ -12,10 +12,10 @@
          data-testid="store-home-size-guide"
          class="s-block s-block--size-guide container js-reveal">
     <div class="size-guide-band">
-        <div class="mb-8 text-center">
-            {% if component.title %}<h2 class="text-xl font-bold sm:text-2xl">{{ component.title }}</h2>{% endif %}
-            {% if component.description %}<p class="mt-2 text-sm sm:text-base">{{ component.description }}</p>{% endif %}
-        </div>
+        {% include 'components.partials.section-head' with {
+            title: component.title,
+            sub_title: component.description
+        } %}
 
         <div class="grid gap-4 sm:gap-6 md:grid-cols-{{ component.steps|length > 2 ? 3 : 2 }}">
             {% for step in component.steps %}

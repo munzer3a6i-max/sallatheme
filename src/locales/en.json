@@ -1,17 +1,19 @@
 {
   "blocks": {
     "zirar": {
-      "home": "Home",
-      "categories": "Categories",
-      "search": "Search",
       "account": "Account",
-      "login": "Sign in",
+      "back_to_top": "Back to top",
+      "brand": "Brand",
+      "categories": "Categories",
+      "category_label": "Category:",
+      "close": "Close",
       "filters": "Filters",
+      "home": "Home",
+      "login": "Sign in",
+      "play": "Play clip",
       "save": "Save",
-      "brand": "Brand"
-    },
-    "header": {
-      "search": "Search the store",
+      "search": "Search",
+      "shop_the_look": "Shop the look",
       "switch_theme": "Toggle dark mode"
     },
     "footer": {

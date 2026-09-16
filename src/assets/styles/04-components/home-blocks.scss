@@ -55,14 +55,36 @@
     @apply hidden lg:block;
   }
 
+  /**
+   * The hero photo belongs to the merchant and may be almost white, so the
+   * scrim is weighted towards whichever side the copy sits on rather than
+   * relying on a uniform wash. Verified against a pure-white hero.
+   */
   .hero-slide__overlay {
     @apply absolute inset-0;
     background-image: linear-gradient(
       to top,
-      rgba(18, 16, 14, 0.7) 0%,
-      rgba(18, 16, 14, 0.25) 45%,
-      rgba(18, 16, 14, 0.1) 100%
+      rgba(12, 10, 9, 0.72) 0%,
+      rgba(12, 10, 9, 0.28) 55%,
+      rgba(12, 10, 9, 0.18) 100%
     );
+  }
+
+  &.align--start .hero-slide__overlay {
+    background-image:
+      linear-gradient(to var(--scrim-dir, left), rgba(12, 10, 9, 0.78) 0%, rgba(12, 10, 9, 0.15) 62%, transparent 100%),
+      linear-gradient(to top, rgba(12, 10, 9, 0.55), transparent 65%);
+  }
+
+  &.align--end .hero-slide__overlay {
+    background-image:
+      linear-gradient(to var(--scrim-dir-r, right), rgba(12, 10, 9, 0.78) 0%, rgba(12, 10, 9, 0.15) 62%, transparent 100%),
+      linear-gradient(to top, rgba(12, 10, 9, 0.55), transparent 65%);
+  }
+
+  &.align--center .hero-slide__overlay {
+    background-image:
+      radial-gradient(ellipse at center, rgba(12, 10, 9, 0.7) 0%, rgba(12, 10, 9, 0.45) 55%, rgba(12, 10, 9, 0.3) 100%);
   }
 
   .hero-slide__content {
@@ -76,12 +98,14 @@
     h2 {
       @apply mb-4 text-3xl font-bold leading-tight sm:text-4xl lg:text-title-size;
       color: #fff;
+      text-shadow: 0 2px 18px rgba(8, 7, 6, 0.55);
       text-wrap: balance;
     }
 
     p {
       @apply mb-6 max-w-lg text-sm leading-7 sm:text-base;
-      color: rgba(255, 255, 255, 0.88);
+      color: rgba(255, 255, 255, 0.92);
+      text-shadow: 0 1px 12px rgba(8, 7, 6, 0.5);
     }
   }
 
@@ -265,14 +289,23 @@
 /* ------------------------------------------------------------ countdown */
 .s-block--countdown {
   .countdown-banner {
-    @apply relative overflow-hidden px-6 py-12 text-center sm:px-12 sm:py-16;
+    @apply relative overflow-hidden py-16 text-center sm:py-24;
     background-color: var(--color-invert-bg);
-    border-radius: var(--s-radius-lg);
     color: var(--color-invert-ink);
 
     &__bg {
       @apply absolute inset-0 bg-cover bg-center;
-      opacity: 0.35;
+    }
+
+    /* Keeps the copy readable whatever photo the merchant uploads. */
+    &__scrim {
+      @apply absolute inset-0;
+      background-image: linear-gradient(
+        to bottom,
+        rgba(10, 9, 8, 0.55),
+        rgba(10, 9, 8, 0.35) 45%,
+        rgba(10, 9, 8, 0.65)
+      );
     }
 
     &__content {
@@ -280,18 +313,37 @@
     }
 
     h2 {
-      @apply mb-3 text-2xl font-bold sm:text-3xl;
-      color: var(--color-invert-ink);
+      @apply mb-3 text-2xl font-bold leading-snug sm:text-4xl;
+      color: #fff;
+      text-wrap: balance;
     }
 
     p {
-      @apply mb-6 text-sm sm:text-base;
-      color: color-mix(in srgb, var(--color-invert-ink) 80%, transparent);
+      @apply mx-auto mb-8 max-w-xl text-sm leading-7 sm:text-base;
+      color: rgba(255, 255, 255, 0.86);
+    }
+
+    salla-count-down {
+      @apply mb-8 flex justify-center;
+    }
+
+    /* Twilight renders the boxed countdown; give the boxes the glass look. */
+    .s-count-down-item,
+    .s-count-down-box {
+      background-color: color-mix(in srgb, #fff 14%, transparent);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: var(--s-radius-sm);
+      color: #fff;
     }
   }
 
-  salla-count-down {
-    @apply mb-6 flex justify-center;
+  /* Without a photo the block still needs contrast, so keep the ink plate. */
+  .countdown-banner:not(.has-media) {
+    h2,
+    p {
+      color: var(--color-invert-ink);
+    }
   }
 }
 
@@ -475,4 +527,57 @@
 /* Home grid helpers shared by several blocks. */
 .blocks-grid {
   @apply grid gap-4 sm:gap-6;
+}
+
+/* --------------------------------------------------------- tab switcher */
+/**
+ * Featured-product tabs render as a pill rail with a gold pill marking the
+ * active tab (Salla's `featured-products-style*` blocks).
+ */
+.s-block-tabs {
+  .tabs {
+    @apply mx-auto mb-8 inline-flex w-auto max-w-full items-center gap-1 overflow-x-auto p-1;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--s-radius-pill);
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  /* centre the rail in its block */
+  > .container > .tabs,
+  > .tabs {
+    @apply flex justify-center;
+  }
+
+  .tabs-row {
+    @apply mb-8 flex justify-center;
+  }
+
+  .tab-trigger {
+    .s-button-element {
+      @apply whitespace-nowrap px-5 py-2 text-sm;
+      background-color: transparent;
+      border: 0;
+      border-radius: var(--s-radius-pill);
+      color: var(--color-ink-soft);
+    }
+
+    &.is-active .s-button-element {
+      background-color: var(--color-gold);
+      color: var(--color-gold-ink);
+    }
+  }
+}
+
+/* The hero sits under a floating header on the home page. */
+body.has-overlay-header .s-block--hero {
+  @apply -mt-px;
+
+  .hero-slide__content {
+    padding-top: calc(var(--header-height) + 40px);
+  }
 }

@@ -47,21 +47,21 @@
       "icon": "sicon-list",
       "selected": [
         {
-          "label": "فاتح (رملي)",
-          "value": "light",
-          "key": "36711657-f547-5ae3-af10-213d28174e3d"
+          "label": "داكن (ليلي)",
+          "value": "dark",
+          "key": "8b694892-e05f-5516-9075-490ed21d4c9a"
         }
       ],
       "options": [
         {
-          "label": "فاتح (رملي)",
-          "value": "light",
-          "key": "36711657-f547-5ae3-af10-213d28174e3d"
-        },
-        {
           "label": "داكن (ليلي)",
           "value": "dark",
           "key": "8b694892-e05f-5516-9075-490ed21d4c9a"
+        },
+        {
+          "label": "فاتح (رملي)",
+          "value": "light",
+          "key": "36711657-f547-5ae3-af10-213d28174e3d"
         },
         {
           "label": "حسب إعداد الجهاز",
@@ -157,6 +157,17 @@
       "selected": true
     },
     {
+      "id": "announcement_marquee",
+      "label": "تحريك نص الإعلان كشريط متتابع",
+      "description": "يكرر النص ويحرّكه أفقيًا بدل عرضه ثابتًا في المنتصف.",
+      "type": "boolean",
+      "icon": "sicon-toggle-off",
+      "format": "switch",
+      "required": false,
+      "value": true,
+      "selected": true
+    },
+    {
       "type": "string",
       "icon": "sicon-format-text-alt",
       "label": "نص شريط الإعلان",
@@ -180,6 +191,49 @@
       "required": false,
       "value": true,
       "selected": true
+    },
+    {
+      "id": "header_overlay",
+      "label": "دمج الترويسة مع الغلاف الرئيسي",
+      "description": "تظهر الترويسة شفافة فوق أول عنصر في الصفحة الرئيسية، وتتحول إلى خلفية صلبة عند التمرير.",
+      "type": "boolean",
+      "icon": "sicon-toggle-off",
+      "format": "switch",
+      "required": false,
+      "value": true,
+      "selected": true
+    },
+    {
+      "id": "header_layout",
+      "type": "items",
+      "format": "dropdown-list",
+      "label": "توزيع الترويسة",
+      "description": null,
+      "labelHTML": null,
+      "icon": "sicon-list",
+      "selected": [
+        {
+          "label": "شعار في المنتصف والقائمة أسفله",
+          "value": "centered",
+          "key": "cc670558-d4d3-5246-be44-622ed6ed56de"
+        }
+      ],
+      "options": [
+        {
+          "label": "شعار في المنتصف والقائمة أسفله",
+          "value": "centered",
+          "key": "cc670558-d4d3-5246-be44-622ed6ed56de"
+        },
+        {
+          "label": "شعار جانبي والقائمة بجانبه",
+          "value": "inline",
+          "key": "f422890b-cda5-5010-8de9-b048f41ee94c"
+        }
+      ],
+      "source": "Manual",
+      "multichoice": false,
+      "searchable": false,
+      "required": true
     },
     {
       "id": "topnav_is_dark",
@@ -229,6 +283,28 @@
       "id": "show_mobile_bottom_bar",
       "label": "شريط التنقل السفلي في الجوال",
       "description": "شريط ثابت أسفل شاشة الجوال يحتوي الرئيسية، التصنيفات، السلة، المفضلة والحساب.",
+      "type": "boolean",
+      "icon": "sicon-toggle-off",
+      "format": "switch",
+      "required": false,
+      "value": true,
+      "selected": true
+    },
+    {
+      "id": "show_floating_buttons",
+      "label": "أزرار التواصل العائمة (واتساب واتصال)",
+      "description": null,
+      "type": "boolean",
+      "icon": "sicon-toggle-off",
+      "format": "switch",
+      "required": false,
+      "value": true,
+      "selected": true
+    },
+    {
+      "id": "show_scroll_top",
+      "label": "زر العودة لأعلى الصفحة",
+      "description": null,
       "type": "boolean",
       "icon": "sicon-toggle-off",
       "format": "switch",
@@ -426,6 +502,39 @@
     {
       "id": "show_tags",
       "label": "إظهار وسوم المنتج",
+      "description": null,
+      "type": "boolean",
+      "icon": "sicon-toggle-off",
+      "format": "switch",
+      "required": false,
+      "value": true,
+      "selected": true
+    },
+    {
+      "id": "card_show_rating",
+      "label": "إظهار تقييم المنتج في البطاقة",
+      "description": null,
+      "type": "boolean",
+      "icon": "sicon-toggle-off",
+      "format": "switch",
+      "required": false,
+      "value": true,
+      "selected": true
+    },
+    {
+      "id": "card_show_category",
+      "label": "إظهار اسم التصنيف في بطاقة المنتج",
+      "description": null,
+      "type": "boolean",
+      "icon": "sicon-toggle-off",
+      "format": "switch",
+      "required": false,
+      "value": true,
+      "selected": true
+    },
+    {
+      "id": "card_show_options",
+      "label": "إظهار خيارات المنتج (المقاسات) في البطاقة",
       "description": null,
       "type": "boolean",
       "icon": "sicon-toggle-off",
@@ -2087,6 +2196,634 @@
           "required": false,
           "value": true,
           "selected": true
+        }
+      ]
+    },
+    {
+      "key": "4fc9a847-0bdc-5458-bb4a-a12e4b43a727",
+      "title": {
+        "en": "Ticker strip",
+        "ar": "شريط متحرك"
+      },
+      "icon": "sicon-arrow-left",
+      "path": "home.zirar-ticker",
+      "is_default": true,
+      "fields": [
+        {
+          "type": "static",
+          "format": "description",
+          "id": "ticker-note",
+          "value": "<small>شريط نصي متحرك يعرض مزايا متجرك بشكل متتابع، مناسب أسفل الغلاف الرئيسي مباشرة.</small>"
+        },
+        {
+          "id": "tone",
+          "type": "items",
+          "format": "dropdown-list",
+          "label": "لون الشريط",
+          "description": null,
+          "labelHTML": null,
+          "icon": "sicon-list",
+          "selected": [
+            {
+              "label": "داكن",
+              "value": "dark",
+              "key": "a9144013-6fed-5871-9e49-04a41e489769"
+            }
+          ],
+          "options": [
+            {
+              "label": "داكن",
+              "value": "dark",
+              "key": "a9144013-6fed-5871-9e49-04a41e489769"
+            },
+            {
+              "label": "ذهبي",
+              "value": "gold",
+              "key": "04ac5854-e6f9-5094-87b4-9bf53c0c6467"
+            },
+            {
+              "label": "رملي",
+              "value": "sand",
+              "key": "df19de18-344d-5bf3-93e8-56492f98b084"
+            }
+          ],
+          "source": "Manual",
+          "multichoice": false,
+          "searchable": false,
+          "required": true
+        },
+        {
+          "id": "speed",
+          "type": "items",
+          "format": "dropdown-list",
+          "label": "سرعة الحركة",
+          "description": null,
+          "labelHTML": null,
+          "icon": "sicon-list",
+          "selected": [
+            {
+              "label": "متوسطة",
+              "value": "medium",
+              "key": "ddc13601-50e4-5934-95c2-c73e4b5c9591"
+            }
+          ],
+          "options": [
+            {
+              "label": "هادئة",
+              "value": "slow",
+              "key": "dc48dcb5-ce90-51ec-9c28-a470e46b801a"
+            },
+            {
+              "label": "متوسطة",
+              "value": "medium",
+              "key": "ddc13601-50e4-5934-95c2-c73e4b5c9591"
+            },
+            {
+              "label": "سريعة",
+              "value": "fast",
+              "key": "dd81b390-78c5-5316-b760-c937fd41ab7f"
+            }
+          ],
+          "source": "Manual",
+          "multichoice": false,
+          "searchable": false,
+          "required": true
+        },
+        {
+          "id": "items",
+          "type": "collection",
+          "format": "collection",
+          "required": true,
+          "minLength": 1,
+          "maxLength": 8,
+          "label": "العبارات",
+          "item_label": "عبارة",
+          "value": [
+            {
+              "items.text": "عروضنا تصل إلى ٤٠٪ وأكثر"
+            },
+            {
+              "items.text": "شحن مجاني إلى جميع مناطق المملكة"
+            },
+            {
+              "items.text": "ضمان ذهبي وإسترجاع سهل"
+            }
+          ],
+          "fields": [
+            {
+              "type": "string",
+              "icon": "sicon-format-text-alt",
+              "label": "النص",
+              "multilanguage": true,
+              "id": "items.text",
+              "value": null,
+              "required": false,
+              "format": "text",
+              "description": null,
+              "placeholder": "مثال: شحن مجاني لجميع مناطق المملكة",
+              "minLength": 0,
+              "maxLength": 90
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "80cf3a65-3b55-53b2-b43f-fe4bd855716c",
+      "title": {
+        "en": "Logo marquee",
+        "ar": "شريط شعارات متحرك"
+      },
+      "icon": "sicon-award-ribbon",
+      "path": "home.zirar-logos",
+      "fields": [
+        {
+          "type": "static",
+          "format": "description",
+          "id": "logos-note",
+          "value": "<small>صفَّان من الشعارات يتحركان في اتجاهين متعاكسين، مناسب لشعارات الماركات أو وسائل الدفع والشحن.</small>"
+        },
+        {
+          "type": "string",
+          "icon": "sicon-format-text-alt",
+          "label": "العنوان",
+          "multilanguage": true,
+          "id": "title",
+          "value": null,
+          "required": false,
+          "format": "text",
+          "description": null,
+          "placeholder": "أدخل العنوان هنا...",
+          "minLength": 0,
+          "maxLength": 100
+        },
+        {
+          "id": "two_rows",
+          "label": "عرض صفَّين متعاكسين",
+          "description": null,
+          "type": "boolean",
+          "icon": "sicon-toggle-off",
+          "format": "switch",
+          "required": false,
+          "value": true,
+          "selected": true
+        },
+        {
+          "id": "items",
+          "type": "collection",
+          "format": "collection",
+          "required": true,
+          "minLength": 3,
+          "maxLength": 24,
+          "label": "قائمة الشعارات",
+          "item_label": "شعار",
+          "value": [
+            {
+              "items.logo": null,
+              "items.name": null,
+              "items.url": null
+            }
+          ],
+          "fields": [
+            {
+              "type": "string",
+              "icon": "sicon-image",
+              "label": "الشعار",
+              "id": "items.logo",
+              "value": null,
+              "format": "image",
+              "required": true,
+              "placeholder": null,
+              "description": "* المقاس المناسب للصورة هو 300×150 بكسل",
+              "settings": {
+                "width": 300,
+                "height": 150
+              }
+            },
+            {
+              "type": "string",
+              "icon": "sicon-format-text-alt",
+              "label": "الاسم",
+              "multilanguage": true,
+              "id": "items.name",
+              "value": null,
+              "required": false,
+              "format": "text",
+              "description": null,
+              "placeholder": "مثال: أرامكس",
+              "minLength": 0,
+              "maxLength": 60
+            },
+            {
+              "type": "items",
+              "icon": "sicon-link",
+              "label": "الرابط",
+              "id": "items.url",
+              "value": null,
+              "description": null,
+              "required": false,
+              "format": "variable-list",
+              "searchable": true,
+              "source": "custom",
+              "sources": [
+                {
+                  "label": "منتج",
+                  "key": "products",
+                  "value": "products"
+                },
+                {
+                  "label": "منتجات مع وسم",
+                  "key": "products_tags",
+                  "value": "products_tags"
+                },
+                {
+                  "label": "تصنيف",
+                  "key": "categories",
+                  "value": "categories"
+                },
+                {
+                  "label": "ماركة تجارية",
+                  "key": "brands",
+                  "value": "brands"
+                },
+                {
+                  "label": "صفحة تعريفية",
+                  "key": "pages",
+                  "value": "pages"
+                },
+                {
+                  "label": "مقالة",
+                  "key": "blog_articles",
+                  "value": "blog_articles"
+                },
+                {
+                  "label": "تصنيف ضمن المدونة",
+                  "key": "blog_categories",
+                  "value": "blog_categories"
+                },
+                {
+                  "label": "التخفيضات",
+                  "key": "offers_link",
+                  "value": "offers_link"
+                },
+                {
+                  "label": "الماركات التجارية",
+                  "key": "brands_link",
+                  "value": "brands_link"
+                },
+                {
+                  "label": "المدونة",
+                  "key": "blog_link",
+                  "value": "blog_link"
+                },
+                {
+                  "label": "رابط خارجي",
+                  "key": "custom",
+                  "value": "custom"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "dc498251-4e1d-5bda-be9c-b94be5be0591",
+      "title": {
+        "en": "Category mosaic",
+        "ar": "فسيفساء التصنيفات"
+      },
+      "icon": "sicon-layout-grid-rearrange",
+      "path": "home.zirar-bento",
+      "is_default": true,
+      "fields": [
+        {
+          "type": "static",
+          "format": "description",
+          "id": "bento-note",
+          "value": "<small>شبكة غير متناظرة من ٥ صور بأحجام مختلفة، يظهر اسم كل تصنيف في زاوية الصورة. أضف ٥ عناصر للحصول على التوزيع الكامل.</small>"
+        },
+        {
+          "type": "string",
+          "icon": "sicon-format-text-alt",
+          "label": "العنوان",
+          "multilanguage": true,
+          "id": "title",
+          "value": null,
+          "required": false,
+          "format": "text",
+          "description": null,
+          "placeholder": "أدخل العنوان هنا...",
+          "minLength": 0,
+          "maxLength": 100
+        },
+        {
+          "type": "string",
+          "icon": "sicon-format-text-alt",
+          "label": "عنوان فرعي",
+          "multilanguage": true,
+          "id": "sub_title",
+          "value": null,
+          "required": false,
+          "format": "text",
+          "description": null,
+          "placeholder": "أدخل عنوانًا فرعيًا...",
+          "minLength": 0,
+          "maxLength": 160
+        },
+        {
+          "id": "items",
+          "type": "collection",
+          "format": "collection",
+          "required": true,
+          "minLength": 3,
+          "maxLength": 5,
+          "label": "بطاقات الفسيفساء",
+          "item_label": "بطاقة",
+          "value": [
+            {
+              "items.image": null,
+              "items.text": "تشكيلة",
+              "items.url": null
+            }
+          ],
+          "fields": [
+            {
+              "type": "string",
+              "icon": "sicon-image",
+              "label": "الصورة",
+              "id": "items.image",
+              "value": null,
+              "format": "image",
+              "required": true,
+              "placeholder": null,
+              "description": "* المقاس المناسب للصورة هو 900×1200 بكسل",
+              "settings": {
+                "width": 900,
+                "height": 1200
+              }
+            },
+            {
+              "type": "string",
+              "icon": "sicon-format-text-alt",
+              "label": "الاسم الظاهر",
+              "multilanguage": true,
+              "id": "items.text",
+              "value": null,
+              "required": false,
+              "format": "text",
+              "description": null,
+              "placeholder": "مثال: أثواب شتوية",
+              "minLength": 0,
+              "maxLength": 60
+            },
+            {
+              "type": "items",
+              "icon": "sicon-link",
+              "label": "الرابط",
+              "id": "items.url",
+              "value": null,
+              "description": null,
+              "required": false,
+              "format": "variable-list",
+              "searchable": true,
+              "source": "custom",
+              "sources": [
+                {
+                  "label": "منتج",
+                  "key": "products",
+                  "value": "products"
+                },
+                {
+                  "label": "منتجات مع وسم",
+                  "key": "products_tags",
+                  "value": "products_tags"
+                },
+                {
+                  "label": "تصنيف",
+                  "key": "categories",
+                  "value": "categories"
+                },
+                {
+                  "label": "ماركة تجارية",
+                  "key": "brands",
+                  "value": "brands"
+                },
+                {
+                  "label": "صفحة تعريفية",
+                  "key": "pages",
+                  "value": "pages"
+                },
+                {
+                  "label": "مقالة",
+                  "key": "blog_articles",
+                  "value": "blog_articles"
+                },
+                {
+                  "label": "تصنيف ضمن المدونة",
+                  "key": "blog_categories",
+                  "value": "blog_categories"
+                },
+                {
+                  "label": "التخفيضات",
+                  "key": "offers_link",
+                  "value": "offers_link"
+                },
+                {
+                  "label": "الماركات التجارية",
+                  "key": "brands_link",
+                  "value": "brands_link"
+                },
+                {
+                  "label": "المدونة",
+                  "key": "blog_link",
+                  "value": "blog_link"
+                },
+                {
+                  "label": "رابط خارجي",
+                  "key": "custom",
+                  "value": "custom"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "a8c2b3eb-f70f-583f-8ce7-97eeee5fb896",
+      "title": {
+        "en": "Video reels",
+        "ar": "مقاطع مرئية"
+      },
+      "icon": "sicon-video-camera",
+      "path": "home.zirar-reels",
+      "fields": [
+        {
+          "type": "static",
+          "format": "description",
+          "id": "reels-note",
+          "value": "<small>صف من المقاطع الرأسية بزر تشغيل، لعرض الإطلالات أو طريقة ارتداء القطعة.</small>"
+        },
+        {
+          "type": "string",
+          "icon": "sicon-format-text-alt",
+          "label": "العنوان",
+          "multilanguage": true,
+          "id": "title",
+          "value": "تألّقي",
+          "required": false,
+          "format": "text",
+          "description": null,
+          "placeholder": "أدخل العنوان هنا...",
+          "minLength": 0,
+          "maxLength": 100
+        },
+        {
+          "type": "string",
+          "icon": "sicon-format-text-alt",
+          "label": "عنوان فرعي",
+          "multilanguage": true,
+          "id": "sub_title",
+          "value": null,
+          "required": false,
+          "format": "text",
+          "description": null,
+          "placeholder": "أدخل عنوانًا فرعيًا...",
+          "minLength": 0,
+          "maxLength": 160
+        },
+        {
+          "id": "items",
+          "type": "collection",
+          "format": "collection",
+          "required": true,
+          "minLength": 2,
+          "maxLength": 10,
+          "label": "قائمة المقاطع",
+          "item_label": "مقطع",
+          "value": [
+            {
+              "items.poster": null,
+              "items.video": null,
+              "items.caption": null,
+              "items.url": null
+            }
+          ],
+          "fields": [
+            {
+              "type": "string",
+              "icon": "sicon-image",
+              "label": "صورة الغلاف",
+              "id": "items.poster",
+              "value": null,
+              "format": "image",
+              "required": true,
+              "placeholder": null,
+              "description": "* المقاس المناسب للصورة هو 600×900 بكسل",
+              "settings": {
+                "width": 600,
+                "height": 900
+              }
+            },
+            {
+              "type": "string",
+              "icon": "sicon-video-camera",
+              "label": "رابط المقطع",
+              "id": "items.video",
+              "value": null,
+              "required": false,
+              "format": "text",
+              "description": "رابط مباشر لملف mp4 أو رابط يوتيوب.",
+              "placeholder": "https://...",
+              "multilanguage": false,
+              "minLength": 0,
+              "maxLength": 300
+            },
+            {
+              "type": "string",
+              "icon": "sicon-format-text-alt",
+              "label": "نص تحت المقطع",
+              "multilanguage": true,
+              "id": "items.caption",
+              "value": null,
+              "required": false,
+              "format": "text",
+              "description": null,
+              "placeholder": "مثال: إطلالة العيد",
+              "minLength": 0,
+              "maxLength": 60
+            },
+            {
+              "type": "items",
+              "icon": "sicon-link",
+              "label": "رابط المنتج",
+              "id": "items.url",
+              "value": null,
+              "description": null,
+              "required": false,
+              "format": "variable-list",
+              "searchable": true,
+              "source": "custom",
+              "sources": [
+                {
+                  "label": "منتج",
+                  "key": "products",
+                  "value": "products"
+                },
+                {
+                  "label": "منتجات مع وسم",
+                  "key": "products_tags",
+                  "value": "products_tags"
+                },
+                {
+                  "label": "تصنيف",
+                  "key": "categories",
+                  "value": "categories"
+                },
+                {
+                  "label": "ماركة تجارية",
+                  "key": "brands",
+                  "value": "brands"
+                },
+                {
+                  "label": "صفحة تعريفية",
+                  "key": "pages",
+                  "value": "pages"
+                },
+                {
+                  "label": "مقالة",
+                  "key": "blog_articles",
+                  "value": "blog_articles"
+                },
+                {
+                  "label": "تصنيف ضمن المدونة",
+                  "key": "blog_categories",
+                  "value": "blog_categories"
+                },
+                {
+                  "label": "التخفيضات",
+                  "key": "offers_link",
+                  "value": "offers_link"
+                },
+                {
+                  "label": "الماركات التجارية",
+                  "key": "brands_link",
+                  "value": "brands_link"
+                },
+                {
+                  "label": "المدونة",
+                  "key": "blog_link",
+                  "value": "blog_link"
+                },
+                {
+                  "label": "رابط خارجي",
+                  "key": "custom",
+                  "value": "custom"
+                }
+              ]
+            }
+          ]
         }
       ]
     }

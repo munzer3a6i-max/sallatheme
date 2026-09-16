@@ -1,0 +1,42 @@
+{#
+| Variable           | Type     | Description                                   |
+|--------------------|----------|-----------------------------------------------|
+| component.title    | ?string  |                                               |
+| component.two_rows | bool     | second row scrolls the other way              |
+| component.items[]  | object[] | logo, name, url                               |
+| position           | int      | Sorting number start from zero                |
+#}
+{% set items = component.items %}
+{% set half = (items|length / 2)|round(0, 'ceil') %}
+<section component-id="{{ componentId }}"
+         data-testid="store-home-logos"
+         class="s-block s-block--logos s-block--full-bg js-reveal">
+    <div class="container">
+        {% include 'components.partials.section-head' with { title: component.title } %}
+    </div>
+
+    {% set rows = component.two_rows ? [items|slice(0, half), items|slice(half)] : [items] %}
+    {% for row in rows %}
+        {% if row|length %}
+            <div class="marquee logo-marquee {{ loop.index0 is odd ? 'marquee--reverse' : '' }}">
+                {% for track in 1..2 %}
+                    <div class="marquee__track" {{ track == 2 ? 'aria-hidden="true"' : '' }}>
+                        {% for repeat in 1..2 %}
+                            {% for item in row %}
+                                {% if item.url %}
+                                    <a href="{{ item.url }}" class="logo-card" aria-label="{{ item.name|default('logo') }}">
+                                        <img src="{{ item.logo }}" alt="{{ item.name|default('') }}" loading="lazy" width="150" height="70">
+                                    </a>
+                                {% else %}
+                                    <span class="logo-card">
+                                        <img src="{{ item.logo }}" alt="{{ item.name|default('') }}" loading="lazy" width="150" height="70">
+                                    </span>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endfor %}
+</section>

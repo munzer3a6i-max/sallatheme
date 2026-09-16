@@ -1,0 +1,155 @@
+@use '../01-settings/breakpoints' as *;
+
+/**
+ * Category mosaic (bento) and the video reels row.
+ */
+.bento {
+  @apply grid gap-3 sm:gap-4;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  &__cell {
+    @apply relative block overflow-hidden;
+    background-color: var(--color-media);
+    border-radius: var(--s-radius);
+    min-height: 200px;
+
+    img {
+      @apply h-full w-full object-cover;
+      transition: transform 0.9s var(--s-ease);
+    }
+
+    &:hover img {
+      transform: scale(1.05);
+    }
+
+    &::after {
+      @apply absolute inset-0;
+      background-image: linear-gradient(to bottom, rgba(10, 9, 8, 0.62) 0%, rgba(10, 9, 8, 0) 48%);
+      content: '';
+      pointer-events: none;
+    }
+  }
+
+  &__label {
+    @apply absolute top-4 z-2 text-sm font-bold rtl:right-4 ltr:left-4 sm:text-base;
+    color: #fff;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
+  }
+}
+
+/* The five-cell mosaic: tall | (wide over two smalls) | tall */
+@include from-desktop {
+  .bento--mosaic {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: repeat(2, 240px);
+
+    .bento__cell--1 {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+    }
+    .bento__cell--2 {
+      grid-column: 2 / span 2;
+      grid-row: 1;
+    }
+    .bento__cell--3 {
+      grid-column: 2;
+      grid-row: 2;
+    }
+    .bento__cell--4 {
+      grid-column: 3;
+      grid-row: 2;
+    }
+    .bento__cell--5 {
+      grid-column: 4;
+      grid-row: 1 / span 2;
+    }
+  }
+
+  .bento--even {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+
+    .bento__cell {
+      min-height: 320px;
+    }
+  }
+}
+
+/* ----------------------------------------------------------------- reels */
+.reels {
+  @apply grid gap-3 sm:gap-4;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  @include from-desktop {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+.reel {
+  &__media {
+    @apply relative overflow-hidden;
+    background-color: var(--color-media);
+    border-radius: var(--s-radius);
+
+    img,
+    &__frame {
+      @apply h-full w-full object-cover;
+      aspect-ratio: 2 / 3;
+    }
+  }
+
+  &__frame {
+    @apply absolute inset-0 h-full w-full;
+    border: 0;
+    object-fit: cover;
+  }
+
+  &__play {
+    @apply absolute left-1/2 top-1/2 inline-flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center text-xl;
+    background-color: color-mix(in srgb, #0a0908 55%, transparent);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: var(--s-radius-pill);
+    color: #fff;
+    transition: var(--s-transition);
+
+    &:hover {
+      background-color: var(--color-gold);
+      border-color: var(--color-gold);
+      color: var(--color-gold-ink);
+    }
+  }
+
+  &__shop {
+    @apply absolute inset-x-3 bottom-3 z-2 inline-flex items-center justify-center gap-2 py-2 text-xs font-bold;
+    background-color: color-mix(in srgb, var(--color-surface) 92%, transparent);
+    backdrop-filter: blur(6px);
+    border-radius: var(--s-radius-pill);
+    color: var(--color-ink);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: var(--s-transition);
+  }
+
+  &:hover &__shop {
+    opacity: 1;
+    transform: none;
+  }
+
+  &.is-playing {
+    .reel__play,
+    img {
+      @apply hidden;
+    }
+  }
+
+  &__caption {
+    @apply mt-2 text-center text-xs font-bold sm:text-sm;
+  }
+}
+
+@media (hover: none) {
+  .reel__shop {
+    opacity: 1;
+    transform: none;
+  }
+}

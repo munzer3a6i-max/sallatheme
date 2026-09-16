@@ -26,12 +26,14 @@
   }
 }
 
+/* Two identical tracks sit side by side; sliding one full track width and
+   restarting makes a seamless loop. */
 @keyframes zirar-marquee {
   from {
     transform: translateX(0);
   }
   to {
-    transform: translateX(var(--marquee-shift, -50%));
+    transform: translateX(-100%);
   }
 }
 

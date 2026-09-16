@@ -10,18 +10,7 @@
          data-testid="store-home-brands"
          class="s-block s-block--logos-slider s-block--full-bg js-reveal">
     <div class="container">
-        {% if component.title or component.show_all %}
-            <div class="s-block__title">
-                {% if component.title %}
-                    <div class="right-side"><h2>{{ component.title }}</h2></div>
-                {% endif %}
-                {% if component.show_all and theme.settings.get('is_more_button_enabled', true) %}
-                    <a href="{{ link('brands') }}" class="s-block__display-all">
-                        {{ trans('blocks.home.display_all') }} <i class="sicon-arrow-left {{ theme.is_rtl ? '' : 'flip-x' }}"></i>
-                    </a>
-                {% endif %}
-            </div>
-        {% endif %}
+        {% include 'components.partials.section-head' with { title: component.title } %}
 
         <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5 lg:gap-6">
             {% for brand in component.brands %}
@@ -30,5 +19,9 @@
                 </a>
             {% endfor %}
         </div>
+
+        {% if component.show_all and theme.settings.get('is_more_button_enabled', true) %}
+            {% include 'components.partials.rule-link' with { url: link('brands') } %}
+        {% endif %}
     </div>
 </section>

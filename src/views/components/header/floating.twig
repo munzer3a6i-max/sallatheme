@@ -1,0 +1,37 @@
+{#
+  Floating actions — WhatsApp, a call button, and back-to-top.
+  `app.js` reveals the back-to-top button once the visitor has scrolled.
+#}
+{% set show_contact = theme.settings.get('show_floating_buttons', true) %}
+{% set show_top     = theme.settings.get('show_scroll_top', true) %}
+
+{% if show_contact or show_top %}
+    <div class="floating-actions" aria-label="{{ trans('common.titles.support') }}">
+        {% if show_contact and store.contacts.whatsapp %}
+            <a class="floating-actions__btn floating-actions__btn--whatsapp"
+               href="https://wa.me/{{ store.contacts.whatsapp|replace({' ': '', '+': '', '-': ''}) }}"
+               target="_blank" rel="noopener"
+               aria-label="{{ trans('blocks.footer.chat_with_us') }}">
+                <i class="sicon-whatsapp"></i>
+            </a>
+        {% endif %}
+
+        {% if show_contact and (store.contacts.mobile or store.contacts.phone) %}
+            <a class="floating-actions__btn floating-actions__btn--call"
+               href="tel:{{ store.contacts.mobile ?: store.contacts.phone }}"
+               aria-label="{{ trans('common.elements.mobile') }}">
+                <i class="sicon-phone"></i>
+            </a>
+        {% endif %}
+    </div>
+
+    {% if show_top %}
+        <button type="button" id="scroll-top" class="scroll-top" aria-label="{{ trans('blocks.zirar.back_to_top') }}">
+            <svg class="scroll-top__ring" viewBox="0 0 44 44" aria-hidden="true">
+                <circle class="scroll-top__ring-base" cx="22" cy="22" r="20"></circle>
+                <circle class="scroll-top__ring-bar" cx="22" cy="22" r="20"></circle>
+            </svg>
+            <i class="sicon-arrow-up"></i>
+        </button>
+    {% endif %}
+{% endif %}

@@ -289,3 +289,97 @@ body.filters-opened {
     @apply absolute inset-0 w-full h-full;
   }
 }
+
+/* ------------------------------------------------- ornamental headings */
+/**
+ * The signature section header: a centred title, an optional subtitle, and a
+ * rule-diamond-rule ornament beneath it.
+ */
+.section-head {
+  @apply mb-8 text-center sm:mb-12;
+
+  &__kicker {
+    @apply mb-2 block text-xs font-bold uppercase;
+    color: var(--color-gold-text);
+    letter-spacing: var(--tracking-kicker);
+  }
+
+  h2 {
+    @apply text-2xl font-bold sm:text-3xl;
+    text-wrap: balance;
+  }
+
+  p {
+    @apply mx-auto mt-2 max-w-xl text-sm sm:text-base;
+    color: var(--color-muted);
+  }
+
+  &--start {
+    @apply text-start;
+
+    .ornament {
+      @apply mx-0 rtl:mr-0 ltr:ml-0;
+    }
+
+    p {
+      @apply mx-0;
+    }
+  }
+}
+
+.ornament {
+  @apply mx-auto mt-4 flex items-center justify-center gap-3;
+  max-width: 220px;
+
+  &::before,
+  &::after {
+    @apply block h-px flex-1;
+    background-image: linear-gradient(to var(--ornament-dir, left), transparent, var(--color-gold));
+    content: '';
+  }
+
+  &::after {
+    background-image: linear-gradient(to var(--ornament-dir-r, right), transparent, var(--color-gold));
+  }
+
+  &__mark {
+    @apply block shrink-0 rotate-45;
+    background-color: var(--color-gold);
+    height: 7px;
+    width: 7px;
+  }
+}
+
+/* ------------------------------------------------- "show all" divider */
+/**
+ * A centred link sitting on a hairline rule — used at the end of every
+ * products block.
+ */
+.rule-link {
+  @apply mt-8 flex items-center gap-4 sm:mt-10;
+
+  &::before,
+  &::after {
+    @apply block h-px flex-1;
+    background-color: var(--color-line);
+    content: '';
+  }
+
+  &::before {
+    background-image: linear-gradient(to left, var(--color-gold), transparent);
+    opacity: 0.6;
+  }
+
+  &__btn {
+    @apply inline-flex shrink-0 items-center gap-2 px-5 py-2 text-sm font-bold;
+    border: 1px solid color-mix(in srgb, var(--color-gold) 55%, transparent);
+    border-radius: var(--s-radius-pill);
+    color: var(--color-gold-text);
+    transition: var(--s-transition);
+
+    &:hover {
+      background-color: var(--color-gold);
+      color: var(--color-gold-ink);
+    }
+  }
+}

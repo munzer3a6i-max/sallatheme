@@ -1,0 +1,23 @@
+{#
+  Shared section header: kicker, title, subtitle and the gold ornament.
+
+  Usage:
+    {% include 'components.partials.section-head' with {
+        title: component.title, sub_title: component.sub_title, kicker: null, align: 'center'
+    } %}
+
+| Variable  | Type    | Description                          |
+|-----------|---------|--------------------------------------|
+| title     | ?string | Section title                        |
+| sub_title | ?string | Optional line under the title        |
+| kicker    | ?string | Small gold label above the title     |
+| align     | ?string | `center` (default) or `start`        |
+#}
+{% if title or sub_title or kicker %}
+    <div class="section-head {{ align == 'start' ? 'section-head--start' : '' }}">
+        {% if kicker %}<span class="section-head__kicker">{{ kicker }}</span>{% endif %}
+        {% if title %}<h2>{{ title }}</h2>{% endif %}
+        {% if sub_title %}<p>{{ sub_title }}</p>{% endif %}
+        <div class="ornament" aria-hidden="true"><span class="ornament__mark"></span></div>
+    </div>
+{% endif %}

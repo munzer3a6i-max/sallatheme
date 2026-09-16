@@ -1,31 +1,51 @@
 {#
+  Header — Selia-style: a marquee announcement, a slim utility bar, then the
+  main bar with a centred logo and the menu beneath it. On the home page the
+  whole header floats over the first block and turns solid on scroll
+  (`app.js` toggles `.fixed-header` on `#mainnav`).
+
 | Variable         | Type    | Description                     |
 |------------------|---------|---------------------------------|
-| cart             | object  |                                 |
 | cart.items_count | int     |                                 |
 | cart.total       | string  | Formatted total ex: "١٠٠ ر.س"   |
 #}
 {% set important_links   = theme.settings.get('important_links', true) %}
 {% set announcement      = theme.settings.get('announcement_text') %}
 {% set show_announcement = theme.settings.get('show_announcement', true) and announcement %}
+{% set is_marquee        = theme.settings.get('announcement_marquee', true) %}
 {% set show_search       = theme.settings.get('show_header_search', true) %}
+{% set centered          = theme.settings.get('header_layout', 'centered') == 'centered' %}
 
-<header data-testid="store-header" class="store-header">
+<header data-testid="store-header" class="store-header {{ centered ? 'store-header--centered' : 'store-header--inline' }}">
 
     {# ---------------------------------------------------------- announcement #}
     {% if show_announcement %}
-        <div id="announcement-bar" class="announcement-bar is-hidden" data-hash="{{ announcement|length }}{{ announcement|slice(0, 12)|url_encode }}">
-            <div class="container announcement-bar__inner">
-                <i class="sicon-shipping-fast {{ theme.is_rtl ? 'flip-x' : '' }}"></i>
-                <span class="announcement-bar__text">{{ announcement }}</span>
-                <button type="button" class="announcement-bar__close" aria-label="{{ trans('common.elements.close') }}">
-                    <i class="sicon-cancel"></i>
-                </button>
-            </div>
+        <div id="announcement-bar" class="announcement-bar is-hidden {{ is_marquee ? 'announcement-bar--marquee' : '' }}"
+             data-hash="{{ announcement|length }}{{ announcement|slice(0, 12)|url_encode }}">
+            {% if is_marquee %}
+                {# Two identical tracks slide as one loop, so the text never shows a seam. #}
+                <div class="marquee" aria-label="{{ announcement }}">
+                    {% for i in 1..2 %}
+                        <div class="marquee__track" {{ i == 2 ? 'aria-hidden="true"' : '' }}>
+                            {% for j in 1..4 %}
+                                <span class="marquee__item">{{ announcement }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="container announcement-bar__inner">
+                    <i class="sicon-shipping-fast {{ theme.is_rtl ? 'flip-x' : '' }}"></i>
+                    <span class="announcement-bar__text">{{ announcement }}</span>
+                </div>
+            {% endif %}
+
+            <button type="button" class="announcement-bar__close" aria-label="{{ trans('blocks.zirar.close') }}">
+                <i class="sicon-cancel"></i>
+            </button>
         </div>
     {% endif %}
 
-    {# Delivery promise tag — mobile gets its own full-width row #}
     <div class="lg:hidden">
         <salla-bullet-delivery-tag></salla-bullet-delivery-tag>
     </div>
@@ -33,29 +53,39 @@
     {# ------------------------------------------------------------- top nav #}
     <div class="top-navbar">
         <div class="container">
-            <div class="flex flex-1 items-center gap-3">
+            <div class="top-navbar__contacts">
+                {% if store.contacts.email %}
+                    <a href="mailto:{{ store.contacts.email }}" class="top-navbar__link">
+                        <i class="sicon-mail-letter"></i><span class="unicode">{{ store.contacts.email }}</span>
+                    </a>
+                {% endif %}
+                {% if store.contacts.mobile %}
+                    <span class="top-navbar__sep"></span>
+                    <a href="tel:{{ store.contacts.mobile }}" class="top-navbar__link">
+                        <i class="sicon-phone"></i><span class="unicode">{{ store.contacts.mobile }}</span>
+                    </a>
+                {% endif %}
+            </div>
+
+            <div class="top-navbar__meta">
                 {% if important_links %}
                     <salla-menu data-testid="store-header-topnav" source="footer" topnav></salla-menu>
                 {% endif %}
 
-                <div class="header-buttons">
-                    {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
-                        <salla-localization-modal data-testid="store-header-localization" show-trigger></salla-localization-modal>
-                    {% endif %}
-                </div>
+                {% if store.scope %}
+                    <button class="top-navbar__link" onclick="salla.event.dispatch('scopes::open', {'mode': 'default'})">
+                        <i class="sicon-location"></i> {{ store.scope.name }}
+                    </button>
+                {% endif %}
+
+                {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
+                    <salla-localization-modal data-testid="store-header-localization" show-trigger></salla-localization-modal>
+                {% endif %}
 
                 <div class="hidden lg:block">
                     <salla-bullet-delivery-tag></salla-bullet-delivery-tag>
                 </div>
-
-                {% if store.scope %}
-                    <button class="btn--rounded-gray" onclick="salla.event.dispatch('scopes::open', {'mode': 'default'})">
-                        <i class="sicon-location"></i> {{ store.scope.name }}
-                    </button>
-                {% endif %}
             </div>
-
-            <salla-contacts data-testid="store-header-contacts" is-header></salla-contacts>
         </div>
     </div>
 
@@ -63,53 +93,57 @@
     <div id="mainnav" class="main-nav-container">
         <div class="inner">
             <div class="container">
-                <div class="flex items-stretch justify-between gap-3">
+                <div class="main-nav__bar">
 
-                    <div class="flex items-center">
+                    {# start side: menu toggle, search, colour scheme #}
+                    <div class="main-nav__side main-nav__side--start">
                         <a data-testid="store-header-mobile-toggle"
-                           class="mburger mburger--collapse rtl:ml-1 ltr:mr-1"
+                           class="mburger mburger--collapse"
                            href="#mobile-menu"
                            aria-label="{{ trans('blocks.header.main_menu') }}">
                             <i class="sicon-menu text-2xl"></i>
                         </a>
 
-                        <a data-testid="store-header-logo" class="navbar-brand" href="{{ store.url }}">
-                            <img fetchpriority="high" width="160" height="46" loading="eager"
-                                 src="{{ store.logo|cdn(175) }}" alt="{{ store.name }}">
-                            {% if is_page('index') %}
-                                <h1 class="sr-only">{{ store.name }}</h1>
-                            {% else %}
-                                <h2 class="sr-only">{{ store.name }}</h2>
-                            {% endif %}
-                        </a>
+                        {% if theme.settings.get('enable_color_switcher', true) %}
+                            <button type="button" class="scheme-toggle header-btn"
+                                    aria-label="{{ trans('blocks.zirar.switch_theme') }}" aria-pressed="false">
+                                <i class="sicon-moon"></i>
+                                <i class="sicon-sun"></i>
+                            </button>
+                        {% endif %}
 
-                        <custom-main-menu></custom-main-menu>
-                    </div>
-
-                    <div class="header-actions">
                         {% if show_search %}
-                            <div class="header-search hidden xl:block rtl:ml-2 ltr:mr-2">
-                                <salla-search data-testid="store-header-search" inline oval height="40"></salla-search>
-                            </div>
-                            <button type="button" class="header-btn xl:hidden" aria-label="{{ trans('blocks.header.search') }}"
+                            <button type="button" class="header-btn" aria-label="{{ trans('blocks.zirar.search') }}"
                                     onclick="salla.event.dispatch('search::open')">
                                 <i class="header-btn__icon sicon-search"></i>
                             </button>
                         {% endif %}
+                    </div>
 
-                        {% if theme.settings.get('enable_color_switcher', true) %}
-                            <button type="button" class="scheme-toggle" aria-label="{{ trans('blocks.header.switch_theme') }}" aria-pressed="false">
-                                <i class="sicon-moon text-xl"></i>
-                                <i class="sicon-sun text-xl"></i>
-                            </button>
+                    {# centre: the logo #}
+                    <a data-testid="store-header-logo" class="navbar-brand" href="{{ store.url }}">
+                        <img fetchpriority="high" width="180" height="52" loading="eager"
+                             src="{{ store.logo|cdn(220) }}" alt="{{ store.name }}">
+                        {% if is_page('index') %}
+                            <h1 class="sr-only">{{ store.name }}</h1>
+                        {% else %}
+                            <h2 class="sr-only">{{ store.name }}</h2>
                         {% endif %}
+                    </a>
 
+                    {# end side: account and cart #}
+                    <div class="main-nav__side main-nav__side--end">
                         <salla-user-menu data-testid="store-header-user-menu" avatar-only show-header show-trigger></salla-user-menu>
 
-                        <salla-cart-summary data-testid="store-header-cart" class="rtl:mr-1 ltr:ml-1">
+                        <salla-cart-summary data-testid="store-header-cart">
                             <i slot="icon" class="header-btn__icon icon sicon-shopping-bag"></i>
                         </salla-cart-summary>
                     </div>
+                </div>
+
+                {# the menu sits under the logo on desktop #}
+                <div class="main-nav__menu">
+                    <custom-main-menu></custom-main-menu>
                 </div>
             </div>
         </div>

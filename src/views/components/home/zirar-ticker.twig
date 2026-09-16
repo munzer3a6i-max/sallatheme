@@ -1,0 +1,30 @@
+{#
+| Variable          | Type     | Description                          |
+|-------------------|----------|--------------------------------------|
+| component.tone    | string   | dark, gold, sand                     |
+| component.speed   | string   | slow, medium, fast                   |
+| component.items[] | object[] | each with `text`                     |
+| position          | int      | Sorting number start from zero       |
+
+  A scrolling strip of promises, meant to sit directly under the hero.
+#}
+{% set tone = component.tone|default('dark') %}
+{% set speed = component.speed|default('medium') %}
+<section component-id="{{ componentId }}"
+         data-testid="store-home-ticker"
+         class="s-block s-block--ticker s-block--full-bg ticker ticker--{{ tone }} ticker--{{ speed }}">
+    <div class="marquee" aria-label="{{ component.items|map(item => item.text)|join(' — ') }}">
+        {% for track in 1..2 %}
+            <div class="marquee__track" {{ track == 2 ? 'aria-hidden="true"' : '' }}>
+                {% for repeat in 1..3 %}
+                    {% for item in component.items %}
+                        <span class="marquee__item ticker__item">
+                            {{ item.text }}
+                            <span class="ticker__sep" aria-hidden="true"></span>
+                        </span>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+</section>

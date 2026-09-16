@@ -1,7 +1,7 @@
 {#
 | Variable              | Type      | Description                          |
 |-----------------------|-----------|--------------------------------------|
-| component.background  | ?string   | background image url                 |
+| component.background  | ?string   | full-bleed background image          |
 | component.title       | ?string   |                                      |
 | component.description | ?string   |                                      |
 | component.end_date    | ?string   | `Y-m-d`, drives the countdown        |
@@ -13,33 +13,39 @@
 {% set product_ids = component.products|map((product) => product.id)|join(',') %}
 <section component-id="{{ componentId }}"
          data-testid="store-home-countdown"
-         class="s-block s-block--countdown container js-reveal">
+         class="s-block s-block--countdown s-block--full-bg">
 
-    <div class="countdown-banner">
+    <div class="countdown-banner {{ component.background ? 'has-media' : '' }}">
         {% if component.background %}
             <div class="countdown-banner__bg" style="background-image:url('{{ component.background }}');"></div>
+            <div class="countdown-banner__scrim"></div>
         {% endif %}
 
-        <div class="countdown-banner__content">
-            {% if component.title %}<h2>{{ component.title }}</h2>{% endif %}
-            {% if component.description %}<p>{{ component.description }}</p>{% endif %}
+        <div class="container">
+            <div class="countdown-banner__content">
+                {% if component.title %}<h2>{{ component.title }}</h2>{% endif %}
+                {% if component.description %}<p>{{ component.description }}</p>{% endif %}
 
-            {% if component.end_date %}
-                <salla-count-down data-testid="store-home-countdown-timer"
-                                  date="{{ component.end_date }}"
-                                  end-of-day
-                                  boxed
-                                  labeled></salla-count-down>
-            {% endif %}
+                {% if component.end_date %}
+                    <salla-count-down data-testid="store-home-countdown-timer"
+                                      date="{{ component.end_date }}"
+                                      end-of-day
+                                      boxed
+                                      labeled></salla-count-down>
+                {% endif %}
 
-            {% if component.button_text and component.url %}
-                <a href="{{ component.url }}" class="btn btn--ghost-white">{{ component.button_text }}</a>
-            {% endif %}
+                {% if component.button_text and component.url %}
+                    <a href="{{ component.url }}" class="btn btn--gold">
+                        <span>{{ component.button_text }}</span>
+                        <i class="sicon-keyboard_arrow_left {{ theme.is_rtl ? '' : 'flip-x' }}"></i>
+                    </a>
+                {% endif %}
+            </div>
         </div>
     </div>
 
     {% if component.products|length %}
-        <div class="mt-8 overflow-hidden">
+        <div class="container mt-8 overflow-hidden sm:mt-12">
             <salla-products-slider data-testid="store-home-countdown-products"
                                    source="selected"
                                    source-value="[{{ product_ids }}]"
